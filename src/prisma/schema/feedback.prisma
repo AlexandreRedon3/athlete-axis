@@ -1,0 +1,9 @@
+model CoachFeedback {
+  id        String  @id @default(uuid())
+  user      User    @relation(fields: [userId], references: [id], name: "UserFeedback")
+  userId    String
+  coach     User    @relation(fields: [coachId], references: [id], name: "CoachFeedback")
+  coachId   String
+  message   String
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,25 @@
+model User {
+  id              String   @id @default(uuid())
+  email           String   @unique
+  password        String
+  firstName       String?
+  lastName        String?
+  role            Role
+  profile         Profile?
+  createdAt       DateTime @default(now())
+  programs        Program[]
+  workoutLogs     WorkoutLog[]
+  nutritionPlans  NutritionPlan[]
+  notifications   Notification[]
+
+  coachFeedback CoachFeedback[] @relation(name: "UserFeedback")
+  feedbackToCoach CoachFeedback[] @relation(name: "CoachFeedback")
+
+  program Program[] @relation(name: "CoachPrograms")
+}
+
+enum Role {
+  ATHLETE
+  COACH
+  ADMIN
+}

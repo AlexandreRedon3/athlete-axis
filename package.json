@@ -1,0 +1,51 @@
+{
+  "name": "@athlete-axis/app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:generate": "drizzle-kit generate:pg",
+    "db:push": "drizzle-kit push:pg",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@auth/core": "^0.34.2",
+    "@auth/drizzle-adapter": "^1.8.0",
+    "@neondatabase/serverless": "^1.0.0",
+    "@paralleldrive/cuid2": "^2.2.2",
+    "@t3-oss/env-nextjs": "^0.9.2",
+    "@tanstack/react-query": "^4.36.1",
+    "@trpc/client": "^10.45.0",
+    "@trpc/next": "^10.45.0",
+    "@trpc/react-query": "^10.45.0",
+    "@trpc/server": "^10.45.0",
+    "better-auth": "^1.2.4",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.36.0",
+    "drizzle-zod": "^0.7.0",
+    "next": "14.1.0",
+    "next-auth": "^5.0.0-beta.25",
+    "next-intl": "^4.0.2",
+    "postgres": "^3.4.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "superjson": "^2.2.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/stripe": "^8.0.417",
+    "autoprefixer": "^10.0.1",
+    "drizzle-kit": "^0.20.13",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.0",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}

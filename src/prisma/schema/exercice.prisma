@@ -1,0 +1,11 @@
+model Exercise {
+  id         String    @id @default(uuid())
+  name       String
+  sets       Int
+  reps       Int
+  rpe        Int?
+  session    Session   @relation(fields: [sessionId], references: [id])
+  sessionId  String
+  progressions WeeklyProgression[]
+  workoutLogs  WorkoutLog[]
+}
