@@ -1,8 +1,9 @@
 import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { Member } from "./member";
 import { InferSelectModel } from "drizzle-orm";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { createInsertSchema } from "drizzle-zod";
 import { Account } from "better-auth";
+import { Program } from "./program";
 
 
 export const user = pgTable("user", {
@@ -31,8 +32,6 @@ export type User = InferSelectModel<typeof user> & {
     memberships: Member[];
     accounts: Account[];
     programs: Program[];
-    address: Address[];
-    clientNotes: ClientNote[];
 };
 
 export const createUserSchema = createInsertSchema(user);

@@ -72,6 +72,18 @@ const getConfig = (): ENV => {
 };
 
 const getSafeConfig = (config: ENV): Config => {
+  const isDev = process.env.NODE_ENV === 'development';
+  
+  // In development, fill missing values with empty strings
+  if (isDev) {
+    const safeConfig = {} as Config;
+    for (const [key, value] of Object.entries(config)) {
+      (safeConfig as any)[key] = value || '';
+    }
+    return safeConfig;
+  }
+  
+  // In production, throw errors for missing values
   for (const [key, value] of Object.entries(config)) {
     if (value === undefined) {
       throw new Error(`Missing key ${key} in .env file`);
@@ -79,7 +91,6 @@ const getSafeConfig = (config: ENV): Config => {
   }
   return config as Config;
 };
-
 const config = getConfig();
 
 export const safeConfig = getSafeConfig(config);

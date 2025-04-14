@@ -20,3 +20,4 @@ export const sessionRelations = relations(session, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
