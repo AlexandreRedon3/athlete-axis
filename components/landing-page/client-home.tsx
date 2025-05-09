@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { Header } from "../ui/header";
 import { AnimatePresence, motion } from "framer-motion";
-import { UserLanding } from "@/components/landing-page/user-landing";
-import { ProLanding } from "@/components/landing-page/pro-landing";
+import { UserLanding } from "../landing-page/user-landing";
+import { ProLanding } from "../landing-page/pro-landing";
 
 export default function ClientHome() {
     

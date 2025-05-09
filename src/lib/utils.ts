@@ -5,6 +5,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function bytesToMegabytes(bytes: number, round?: boolean): number {
+  const megabytes = bytes / (1024 * 1024)
+  if (round) return Math.round(megabytes * 100) / 100
+  return megabytes
+}
+
 export function takeUniqueOrThrow<T extends unknown[]>(values: T): T[number] {
   if (values.length !== 1)
     throw new Error("Found non unique or inexistent value");

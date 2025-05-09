@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "./button";
+import { Button } from "@heroui/button";
 import { useSidebar } from "./sidebar";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
