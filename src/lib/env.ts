@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -22,6 +22,9 @@ interface ENV {
   STRIPE_WEBHOOK_BASIC_SECRET: string | undefined;
   STRIPE_WEBHOOK_PRO_SECRET: string | undefined;
   STRIPE_WEBHOOK_ULTIMATE_SECRET: string | undefined;
+  GOOGLE_CLIENT_ID: string | undefined;
+  GOOGLE_CLIENT_SECRET: string | undefined;
+  NEXT_PUBLIC_BETTER_AUTH_URL: string | undefined;
 }
 
 interface Config {
@@ -44,6 +47,9 @@ interface Config {
   STRIPE_WEBHOOK_BASIC_SECRET: string;
   STRIPE_WEBHOOK_PRO_SECRET: string;
   STRIPE_WEBHOOK_ULTIMATE_SECRET: string;
+  GOOGLE_CLIENT_ID: string;
+  GOOGLE_CLIENT_SECRET: string;
+  NEXT_PUBLIC_BETTER_AUTH_URL: string;
 }
 
 const getConfig = (): ENV => {
@@ -68,13 +74,15 @@ const getConfig = (): ENV => {
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    NEXT_PUBLIC_BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
   };
 };
 
 const getSafeConfig = (config: ENV): Config => {
   const isDev = process.env.NODE_ENV === 'development';
-  
-  // In development, fill missing values with empty strings
+    // In development, fill missing values with empty strings
   if (isDev) {
     const safeConfig = {} as Config;
     for (const [key, value] of Object.entries(config)) {

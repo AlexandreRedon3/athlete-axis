@@ -12,6 +12,10 @@ node_modules
 # .env
 .env
 
+# migrations
+/src/drizzle/meta
+
+
 /build
 /coverage
 
