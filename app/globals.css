@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Vos styles personnalisés ici */
+
 :root {
   /* Variables HeroUI */
   --heroui-primary: 262 80% 50%;

@@ -8,7 +8,7 @@ let stripeInstance: Stripe | null = null;
 
 if (stripeSecretKey) {
   stripeInstance = new Stripe(stripeSecretKey, {
-    apiVersion: "2025-02-24.acacia", // Match the original API version
+    apiVersion: "2025-04-30.basil", // Match the original API version
     appInfo: {
       name: "Athlete-Axis",
       version: "0.1.0",
