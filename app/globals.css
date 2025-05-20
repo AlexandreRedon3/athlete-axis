@@ -2,43 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Vos styles personnalisés ici */
-
 :root {
-  /* Variables HeroUI */
-  --heroui-primary: 262 80% 50%;
-  --heroui-success: 142 70% 45%;
-  --heroui-warning: 38 92% 50%;
-  --heroui-danger: 0 84% 60%;
-  --heroui-background: 220 14% 96%;
-  --heroui-foreground: 220 14% 4%;
-  
-  /* Variables Toastify */
-  --toastify-color-progress-light: hsl(var(--heroui-primary));
-  --toastify-color-progress-dark: hsl(var(--heroui-primary));
-  --toastify-color-progress-success: hsl(var(--heroui-success));
-  --toastify-icon-color-success: hsl(var(--heroui-success));
-  --toastify-color-progress-warning: hsl(var(--heroui-warning));
-  --toastify-icon-color-warning: hsl(var(--heroui-warning));
-  --toastify-color-progress-error: hsl(var(--heroui-danger));
-  --toastify-icon-color-error: hsl(var(--heroui-danger));
-  --toastify-toast-background: hsl(var(--heroui-background));
-  --toastify-text-color-light: hsl(var(--heroui-foreground));
-  --toastify-text-color-dark: hsl(var(--heroui-foreground));
-  --toastify-color-light: hsl(var(--heroui-background));
-  --toastify-color-dark: hsl(var(--heroui-background));
-  
-  /* Variables générales */
-  --foreground: hsl(var(--heroui-foreground));
-  --background: hsl(var(--heroui-background));
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 173 82% 47%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 65 87% 67%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
+  --radius: 0.5rem;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  min-height: 100%;
+  background: #2f455c;
+  color: white;
 }
 
-html {
-  height: 100%;
+.text-shadow {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.text-shadow-strong {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }

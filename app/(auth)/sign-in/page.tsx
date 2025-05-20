@@ -5,7 +5,6 @@ import { authClient } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
 import { Button, Spinner } from '@heroui/react';
 import Link from 'next/link';
-import { safeConfig } from '@/lib/';
 
 export default function SignInPage() {
   const router = useRouter();

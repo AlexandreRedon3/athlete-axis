@@ -1,89 +1,61 @@
-"use client"
-
-import { Button } from "@heroui/button"
-import { Card } from "@heroui/card"
-import Image from "next/image"
+import HeroSection from "./sections/hero-section"
+import ProgrammesSection from "./sections/programmes-section"
+import CoachingSection from "./sections/coaching-section"
+import TestimonialsSection from "./sections/testimonials-section"
+import FAQSection from "./sections/faq-section"
+import CTASection from "./sections/cta-section"
+import FooterSection from "./sections/footer-section"
 import Link from "next/link"
+import { Dumbbell } from "lucide-react"
+import { Button } from "../ui/button"
+import { MobileMenu } from "../ui/mobile-menu"
 
 export const UserLanding = () => {
+  const navLinks = [
+    { href: "#programmes", label: "Programmes" },
+    { href: "#coaching", label: "Coaching" },
+    { href: "#temoignages", label: "Témoignages" },
+    { href: "#faq", label: "FAQ" },
+  ]
+
   return (
-    <div className="flex min-h-screen flex-col bg-black text-white">
-      {/* Header avec bouton retour */}
-      <header className="container mx-auto px-4 py-6">
-        <Link href="/back" className="flex items-center text-yellow-400">
-          <span className="mr-2">◀</span> Retour
-        </Link>
+    <div className="flex min-h-screen flex-col">
+      {/* Header */}
+      <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-[#2F455C]/80 backdrop-blur supports-[backdrop-filter]:bg-[#2F455C]/60">
+        <div className="container flex h-16 items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Dumbbell className="h-6 w-6 text-[#21D0B2]" />
+            <span className="text-xl font-bold text-white">AthleteAxis</span>
+          </div>
+          <nav className="hidden md:flex gap-6">
+            {navLinks.map((link) => (
+              <Link key={link.href} href={link.href} className="text-sm font-medium text-white hover:text-[#21D0B2]">
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="hidden md:flex items-center gap-4">
+            <Link href="/connexion" className="text-sm font-medium text-white hover:underline underline-offset-4">
+              Connexion
+            </Link>
+            <Link href="/inscription">
+              <Button className="bg-[#21D0B2] text-[#2F455C] hover:bg-[#1DCFE0]">S'inscrire</Button>
+            </Link>
+          </div>
+          <MobileMenu links={navLinks} />
+        </div>
       </header>
 
-      {/* Contenu principal */}
-      <main className="container mx-auto flex-1 px-4 py-6">
-        <div className="mb-12 text-center md:text-left">
-          <h1 className="mb-2 text-3xl font-bold md:text-4xl">
-            Choisis ton plan d'entraînement
-          </h1>
-        </div>
-
-        {/* Cartes d'options */}
-        <div className="flex flex-col gap-6 md:flex-row md:flex-wrap">
-          {/* Carte 1: Programmes prédéfinis */}
-          <Card className="w-full overflow-hidden rounded-xl bg-teal-900 md:w-[48%]">
-            <div className="p-6">
-              <h2 className="mb-4 text-center text-xl font-semibold">
-                Programmes prédéfinis
-              </h2>
-              <div className="relative h-48 w-full overflow-hidden rounded-lg">
-                <Image
-                  src={"/images/predefined-programs.jpg" ? "/images/predefined-programs.jpg" : "https://heroui.com/images/hero-card-complete.jpeg"}
-                  alt="Programmes prédéfinis"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="mt-4">
-                <p className="text-sm">
-                  <span className="font-bold">Accès immédiat</span> à des
-                  programmes prêts à l'emploi pour
-                  <span className="font-bold"> débutants à experts</span>.
-                </p>
-              </div>
-            </div>
-            <div className="px-6 pb-6">
-              <Button color="primary" className="w-full">
-                Découvrir
-              </Button>
-            </div>
-          </Card>
-
-          {/* Carte 2: Accompagnement personnalisé */}
-          <Card className="w-full overflow-hidden rounded-xl bg-gray-700 md:w-[48%]">
-            <div className="p-6">
-              <h2 className="mb-4 text-center text-xl font-semibold">
-                Accompagnement personnalisé
-              </h2>
-              <div className="relative h-48 w-full overflow-hidden rounded-lg">
-                <Image
-                  src={"/images/personal-coaching.jpg" ? "/images/personal-coaching.jpg" : "https://heroui.com/images/hero-card-complete.jpeg"}
-                  alt="Accompagnement personnalisé"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="mt-4">
-                <p className="text-sm">
-                  Un suivi <span className="font-bold">sur mesure</span> avec un{" "}
-                  <span className="font-bold">coach</span> afin de vous permettre
-                  d'atteindre vos <span className="font-bold">objectifs</span>.
-                </p>
-              </div>
-            </div>
-            <div className="px-6 pb-6">
-              <Button color="secondary" className="w-full">
-                En savoir plus
-              </Button>
-            </div>
-          </Card>
-        </div>
+      <main className="flex-1">
+        <HeroSection />
+        <ProgrammesSection />
+        <CoachingSection />
+        <TestimonialsSection />
+        <FAQSection />
+        <CTASection />
       </main>
+
+      <FooterSection />
     </div>
   )
 }
