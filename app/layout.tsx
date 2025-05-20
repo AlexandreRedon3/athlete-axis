@@ -5,7 +5,6 @@ import { cn } from "../src/lib/utils";
 import { Inter } from "next/font/google";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
-import { SidebarProvider } from "../components/ui/sidebar";
 import { cookies } from "next/headers";
 import { ourFileRouter } from "../app/api/uploadthing/core";
 import { NuqsAdapter } from "nuqs/adapters/next";
@@ -33,25 +32,19 @@ export default async function RootLayout({
 
   return (
     <html lang="fr" suppressHydrationWarning>
-      <body
-        className={cn("min-h-screen font-sans antialiased bg-background text-foreground", inter.variable)}
-      >
+      <body className={cn("min-h-screen font-sans antialiased", inter.variable)}>
         <Providers>
-          <SidebarProvider defaultOpen={defaultOpen}>
-            <div vaul-drawer-wrapper="">
-              <NextSSRPlugin
-                routerConfig={extractRouterConfig(ourFileRouter)}
+            <NextSSRPlugin
+              routerConfig={extractRouterConfig(ourFileRouter)}
+            />
+            <NuqsAdapter>
+              <NextTopLoader
+                height={3}
+                color="#A594FF"
+                showSpinner={false}
               />
-              <NuqsAdapter>
-                <NextTopLoader
-                  height={3}
-                  color="#A594FF"
-                  showSpinner={false}
-                />
-                {children}
-              </NuqsAdapter>
-            </div>
-          </SidebarProvider>
+              {children}
+            </NuqsAdapter>
         </Providers>
       </body>
     </html>
