@@ -7,7 +7,7 @@ export default async function Page() {
   const session = await getSession();
 
   if (session?.data?.user) {
-    if (session.data.user.isPro) redirect("/dashboard/coach");
+    if (session.data.user.isCoach) redirect("/dashboard/coach");
     else redirect("/dashboard/coache");
   }
 

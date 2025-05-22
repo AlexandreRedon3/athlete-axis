@@ -1,28 +1,33 @@
-'use client';
+"use client"
 
-import { useState } from 'react';
-import { authClient } from '@/lib/auth-client';
-import { useRouter } from 'next/navigation';
-import { Button, Spinner } from '@heroui/react';
-import Link from 'next/link';
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { Button } from "../../../components/ui/button"
+import { Card } from "../../../components/ui/card"
+import Link from "next/link"
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Dumbbell, Loader2, ChevronRight } from "lucide-react"
+import Image from "next/image"
+import { toast } from "sonner"
+import { authClient, signUp } from "@/lib/auth-client"
 
 const registerSchema = z.object({
   name: z.string().min(2, "Le nom doit comporter au moins 2 caractères"),
   email: z.string().email("Adresse email invalide"),
   password: z.string().min(8, "Le mot de passe doit comporter au moins 8 caractères"),
-});
+  isCoach: z.boolean(),
+})
 
-type RegisterFormValues = z.infer<typeof registerSchema>;
+type RegisterFormValues = z.infer<typeof registerSchema>
 
 export default function SignUpPage() {
-  const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [socialLoading, setSocialLoading] = useState(false);
-  
+  const router = useRouter()
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [socialLoading, setSocialLoading] = useState(false)
+
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -44,12 +49,14 @@ export default function SignUpPage() {
           name: data.name,
           username: data.name,
           image: "",
-          isPro: false,
+          isCoach: false,
           onBoardingComplete: false,
         },
         {
           onSuccess: () => {
-            router.push('/dashboard');
+            const session = authClient.getSession()
+            console.log("session", session)
+            router.push('/dashboard/client');
           },
           onError: (err) => {
             setError(err.error.message || 'Échec de l\'inscription');
@@ -70,57 +77,88 @@ export default function SignUpPage() {
         provider: 'google',
         callbackURL: "/dashboard"
       });
-      // La redirection est gérée par le SDK de Better Auth
     } catch (err) {
       setError('Une erreur est survenue lors de l\'inscription avec Google');
       setSocialLoading(false);
     }
   };
-
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100">
-      <div className="hidden lg:flex lg:w-1/2 bg-indigo-600 items-center justify-center">
+    <div className="flex min-h-screen">
+      {/* Panneau gauche - visible uniquement sur desktop */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#1DCFE0] via-[#2DF3C0] to-[#2F455C] items-center justify-center">
         <div className="max-w-md text-white p-12">
-          <h1 className="text-4xl font-bold mb-6">Athlete Axis</h1>
-          <p className="text-xl mb-8">
-            Plateforme dédiée aux athlètes et coachs pour optimiser leurs performances
+          <div className="flex items-center gap-2 mb-8">
+            <Dumbbell className="h-8 w-8" />
+            <h1 className="text-4xl font-bold">AthleteAxis</h1>
+          </div>
+          <p className="text-xl mb-10">
+            Transformez votre entraînement, atteignez vos objectifs avec notre plateforme dédiée aux athlètes et coachs.
           </p>
-          <div className="space-y-4">
-            <div className="flex items-center">
-              <div className="bg-white/20 p-2 rounded-full mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <div className="space-y-6">
+            <div className="flex items-start">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 mr-4 flex-shrink-0">
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               </div>
-              <p>Programmes d'entraînement personnalisés</p>
+              <p className="text-lg">Programmes d'entraînement personnalisés adaptés à tous les niveaux</p>
             </div>
-            <div className="flex items-center">
-              <div className="bg-white/20 p-2 rounded-full mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <div className="flex items-start">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 mr-4 flex-shrink-0">
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               </div>
-              <p>Suivi des performances en temps réel</p>
+              <p className="text-lg">Suivi des performances en temps réel avec analyses détaillées</p>
             </div>
-            <div className="flex items-center">
-              <div className="bg-white/20 p-2 rounded-full mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <div className="flex items-start">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 mr-4 flex-shrink-0">
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               </div>
-              <p>Communauté d'athlètes et de coachs</p>
+              <p className="text-lg">Communauté active d'athlètes et de coachs pour vous motiver</p>
             </div>
+          </div>
+          <div className="mt-12">
+            <Image
+              src="/fitness-app-dashboard.png"
+              width={400}
+              height={300}
+              alt="Aperçu de l'application"
+              className="rounded-lg shadow-xl"
+            />
           </div>
         </div>
       </div>
-      
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-        <div className="w-full max-w-md">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-gray-800">Inscription</h2>
-            <p className="text-gray-600 mt-2">Rejoignez notre communauté</p>
+
+      {/* Panneau droit - formulaire d'inscription */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 md:p-12 bg-[#2F455C]/5">
+        <Card className="w-full max-w-md p-8 bg-white shadow-lg rounded-xl border-0">
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-2 mb-4 lg:hidden">
+              <Dumbbell className="h-7 w-7 text-[#21D0B2]" />
+              <h1 className="text-3xl font-bold text-[#2F455C]">AthleteAxis</h1>
+            </div>
+            <h2 className="text-2xl font-bold text-[#2F455C]">Créez votre compte</h2>
+            <p className="text-gray-600 mt-2">Rejoignez notre communauté d'athlètes</p>
           </div>
-          
+
           {/* Bouton Google */}
           <div className="mb-6">
             <button
@@ -128,7 +166,9 @@ export default function SignUpPage() {
               disabled={socialLoading}
               className="w-full py-3 bg-white border border-gray-300 text-gray-800 hover:bg-gray-50 rounded-lg font-medium transition-colors flex items-center justify-center shadow-sm"
             >
-              {socialLoading ? <span className="mr-2 animate-spin">⟳</span> : (
+              {socialLoading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
                 <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                   <path
                     fill="#4285F4"
@@ -148,10 +188,10 @@ export default function SignUpPage() {
                   />
                 </svg>
               )}
-              {socialLoading ? 'Inscription en cours...' : 'S\'inscrire avec Google'}
+              {socialLoading ? "Inscription en cours..." : "S'inscrire avec Google"}
             </button>
           </div>
-          
+
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300"></div>
@@ -160,73 +200,76 @@ export default function SignUpPage() {
               <span className="px-2 bg-white text-gray-500">Ou par email</span>
             </div>
           </div>
-          
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
               <input
                 type="text"
                 {...register("name")}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#21D0B2] focus:border-transparent transition-all"
                 placeholder="Votre nom"
               />
-              {errors.name && (
-                <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
-              )}
+              {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
               <input
                 type="email"
                 {...register("email")}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#21D0B2] focus:border-transparent transition-all"
                 placeholder="votre@email.com"
               />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-              )}
+              {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
               <input
                 type="password"
                 {...register("password")}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#21D0B2] focus:border-transparent transition-all"
                 placeholder="••••••••"
               />
-              {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
-              )}
+              {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>}
             </div>
 
-            {error && (
-              <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">
-                {error}
-              </div>
-            )}
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="isCoach"
+                {...register("isCoach")}
+                className="h-4 w-4 text-[#21D0B2] focus:ring-[#21D0B2] border-gray-300 rounded"
+              />
+              <label htmlFor="isCoach" className="ml-2 block text-sm text-gray-700">
+                Je suis un coach
+              </label>
+            </div>
+
+            {error && <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">{error}</div>}
 
             <Button
               type="submit"
-              className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors"
+              className="w-full py-6 bg-[#21D0B2] hover:bg-[#1DCFE0] text-[#2F455C] font-semibold rounded-lg transition-colors"
               disabled={loading}
             >
-              {loading ? <Spinner className="mr-2" /> : null}
-              {loading ? 'Inscription en cours...' : 'S\'inscrire'}
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {loading ? "Inscription en cours..." : "S'inscrire"}
+              {!loading && <ChevronRight className="ml-2 h-4 w-4" />}
             </Button>
           </form>
-          
+
           <div className="text-center mt-8">
             <p className="text-gray-600">
-              Vous avez déjà un compte ?{' '}
-              <Link href="/sign-in" className="text-indigo-600 hover:text-indigo-800 font-medium">
+              Vous avez déjà un compte ?{" "}
+              <Link href="/sign-in" className="text-[#21D0B2] hover:text-[#1DCFE0] font-medium">
                 Connectez-vous
               </Link>
             </p>
           </div>
-        </div>
+        </Card>
       </div>
     </div>
-  );
+  )
 }

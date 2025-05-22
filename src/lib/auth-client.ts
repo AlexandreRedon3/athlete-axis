@@ -16,7 +16,7 @@ export const authClient = createAuthClient({
     inferAdditionalFields({
       user: {
         stripeId: { type: "string", defaultValue: "" },
-        isPro: { type: "boolean", defaultValue: false, required: false },
+        isCoach: { type: "boolean", defaultValue: false, required: false },
         onBoardingComplete: { type: "boolean", defaultValue: false, required: false },
         address: { type: "string", defaultValue: "", required: false },
         zipCode: { type: "string", defaultValue: "", required: false },

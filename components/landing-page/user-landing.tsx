@@ -35,10 +35,10 @@ export const UserLanding = () => {
             ))}
           </nav>
           <div className="hidden md:flex items-center gap-4">
-            <Link href="/connexion" className="text-sm font-medium text-white hover:underline underline-offset-4">
+            <Link href="/sign-in" className="text-sm font-medium text-white hover:underline underline-offset-4">
               Connexion
             </Link>
-            <Link href="/inscription">
+            <Link href="/sign-up">
               <Button className="bg-[#21D0B2] text-[#2F455C] hover:bg-[#1DCFE0]">S'inscrire</Button>
             </Link>
           </div>
