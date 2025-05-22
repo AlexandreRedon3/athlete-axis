@@ -1,7 +1,7 @@
 // middleware.ts
 import { NextRequest, NextResponse } from "next/server";
 import { betterFetch } from "@better-fetch/fetch";
-import type { Session } from "better-auth/types";
+import type { Session } from "@/db/session";
 
 // Middleware d'authentification
 export default async function middleware(request: NextRequest) {
@@ -22,10 +22,25 @@ export default async function middleware(request: NextRequest) {
         },
       },
     );
+    
+    console.log("session", session?.user);
+    
 
     if (!session) {
       return NextResponse.redirect(new URL(`/sign-in`, request.url));
     }
+
+    // Ajoute une vérification pour la route /dashboard spécifiquement
+  if (pathname === '/dashboard') {
+    // Rediriger selon le type d'utilisateur
+    if (session.user?.isCoach === true) {
+      return NextResponse.redirect(new URL(`/dashboard/pro/${session.user.id}`, request.url));
+    }
+    
+    if (session.user?.isCoach === false) {
+      return NextResponse.redirect(new URL(`/dashboard/client/${session.user.id}`, request.url));
+    }
+  }
     
     return NextResponse.next();
   } catch (error) {

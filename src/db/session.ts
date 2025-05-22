@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { user } from "./user";
+import { User, user } from "./user";
 import { relations } from "drizzle-orm";
 
 export const session = pgTable("sessions", {
@@ -21,3 +21,14 @@ export const sessionRelations = relations(session, ({ one }) => ({
   }),
 }));
 
+export type Session = {
+  id: string;
+  expiresAt: Date;
+  token: string;
+  createdAt: Date;
+  updatedAt: Date;
+  ipAddress: string;
+  userAgent: string;
+  userId: string;
+  user: User;
+}
