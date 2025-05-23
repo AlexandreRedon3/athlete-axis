@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Button } from "../../../components/ui/button"
-import { Card } from "../../../components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 import Link from "next/link"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
@@ -55,7 +55,6 @@ export default function SignUpPage() {
         {
           onSuccess: () => {
             const session = authClient.getSession()
-            console.log("session", session)
             router.push('/dashboard/client');
           },
           onError: (err) => {

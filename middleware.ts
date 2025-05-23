@@ -22,9 +22,10 @@ export default async function middleware(request: NextRequest) {
         },
       },
     );
+
+    console.log("session : ", session);
     
-    console.log("session", session?.user);
-    
+        
 
     if (!session) {
       return NextResponse.redirect(new URL(`/sign-in`, request.url));

@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Button } from "../ui/button"
+import { Button } from "./button"
 import { Menu, X } from 'lucide-react'
 
 interface MobileMenuProps {

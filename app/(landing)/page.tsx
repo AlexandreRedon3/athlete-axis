@@ -1,6 +1,6 @@
 "use client";
 
-import { UserLanding } from "../../components/landing-page/user-landing";
+import { UserLanding } from "../../src/components/landing-page/user-landing";
 
 export default function LandingPage() {
   return (

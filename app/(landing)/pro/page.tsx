@@ -1,6 +1,6 @@
 "use client";
 
-import { ProLanding } from "../../../components/landing-page/pro-landing";
+import { ProLanding } from "../../../src/components/landing-page/pro-landing";
 
 export default function ProLandingPage() {
   return <ProLanding />;

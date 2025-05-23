@@ -3,8 +3,8 @@
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { UserLanding } from "../landing-page/user-landing";
-import { ProLanding } from "../landing-page/pro-landing";
+import { UserLanding } from "./user-landing";
+import { ProLanding } from "./pro-landing";
 
 export default function ClientHome() {
     const searchParams = useSearchParams();

@@ -1,12 +1,11 @@
-import { Button } from "../../../../../components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../../../components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dumbbell, User, Calendar, Activity, BarChart, Clock, ChevronRight } from "lucide-react"
 import Link from "next/link"
 import { authClient } from "@/lib/auth-client";
 
 export default async function UserDashboard() {
   const session = await authClient.getSession()
-  console.log("session dashboard client", session);
   
   return (
     <div className="min-h-screen bg-[#2F455C]/5">

@@ -1,8 +1,8 @@
 import type React from "react"
 import { Dumbbell } from "lucide-react"
 import Link from "next/link"
-import { LogoutButton } from "../../../components/ui/logout-button"
-import { Button } from "../../../components/ui/button"
+import { LogoutButton } from "@/components/ui/logout-button"
+import { Button } from "@/components/ui/button"
 import { User } from "lucide-react"
 import { authClient } from "@/lib/auth-client"
 import { cookies, headers } from "next/headers"
@@ -18,7 +18,6 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
     }
   })
   const user = data.data?.user ? data.data.user : null
-  console.log("user :", user)
   return (
     <div className="min-h-screen bg-[#2F455C]/5">
       {/* Header */}
