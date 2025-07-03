@@ -1,39 +1,33 @@
 import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { Member } from "./member";
-import { InferSelectModel, sql } from "drizzle-orm";
+import { InferSelectModel, InferInsertModel, sql } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
-import { Account } from "better-auth";
-import { Program } from "./program";
-
 
 export const user = pgTable("users", {
     id: text("id").primaryKey(),
     name: text("name").notNull(),
     username: text("username").unique(),
-    displayedUsername: text("displayedUsername").unique(),
+    displayUsername: text("display_username").unique(),
     email: text("email").notNull().unique(),
-    emailVerified: boolean("emailVerified").notNull().default(false),
+    emailVerified: boolean("email_verified").notNull().default(false),
     image: text("image"),
-    createdAt: timestamp("createdAt").notNull().default(sql`now()`),
-    updatedAt: timestamp("updatedAt").notNull().default(sql`now()`),
-    twoFactorEnabled: boolean("twoFactorEnabled").notNull().default(false),
-    isCoach: boolean("isCoach").notNull().default(false),
-    onBoardingComplete: boolean("onBoardingComplete").notNull().default(false),
-    stripeId: text("stripeId"),
+    createdAt: timestamp("created_at").notNull().default(sql`now()`),
+    updatedAt: timestamp("updated_at").notNull().default(sql`now()`),
+    twoFactorEnabled: boolean("two_factor_enabled").notNull().default(false),
+    isCoach: boolean("is_coach").notNull().default(false),
+    onBoardingComplete: boolean("on_boarding_complete").notNull().default(false),
+    stripeId: text("stripe_id"),
     address: text("address"),
-    zipCode: text("zipCode"),
+    zipCode: text("zip_code"),
     city: text("city"),
     country: text("country"),
-    lang: text("lang").default("fr"),
-    phoneNumber: text("phoneNumber"),
-    emailNotifications: boolean("emailNotifications").notNull().default(false),
-    smsNotifications: boolean("smsNotifications").notNull().default(false),
+    phoneNumber: text("phone_number"),
+    emailNotifications: boolean("email_notifications").notNull().default(false),
+    smsNotifications: boolean("sms_notifications").notNull().default(false),
+    password: text("password"),
+    coachId: text("coach_id"),
 });
 
-export type User = InferSelectModel<typeof user> & {
-    memberships: Member[];
-    accounts: Account[];
-    programs: Program[];
-};
+export type User = InferSelectModel<typeof user>;
+export type NewUser = InferInsertModel<typeof user>;
 
 export const createUserSchema = createInsertSchema(user);

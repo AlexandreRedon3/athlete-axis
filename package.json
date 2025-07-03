@@ -11,7 +11,11 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:migrate:neon": "tsx scripts/migrate-neon.ts",
+    "db:reset": "drizzle-kit drop && npm run db:migrate:neon",
+    "db:seed": "tsx scripts/seed-test-data.ts",
+    "db:seed:better-auth": "tsx scripts/seed-better-auth.ts"
   },
   "dependencies": {
     "@auth/core": "^0.39.0",
@@ -25,7 +29,11 @@
     "@hookform/resolvers": "^5.0.1",
     "@neondatabase/serverless": "^1.0.0",
     "@paralleldrive/cuid2": "^2.2.2",
+    "@radix-ui/react-dialog": "^1.1.14",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-slot": "^1.2.0",
+    "@radix-ui/react-tabs": "^1.1.12",
     "@t3-oss/env-nextjs": "^0.13.4",
     "@tanstack/react-query": "^5.75.7",
     "@trigger.dev/sdk": "^3.3.17",
@@ -33,9 +41,11 @@
     "@trpc/next": "^11.1.2",
     "@trpc/react-query": "^11.1.2",
     "@trpc/server": "^11.1.2",
+    "@types/bcryptjs": "^3.0.0",
     "@types/pg": "^8.15.1",
     "@uploadthing/react": "^7.3.0",
     "@vercel/postgres": "^0.10.0",
+    "bcryptjs": "^3.0.2",
     "better-auth": "^1.2.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -44,9 +54,11 @@
     "drizzle-zod": "^0.7.1",
     "framer-motion": "^12.10.5",
     "lucide-react": "^0.511.0",
+    "nanoid": "^5.1.5",
     "next": "^15.3.0",
     "next-auth": "^5.0.0-beta.25",
     "next-intl": "^4.0.2",
+    "next-themes": "^0.4.6",
     "nextjs-toploader": "^3.8.16",
     "nuqs": "^2.4.1",
     "pg": "^8.15.6",
@@ -74,6 +86,7 @@
     "eslint-config-next": "^15.3.2",
     "postcss": "^8.5.3",
     "tailwindcss-animate": "^1.0.7",
+    "tsx": "^4.20.3",
     "typescript": "^5"
   }
 }
