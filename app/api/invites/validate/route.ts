@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { invites } from "@/db/invites"
+import { user } from "@/db/user"
 import { eq } from "drizzle-orm"
 
 export async function GET(req: Request) {
@@ -29,9 +30,18 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Invitation expirée" }, { status: 400 })
     }
 
+    // Récupérer le nom du coach
+    let coachName = null;
+    if (invitation.coachId) {
+      const coach = await db.query.user.findFirst({ where: eq(user.id, invitation.coachId) });
+      coachName = coach?.name || null;
+    }
+
     return NextResponse.json({ 
       valid: true, 
       coachId: invitation.coachId,
+      coachName,
+      email: invitation.email,
       expiresAt: invitation.expiresAt 
     })
   } catch (error) {

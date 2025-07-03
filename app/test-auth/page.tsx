@@ -21,6 +21,7 @@ export default function TestAuthPage() {
               <p><strong>Email :</strong> {session.user.email}</p>
               <p><strong>Nom :</strong> {session.user.name}</p>
               <p><strong>ID :</strong> {session.user.id}</p>
+              <p><strong>Token :</strong> {session.session.token}</p>
               <p><strong>isCoach :</strong> {session.user.isCoach ? "OUI" : "NON"}</p>
               <p><strong>Email vérifié :</strong> {session.user.emailVerified ? "OUI" : "NON"}</p>
             </div>
