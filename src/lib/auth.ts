@@ -4,7 +4,7 @@ import { safeConfig } from "./env";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "../lib/db";
 import { user as dbUsers } from "../db";
-import { account, memberSchema } from "../db";
+import { account } from "../db";
 import { verification } from "@/db/verification";
 import { twoFactor as twoFactorSchema } from "@/db/twoFactor";
 import { session } from "@/db/session";
@@ -13,6 +13,7 @@ import { eq } from "drizzle-orm";
 import { nextCookies } from "better-auth/next-js";
 import { username } from "better-auth/plugins/username";
 import { twoFactor } from "better-auth/plugins/two-factor";
+import bcrypt from "bcryptjs";
 
 export const auth = betterAuth({
   appName: "Athlete-Axis",
@@ -22,22 +23,22 @@ export const auth = betterAuth({
     schema: {
       users: dbUsers,
       accounts: account,
-      member: memberSchema,
       verifications: verification,
       twoFactors: twoFactorSchema,
       sessions: session,
-      members: memberSchema,
     },
     usePlural: true,
   }),
   emailAndPassword: {
     enabled: true,
-  },
-  socialProviders: {
-    google: {
-      prompt: "select_account",
-      clientId: safeConfig.GOOGLE_CLIENT_ID as string,
-      clientSecret: safeConfig.GOOGLE_CLIENT_SECRET as string,
+    requireEmailVerification: false,
+    password: {
+      hash(password) {
+        return bcrypt.hash(password, 12);
+      },
+      verify(data) {
+        return bcrypt.compare(data.password, data.hash);
+      },
     },
   },
   user: {
@@ -53,29 +54,6 @@ export const auth = betterAuth({
       phoneNumber: { type: "string", defaultValue: "", required: false },
       smsNotifications: { type: "boolean", defaultValue: false, required: false },
       emailNotifications: { type: "boolean", defaultValue: false, required: false },
-    },
-  },
-  databaseHooks: {
-    user: {
-      create: {
-        after: async (user) => {
-          const customer = await stripe.customers.create({
-            email: user.email,
-            name: user.name,
-          });
-
-          await db.update(dbUsers).set({
-            stripeId: customer.id,
-          }).where(eq(dbUsers.id, user.id));
-        },
-      },
-      update: {
-        after: async (user) => {
-          await db.update(dbUsers).set({
-            updatedAt: new Date(),
-          }).where(eq(dbUsers.id, user.id));
-        },
-      },
     },
   },
   plugins: [

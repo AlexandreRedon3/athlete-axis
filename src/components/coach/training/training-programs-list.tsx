@@ -39,20 +39,20 @@ export function TrainingProgramsList({ programs, onSelectProgram }: TrainingProg
   const getLevelColor = (level: string) => {
     switch (level) {
       case "Débutant":
-        return "bg-green-100 text-green-800"
+        return "bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200"
       case "Intermédiaire":
-        return "bg-blue-100 text-blue-800"
+        return "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200"
       case "Avancé":
-        return "bg-purple-100 text-purple-800"
+        return "bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200"
     }
   }
 
   return (
     <div className="space-y-4">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Rechercher un programme..."
           className="pl-10"
@@ -66,31 +66,31 @@ export function TrainingProgramsList({ programs, onSelectProgram }: TrainingProg
           filteredPrograms.map((program) => (
             <Card key={program.id} className="overflow-hidden hover:shadow-md transition-shadow h-full">
               <CardContent className="p-0 flex flex-col h-full">
-                <div className="p-4 border-b bg-[#21D0B2]/10">
+                <div className="p-4 border-b bg-primary/5 dark:bg-primary/10">
                   <div className="flex justify-between items-start">
                     <div className="flex items-center">
-                      <Dumbbell className="h-5 w-5 text-[#21D0B2] mr-2" />
-                      <h3 className="font-bold text-[#2F455C]">{program.name}</h3>
+                      <Dumbbell className="h-5 w-5 text-primary mr-2" />
+                      <h3 className="font-bold text-foreground">{program.name}</h3>
                     </div>
                     <Badge className={getLevelColor(program.level)}>{program.level}</Badge>
                   </div>
                 </div>
                 <div className="p-4 flex flex-col flex-grow">
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">{program.description}</p>
+                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{program.description}</p>
                   <div className="grid grid-cols-2 gap-2 mb-4">
                     <div className="flex items-center">
-                      <Clock className="h-4 w-4 text-gray-400 mr-2" />
-                      <span className="text-sm">{program.duration}</span>
+                      <Clock className="h-4 w-4 text-muted-foreground mr-2" />
+                      <span className="text-sm text-muted-foreground">{program.duration}</span>
                     </div>
                     <div className="flex items-center">
-                      <Users className="h-4 w-4 text-gray-400 mr-2" />
-                      <span className="text-sm">{program.clients} clients</span>
+                      <Users className="h-4 w-4 text-muted-foreground mr-2" />
+                      <span className="text-sm text-muted-foreground">{program.clients} clients</span>
                     </div>
                   </div>
                   <div className="mt-auto pt-4">
                     <Button
                       onClick={() => onSelectProgram(program.id)}
-                      className="w-full bg-[#21D0B2] text-[#2F455C] hover:bg-[#1DCFE0]"
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
                     >
                       Voir les détails
                     </Button>
@@ -100,7 +100,7 @@ export function TrainingProgramsList({ programs, onSelectProgram }: TrainingProg
             </Card>
           ))
         ) : (
-          <div className="col-span-full text-center py-8 text-gray-500">Aucun programme trouvé</div>
+          <div className="col-span-full text-center py-8 text-muted-foreground">Aucun programme trouvé</div>
         )}
       </div>
     </div>

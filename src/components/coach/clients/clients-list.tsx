@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search, UserRound } from "lucide-react"
 import { useState } from "react"
+import { InviteClientButton } from "./invite-client-button"
 
 interface Client {
   id: string
@@ -27,14 +28,16 @@ export function ClientsList({ clients, onSelectClient }: ClientsListProps) {
 
   return (
     <div className="space-y-4">
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-        <Input
-          placeholder="Rechercher un client..."
-          className="pl-10"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+      <div className="flex justify-between items-center">
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Rechercher un client..."
+            className="pl-10"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
       </div>
 
       <Card>
@@ -42,12 +45,12 @@ export function ClientsList({ clients, onSelectClient }: ClientsListProps) {
           <table className="w-full">
             <thead>
               <tr className="border-b">
-                <th className="text-left p-4 font-medium text-gray-500">Nom</th>
-                <th className="text-left p-4 font-medium text-gray-500 hidden md:table-cell">Email</th>
-                <th className="text-left p-4 font-medium text-gray-500 hidden lg:table-cell">Objectif</th>
-                <th className="text-left p-4 font-medium text-gray-500 hidden md:table-cell">Programme</th>
-                <th className="text-left p-4 font-medium text-gray-500">Progression</th>
-                <th className="text-left p-4 font-medium text-gray-500">Action</th>
+                <th className="text-left p-4 font-medium text-muted-foreground">Nom</th>
+                <th className="text-left p-4 font-medium text-muted-foreground hidden md:table-cell">Email</th>
+                <th className="text-left p-4 font-medium text-muted-foreground hidden lg:table-cell">Objectif</th>
+                <th className="text-left p-4 font-medium text-muted-foreground hidden md:table-cell">Programme</th>
+                <th className="text-left p-4 font-medium text-muted-foreground">Progression</th>
+                <th className="text-left p-4 font-medium text-muted-foreground">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -55,11 +58,11 @@ export function ClientsList({ clients, onSelectClient }: ClientsListProps) {
                 filteredClients.map((client, index) => (
                   <tr
                     key={client.id}
-                    className={index < filteredClients.length - 1 ? "border-b hover:bg-gray-50" : "hover:bg-gray-50"}
+                    className={index < filteredClients.length - 1 ? "border-b hover:bg-accent/50" : "hover:bg-accent/50"}
                   >
                     <td className="p-4 flex items-center">
-                      <div className="w-8 h-8 rounded-full bg-[#21D0B2]/20 flex items-center justify-center mr-3">
-                        <UserRound className="h-4 w-4 text-[#21D0B2]" />
+                      <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">
+                        <UserRound className="h-4 w-4 text-primary" />
                       </div>
                       {client.name}
                     </td>
@@ -68,9 +71,9 @@ export function ClientsList({ clients, onSelectClient }: ClientsListProps) {
                     <td className="p-4 hidden md:table-cell">{client.activeProgram}</td>
                     <td className="p-4">
                       <div className="flex items-center">
-                        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mr-2">
+                        <div className="w-full h-2 bg-muted rounded-full overflow-hidden mr-2">
                           <div
-                            className="h-full bg-[#21D0B2] rounded-full"
+                            className="h-full bg-primary rounded-full"
                             style={{ width: `${client.programProgress}%` }}
                           ></div>
                         </div>
@@ -81,7 +84,7 @@ export function ClientsList({ clients, onSelectClient }: ClientsListProps) {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="text-[#21D0B2]"
+                        className="text-primary hover:text-primary/90"
                         onClick={() => onSelectClient(client.id)}
                       >
                         Détails
@@ -91,7 +94,7 @@ export function ClientsList({ clients, onSelectClient }: ClientsListProps) {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="p-4 text-center text-gray-500">
+                  <td colSpan={6} className="p-4 text-center text-muted-foreground">
                     Aucun client trouvé
                   </td>
                 </tr>

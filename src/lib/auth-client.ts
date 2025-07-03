@@ -2,11 +2,11 @@
 import { createAuthClient } from "better-auth/react";
 import {
   inferAdditionalFields,
-  organizationClient,
   twoFactorClient,
   usernameClient,
 } from "better-auth/client/plugins";
 import { safeConfig } from "./env";
+import React from "react";
 
 export const authClient = createAuthClient({
   baseURL: safeConfig.NEXT_PUBLIC_BETTER_AUTH_URL,
@@ -30,6 +30,32 @@ export const authClient = createAuthClient({
   ],
 });
 
+// Hook personnalisé pour gérer les redirections après authentification
+export const useAuthRedirect = () => {
+  const { data: session, isPending } = authClient.useSession();
+  
+  React.useEffect(() => {
+    if (!isPending && session?.user) {
+      console.log("🔄 Redirection automatique - Utilisateur:", session.user.email, "isCoach:", session.user.isCoach);
+      // Rediriger selon le type d'utilisateur
+      if (session.user.isCoach) {
+        window.location.href = `/dashboard/pro/${session.user.id}`;
+      } else {
+        window.location.href = `/dashboard/client/${session.user.id}`;
+      }
+    }
+  }, [session, isPending]);
+};
+
+// Fonction utilitaire pour rediriger après connexion
+export const redirectAfterAuth = (user: any) => {
+  if (user?.isCoach) {
+    window.location.href = `/dashboard/pro/${user.id}`;
+  } else {
+    window.location.href = `/dashboard/client/${user.id}`;
+  }
+};
+
 export const {
   signIn,
   signUp,
@@ -38,7 +64,6 @@ export const {
   verifyEmail,
   getSession,
   sendVerificationEmail,
-  linkSocial,
   deleteUser,
   updateUser,
   forgetPassword,

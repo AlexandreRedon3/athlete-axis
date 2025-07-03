@@ -18,6 +18,7 @@ CREATE TABLE "users" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"username" text,
+	"displayedUsername" text,
 	"email" text NOT NULL,
 	"emailVerified" boolean DEFAULT false NOT NULL,
 	"image" text,
@@ -35,7 +36,9 @@ CREATE TABLE "users" (
 	"phoneNumber" text,
 	"emailNotifications" boolean DEFAULT false NOT NULL,
 	"smsNotifications" boolean DEFAULT false NOT NULL,
+	"password" text,
 	CONSTRAINT "users_username_unique" UNIQUE("username"),
+	CONSTRAINT "users_displayedUsername_unique" UNIQUE("displayedUsername"),
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
@@ -49,12 +52,17 @@ CREATE TABLE "member" (
 CREATE TABLE "program" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
+	"description" text NOT NULL,
+	"level" text NOT NULL,
+	"type" text NOT NULL,
 	"durationWeeks" integer NOT NULL,
 	"sessionsPerWeek" integer NOT NULL,
+	"status" text DEFAULT 'draft',
+	"imageUrl" text,
 	"coachId" text NOT NULL,
+	"userId" text NOT NULL,
 	"createdAt" timestamp NOT NULL,
-	"updatedAt" timestamp NOT NULL,
-	"userId" text NOT NULL
+	"updatedAt" timestamp NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "sessions" (
@@ -84,6 +92,15 @@ CREATE TABLE "verifications" (
 	"expiresAt" timestamp NOT NULL,
 	"createdAt" timestamp,
 	"updatedAt" timestamp
+);
+--> statement-breakpoint
+CREATE TABLE "invites" (
+	"id" text PRIMARY KEY NOT NULL,
+	"token" text NOT NULL,
+	"coach_id" text NOT NULL,
+	"created_at" timestamp NOT NULL,
+	"expires_at" timestamp NOT NULL,
+	"used" boolean DEFAULT false NOT NULL
 );
 --> statement-breakpoint
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint

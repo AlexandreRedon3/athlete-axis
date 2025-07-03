@@ -7,6 +7,7 @@ import { eq } from 'drizzle-orm';
 const userInput = z.object({
   email: z.string().email(),
   name: z.string().optional(),
+  isCoach: z.boolean().optional(),
 });
 
 export type UserInput = z.infer<typeof userInput>;
@@ -35,7 +36,7 @@ export const userRouter = router({
         createdAt: new Date(),
         updatedAt: new Date(),
         twoFactorEnabled: false,         // facultatif (nullable mais présent)
-        isCoach: false,
+        isCoach: input.isCoach || false,
         onBoardingComplete: false,
         stripeId: null,
         address: null,

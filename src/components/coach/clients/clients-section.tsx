@@ -7,6 +7,7 @@ import { ClientDetail } from "@/components/coach/clients/client-detail"
 import { AddClientForm } from "@/components/coach/clients/add-client-form"
 import { UserPlus } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { InviteClientButton } from "./invite-client-button"
 
 export function ClientsSection() {
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null)
@@ -72,34 +73,15 @@ export function ClientsSection() {
 
   return (
     <div className="space-y-6">
-      <SectionHeader
-        title="Gestion des clients"
-        description="Consultez et gérez vos clients"
-        buttonText="Ajouter un client"
-        buttonIcon={UserPlus}
-        onButtonClick={() => setIsAddClientOpen(true)}
-      />
+      <div className="flex justify-end">
+        <InviteClientButton />
+      </div>
 
       {selectedClientId ? (
         <ClientDetail client={selectedClient!} onBack={() => setSelectedClientId(null)} />
       ) : (
         <ClientsList clients={clients} onSelectClient={(id) => setSelectedClientId(id)} />
       )}
-
-      <Dialog open={isAddClientOpen} onOpenChange={setIsAddClientOpen}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Ajouter un nouveau client</DialogTitle>
-          </DialogHeader>
-          <AddClientForm
-            onSubmit={(data) => {
-              console.log("Nouveau client:", data)
-              setIsAddClientOpen(false)
-              // Ici, vous ajouteriez le client à votre base de données
-            }}
-          />
-        </DialogContent>
-      </Dialog>
     </div>
   )
 }

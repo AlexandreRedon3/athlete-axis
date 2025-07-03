@@ -38,20 +38,23 @@ export function CoachOverview() {
       <div className="flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-2/3">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-bold text-[#2F455C]">Clients récents</h3>
-            <Button variant="ghost" className="text-[#21D0B2] hover:text-[#1DCFE0] hover:bg-[#21D0B2]/10">
+            <h3 className="text-lg font-bold text-foreground transition-colors duration-200">Clients récents</h3>
+            <Button 
+              variant="ghost" 
+              className="text-primary hover:text-primary/80 hover:bg-primary/10 transition-colors duration-200"
+            >
               Voir tous <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
           </div>
-          <Card>
+          <Card className="border-border/50 shadow-sm transition-colors duration-200">
             <CardContent className="p-0">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b">
-                    <th className="text-left p-4 font-medium text-gray-500">Nom</th>
-                    <th className="text-left p-4 font-medium text-gray-500">Programme</th>
-                    <th className="text-left p-4 font-medium text-gray-500">Progression</th>
-                    <th className="text-left p-4 font-medium text-gray-500">Action</th>
+                  <tr className="border-b border-border/50">
+                    <th className="text-left p-4 font-medium text-muted-foreground transition-colors duration-200">Nom</th>
+                    <th className="text-left p-4 font-medium text-muted-foreground transition-colors duration-200">Programme</th>
+                    <th className="text-left p-4 font-medium text-muted-foreground transition-colors duration-200">Progression</th>
+                    <th className="text-left p-4 font-medium text-muted-foreground transition-colors duration-200">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -61,22 +64,31 @@ export function CoachOverview() {
                     { name: "Julie Petit", program: "Avancé", progress: 30 },
                     { name: "Marc Leroy", program: "Débutant", progress: 15 },
                   ].map((client, index) => (
-                    <tr key={index} className={index < 3 ? "border-b hover:bg-gray-50" : "hover:bg-gray-50"}>
-                      <td className="p-4">{client.name}</td>
-                      <td className="p-4">{client.program}</td>
+                    <tr 
+                      key={index} 
+                      className={`${
+                        index < 3 ? "border-b border-border/30" : ""
+                      } hover:bg-accent/50 transition-colors duration-200`}
+                    >
+                      <td className="p-4 text-foreground dark:text-foreground transition-colors duration-200">{client.name}</td>
+                      <td className="p-4 text-foreground transition-colors duration-200">{client.program}</td>
                       <td className="p-4">
                         <div className="flex items-center">
-                          <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mr-2">
+                          <div className="w-full h-2 bg-muted rounded-full overflow-hidden mr-2">
                             <div
-                              className="h-full bg-[#21D0B2] rounded-full"
+                              className="h-full bg-primary rounded-full transition-all duration-300"
                               style={{ width: `${client.progress}%` }}
                             ></div>
                           </div>
-                          <span>{client.progress}%</span>
+                          <span className="text-foreground transition-colors duration-200">{client.progress}%</span>
                         </div>
                       </td>
                       <td className="p-4">
-                        <Button variant="ghost" size="sm" className="text-[#21D0B2]">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="text-primary hover:text-primary/80 hover:bg-primary/10 transition-colors duration-200"
+                        >
                           Détails
                         </Button>
                       </td>
@@ -89,9 +101,9 @@ export function CoachOverview() {
         </div>
 
         <Dialog open={isCreateProgramOpen} onOpenChange={setIsCreateProgramOpen}>
-          <DialogContent className="sm:max-w-[600px]">
+          <DialogContent className="sm:max-w-[600px] bg-background border-border">
             <DialogHeader>
-              <DialogTitle>Créer un nouveau programme</DialogTitle>
+              <DialogTitle className="text-foreground">Créer un nouveau programme</DialogTitle>
             </DialogHeader>
             <CreateProgramForm
               onSubmit={(data) => {
@@ -103,31 +115,37 @@ export function CoachOverview() {
           </DialogContent>
         </Dialog>
 
+        {/* Séances à venir */}
+        {/* TODO: Implémenter la logique avec Calendly */}
+
         <div className="w-full md:w-1/3">
-          <h3 className="text-lg font-bold text-[#2F455C] mb-4">Séances à venir</h3>
-          <Card>
+          <h3 className="text-lg font-bold text-foreground mb-4 transition-colors duration-200">Séances à venir</h3>
+          <Card className="border-border/50 shadow-sm transition-colors duration-200">
             <CardHeader>
-              <CardTitle>Aujourd'hui</CardTitle>
-              <CardDescription>Mardi, 20 Mai 2025</CardDescription>
+              <CardTitle className="text-foreground transition-colors duration-200">Aujourd'hui</CardTitle>
+              <CardDescription className="text-muted-foreground transition-colors duration-200">Mardi, 20 Mai 2025</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="bg-[#21D0B2]/10 p-3 rounded-lg border border-[#21D0B2]/20">
+              <div className="bg-primary/10 p-3 rounded-lg border border-primary/20 transition-colors duration-200">
                 <div className="flex justify-between items-center">
-                  <p className="font-medium">Sophie Martin</p>
-                  <span className="text-sm text-gray-500">10:00 - 11:00</span>
+                  <p className="font-medium text-foreground transition-colors duration-200">Sophie Martin</p>
+                  <span className="text-sm text-muted-foreground transition-colors duration-200">10:00 - 11:00</span>
                 </div>
-                <p className="text-sm text-gray-600">Séance de renforcement</p>
+                <p className="text-sm text-muted-foreground transition-colors duration-200">Séance de renforcement</p>
               </div>
-              <div className="bg-[#21D0B2]/10 p-3 rounded-lg border border-[#21D0B2]/20">
+              <div className="bg-primary/10 p-3 rounded-lg border border-primary/20 transition-colors duration-200">
                 <div className="flex justify-between items-center">
-                  <p className="font-medium">Thomas Dubois</p>
-                  <span className="text-sm text-gray-500">14:30 - 15:30</span>
+                  <p className="font-medium text-foreground transition-colors duration-200">Thomas Dubois</p>
+                  <span className="text-sm text-muted-foreground transition-colors duration-200">14:30 - 15:30</span>
                 </div>
-                <p className="text-sm text-gray-600">Cardio intensif</p>
+                <p className="text-sm text-muted-foreground transition-colors duration-200">Cardio intensif</p>
               </div>
               <div className="mt-4">
                 <Link href="/dashboard/coach/calendar">
-                  <Button variant="outline" className="w-full">
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-border dark:text-foreground text-foreground hover:bg-accent transition-colors duration-200"
+                  >
                     Voir le calendrier complet
                   </Button>
                 </Link>

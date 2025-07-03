@@ -5,13 +5,36 @@ import type { Session } from "@/db/session";
 
 // Middleware d'authentification
 export default async function middleware(request: NextRequest) {
-  // Vérifiez si c'est une route d'authentification
   const pathname = request.nextUrl.pathname;
-  if (pathname.includes('/sign-in') || pathname.includes('/sign-up')) {
+  
+  console.log("🔍 Middleware - Pathname:", pathname);
+  
+  // Routes publiques qui ne nécessitent pas d'authentification
+  const publicRoutes = [
+    '/',
+    '/sign-in',
+    '/sign-up',
+    '/invitation-invalide',
+    '/pro',
+    '/test-auth',
+    '/api/auth',
+    '/api/invites/validate',
+    '/api/uploadthing'
+  ];
+  
+  // Vérifier si c'est une route publique
+  const isPublicRoute = publicRoutes.some(route => 
+    pathname === route || pathname.startsWith(route + '/')
+  );
+  
+  if (isPublicRoute) {
+    console.log("✅ Route publique, passage libre");
     return NextResponse.next();
   }
   
-  // Vérifiez l'authentification pour les autres routes
+  console.log("🔐 Route protégée, vérification de l'authentification");
+  
+  // Vérifiez l'authentification pour les routes protégées
   try {
     const { data: session } = await betterFetch<Session>(
       `/api/auth/get-session`,
@@ -21,32 +44,40 @@ export default async function middleware(request: NextRequest) {
           cookie: request.headers.get("cookie") || "",
         },
       },
-    );
-
-    console.log("session : ", session);
-    
+    );    
         
+    console.log("📊 Session récupérée:", session ? "OUI" : "NON");
 
     if (!session) {
+      console.log("❌ Pas de session, redirection vers /sign-in");
       return NextResponse.redirect(new URL(`/sign-in`, request.url));
     }
 
-    // Ajoute une vérification pour la route /dashboard spécifiquement
+    console.log("👤 Utilisateur:", session.user?.email, "isCoach:", session.user?.isCoach);
+
+    // Gérer les redirections pour le dashboard
   if (pathname === '/dashboard') {
+      console.log("🎯 Redirection dashboard selon le type d'utilisateur");
     // Rediriger selon le type d'utilisateur
     if (session.user?.isCoach === true) {
-      return NextResponse.redirect(new URL(`/dashboard/pro/${session.user.id}`, request.url));
+        const redirectUrl = `/dashboard/pro/${session.user.id}`;
+        console.log("🏋️ Redirection vers:", redirectUrl);
+        return NextResponse.redirect(new URL(redirectUrl, request.url));
     }
     
     if (session.user?.isCoach === false) {
-      return NextResponse.redirect(new URL(`/dashboard/client/${session.user.id}`, request.url));
+        const redirectUrl = `/dashboard/client/${session.user.id}`;
+        console.log("🏃 Redirection vers:", redirectUrl);
+        return NextResponse.redirect(new URL(redirectUrl, request.url));
     }
   }
     
+    console.log("✅ Authentification réussie, passage libre");
     return NextResponse.next();
   } catch (error) {
-    console.error("Erreur lors de la vérification de la session:", error);
-    return NextResponse.next();
+    console.error("💥 Erreur lors de la vérification de la session:", error);
+    // En cas d'erreur, rediriger vers la page de connexion
+    return NextResponse.redirect(new URL(`/sign-in`, request.url));
   }
 }
 

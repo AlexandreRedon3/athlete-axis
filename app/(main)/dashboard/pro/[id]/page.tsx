@@ -15,17 +15,47 @@ export default function CoachDashboard() {
   const [activeTab, setActiveTab] = useState("overview")
 
   return (
-    <div className="min-h-screen bg-[#2F455C]/5">
+    <div className="min-h-screen bg-background transition-colors duration-200">
       {/* Header */}
 
       <main className="container py-8">
-        <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid grid-cols-5 w-full max-w-4xl mx-auto">
-            <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
-            <TabsTrigger value="clients">Clients</TabsTrigger>
-            <TabsTrigger value="training">Entraînement</TabsTrigger>
-            <TabsTrigger value="nutrition">Nutrition</TabsTrigger>
-            <TabsTrigger value="settings">Paramètres</TabsTrigger>
+        <Tabs 
+          defaultValue="overview" 
+          value={activeTab} 
+          onValueChange={setActiveTab} 
+          className="space-y-6"
+        >
+          <TabsList className="grid grid-cols-5 w-full max-w-4xl mx-auto bg-card border border-border shadow-sm">
+            <TabsTrigger 
+              value="overview"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200"
+            >
+              Vue d'ensemble
+            </TabsTrigger>
+            <TabsTrigger 
+              value="clients"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200"
+            >
+              Clients
+            </TabsTrigger>
+            <TabsTrigger 
+              value="training"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200"
+            >
+              Entraînement
+            </TabsTrigger>
+            <TabsTrigger 
+              value="nutrition"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200"
+            >
+              Nutrition
+            </TabsTrigger>
+            <TabsTrigger 
+              value="settings"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-colors duration-200"
+            >
+              Paramètres
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
