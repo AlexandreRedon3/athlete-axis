@@ -18,7 +18,6 @@ export function InviteClientButton() {
   const [email, setEmail] = useState("")
   const { data: session } = useSession()
 
-
   const generateInviteLink = async () => {
     setIsLoading(true)
     try {

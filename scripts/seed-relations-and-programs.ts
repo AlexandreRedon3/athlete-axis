@@ -73,6 +73,8 @@ async function main() {
   const usersInDb = await db.select().from(user);
   const emailToId = Object.fromEntries(usersInDb.map(u => [u.email, u.id]));
 
+  // update users
+
   // Créer les relations coach-client
   console.log("🤝 Insertion des relations coach-client...");
   for (const c of clients) {
