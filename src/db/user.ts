@@ -1,6 +1,9 @@
 import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { InferSelectModel, InferInsertModel, sql } from "drizzle-orm";
+import { InferSelectModel, InferInsertModel, sql, relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
+import { program } from "./program";
+import { programAssignment } from "./program-assignment";
+import { workoutLog } from "./workout-log";
 
 export const user = pgTable("users", {
     id: text("id").primaryKey(),
@@ -26,6 +29,12 @@ export const user = pgTable("users", {
     password: text("password"),
     coachId: text("coach_id"),
 });
+
+export const userRelations = relations(user, ({ many }) => ({
+    createdPrograms: many(program),
+    programAssignments: many(programAssignment),
+    workoutLogs: many(workoutLog),
+}));
 
 export type User = InferSelectModel<typeof user>;
 export type NewUser = InferInsertModel<typeof user>;

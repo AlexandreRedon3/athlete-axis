@@ -6,3 +6,8 @@ export * from "./twoFactor";
 export * from "./verification";
 export * from "./invites";
 export * from "./coach_client"; 
+export * from "./training-session";
+export * from "./exercice";
+export * from "./workout-log";
+export * from "./program-assignment";
+export * from "./exercise-library";

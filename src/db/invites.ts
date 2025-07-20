@@ -4,8 +4,9 @@ import { user } from "./user"
 
 export const invites = pgTable("invites", {
   id: text("id").primaryKey(),
-  token: text("token").notNull(),
+  token: text("token").notNull().unique(),
   coachId: text("coach_id").notNull(),
+  email: text("email"),
   createdAt: timestamp("created_at").notNull(),
   expiresAt: timestamp("expires_at").notNull(),
   used: boolean("used").notNull().default(false),

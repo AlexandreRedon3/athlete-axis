@@ -3,6 +3,8 @@ import { user } from "./user";
 import { InferSelectModel, relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { User } from "better-auth";
+import { programAssignment } from "./program-assignment";
+import { trainingSession } from "./training-session";
 
 export const program = pgTable("program", {
     id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
@@ -20,11 +22,13 @@ export const program = pgTable("program", {
     updatedAt: timestamp("updatedAt").notNull(),
 })
 
-export const programRelations = relations(program, ({ one }) => ({
+export const programRelations = relations(program, ({ one, many }) => ({
     coach: one(user, {
         fields: [program.coachId],
         references: [user.id],
     }),
+    assignments: many(programAssignment),
+    trainingSessions: many(trainingSession),
 }));
 
 export type Program = InferSelectModel<typeof program> & {
