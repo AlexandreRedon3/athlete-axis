@@ -1,24 +1,28 @@
-// app/api/sessions/[sessionId]/route.ts
+// app/api/exercises/[exerciseId]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { trainingSession } from "@/db";
+import { exercise } from "@/db";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 interface RouteParams {
   params: {
-    trainingSessionId: string;
+    exerciseId: string;
   };
 }
 
-const updateSessionSchema = z.object({
+const updateExerciseSchema = z.object({
   name: z.string().min(1).optional(),
-  description: z.string().optional(),
+  sets: z.number().min(1).max(10).optional(),
+  reps: z.number().min(1).max(50).optional(),
+  rpe: z.number().min(1).max(10).optional(),
+  restSeconds: z.number().min(0).max(600).optional(),
+  notes: z.string().optional(),
   order: z.number().min(1).optional(),
 });
 
-// PUT /api/sessions/:sessionId - Modifier une session
+// PUT /api/exercises/:exerciseId - Modifier un exercice
 export async function PUT(req: NextRequest, { params }: RouteParams) {
   try {
     const session = await auth.api.getSession({
@@ -29,30 +33,35 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
-    const trainingSessionData = await db.query.trainingSession.findFirst({
-      where: eq(trainingSession.id, params.trainingSessionId),
+    // Vérifier que l'exercice appartient au coach
+    const exerciseData = await db.query.exercise.findFirst({
+      where: eq(exercise.id, params.exerciseId),
       with: {
-        program: true,
+        trainingSession: {
+          with: {
+            program: true,
+          },
+        },
       },
     });
 
-    if (!trainingSessionData || trainingSessionData.program.coachId !== session.user.id) {
+    if (!exerciseData || exerciseData.trainingSession.program.coachId !== session.user.id) {
       return NextResponse.json({ error: "Accès refusé" }, { status: 403 });
     }
 
     const body = await req.json();
-    const validatedData = updateSessionSchema.parse(body);
+    const validatedData = updateExerciseSchema.parse(body);
 
     const updated = await db
-      .update(trainingSession)
+      .update(exercise)
       .set({
         ...validatedData,
         updatedAt: new Date(),
       })
-      .where(eq(trainingSession.id, params.trainingSessionId))
+      .where(eq(exercise.id, params.exerciseId))
       .returning();
 
-    return NextResponse.json({ session: updated[0] });
+    return NextResponse.json({ exercise: updated[0] });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -61,7 +70,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       );
     }
     
-    console.error("Erreur PUT /api/sessions/:id:", error);
+    console.error("Erreur PUT /api/exercises/:id:", error);
     return NextResponse.json(
       { error: "Erreur serveur" },
       { status: 500 }
@@ -69,7 +78,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
   }
 }
 
-// DELETE /api/sessions/:sessionId - Supprimer une session
+// DELETE /api/exercises/:exerciseId - Supprimer un exercice
 export async function DELETE(req: NextRequest, { params }: RouteParams) {
   try {
     const session = await auth.api.getSession({
@@ -80,22 +89,27 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
-    const trainingSessionData = await db.query.trainingSession.findFirst({
-      where: eq(trainingSession.id, params.trainingSessionId),
+    // Vérifier permissions
+    const exerciseData = await db.query.exercise.findFirst({
+      where: eq(exercise.id, params.exerciseId),
       with: {
-        program: true,
+        trainingSession: {
+          with: {
+            program: true,
+          },
+        },
       },
     });
 
-    if (!trainingSessionData || trainingSessionData.program.coachId !== session.user.id) {
+    if (!exerciseData || exerciseData.trainingSession.program.coachId !== session.user.id) {
       return NextResponse.json({ error: "Accès refusé" }, { status: 403 });
     }
 
-    await db.delete(trainingSession).where(eq(trainingSession.id, params.trainingSessionId));
+    await db.delete(exercise).where(eq(exercise.id, params.exerciseId));
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Erreur DELETE /api/sessions/:id:", error);
+    console.error("Erreur DELETE /api/exercises/:id:", error);
     return NextResponse.json(
       { error: "Erreur serveur" },
       { status: 500 }
