@@ -1,6 +1,8 @@
+// src/hooks/use-coach-programs.ts
 "use client"
 
 import { useState, useEffect } from 'react';
+import { useRefreshStore } from '../lib/refresh-store';
 
 interface Program {
   id: string;
@@ -27,6 +29,9 @@ export const useCoachPrograms = (): UseCoachProgramsReturn => {
   const [programs, setPrograms] = useState<Program[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Écouter les changements du store Zustand pour rafraîchir automatiquement
+  const refreshKey = useRefreshStore(state => state.getRefreshKey('programs'));
 
   const fetchPrograms = async () => {
     try {
@@ -53,9 +58,10 @@ export const useCoachPrograms = (): UseCoachProgramsReturn => {
     }
   };
 
+  // Fetch initial et à chaque changement du refreshKey
   useEffect(() => {
     fetchPrograms();
-  }, []);
+  }, [refreshKey]);
 
   return {
     programs,
