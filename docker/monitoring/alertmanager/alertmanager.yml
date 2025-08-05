@@ -1,0 +1,67 @@
+# docker/monitoring/alertmanager/alertmanager.yml
+global:
+  smtp_smarthost: 'localhost:587'
+  smtp_from: 'alerts@athleteaxis.com'
+  smtp_auth_username: 'alerts@athleteaxis.com'
+  smtp_auth_password: 'your-smtp-password'
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'web.hook'
+  routes:
+    - match:
+        severity: critical
+      receiver: 'critical-alerts'
+    - match:
+        severity: warning
+      receiver: 'warning-alerts'
+
+receivers:
+  - name: 'web.hook'
+    webhook_configs:
+      - url: 'http://127.0.0.1:5001/'
+
+  - name: 'critical-alerts'
+    email_configs:
+      - to: 'admin@athleteaxis.com'
+        subject: '🚨 AthleteAxis - Alerte Critique'
+        body: |
+          Alerte critique détectée sur AthleteAxis !
+          
+          Détails:
+          - Alerte: {{ .GroupLabels.alertname }}
+          - Sévérité: {{ .GroupLabels.severity }}
+          - Instance: {{ .GroupLabels.instance }}
+          - Description: {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
+          
+          Tableau de bord: http://localhost:3001
+          
+          Merci de vérifier immédiatement.
+    webhook_configs:
+      - url: 'http://127.0.0.1:5001/critical'
+        send_resolved: true
+
+  - name: 'warning-alerts'
+    email_configs:
+      - to: 'monitoring@athleteaxis.com'
+        subject: '⚠️ AthleteAxis - Alerte'
+        body: |
+          Alerte détectée sur AthleteAxis.
+          
+          Détails:
+          - Alerte: {{ .GroupLabels.alertname }}
+          - Sévérité: {{ .GroupLabels.severity }}
+          - Instance: {{ .GroupLabels.instance }}
+          - Description: {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
+          
+          Tableau de bord: http://localhost:3001
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']
