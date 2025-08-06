@@ -2,11 +2,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { betterFetch } from "@better-fetch/fetch";
 import type { Session } from "@/db/session";
-import { recordHttpMetrics } from "./app/api/metrics/route";
 
 // Middleware d'authentification
 export default async function middleware(request: NextRequest) {
-  const startTime = Date.now();
   const pathname = request.nextUrl.pathname;
   
   console.log("🔍 Middleware - Pathname:", pathname);
@@ -85,25 +83,6 @@ export default async function middleware(request: NextRequest) {
       response = NextResponse.redirect(new URL(`/sign-in`, request.url));
     }
   }
-
-  // Enregistrer les métriques HTTP
-  const endTime = Date.now();
-  const duration = (endTime - startTime) / 1000; // en secondes
-  
-  // Enregistrer les métriques après que la réponse soit créée
-  try {
-    recordHttpMetrics(
-      request.method,
-      pathname,
-      response.status,
-      duration
-    );
-  } catch (error) {
-    // Ne pas faire échouer le middleware si l'enregistrement des métriques échoue
-    console.error("Erreur lors de l'enregistrement des métriques:", error);
-  }
-
-  return response;
 }
 
 export const config = {
