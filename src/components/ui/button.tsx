@@ -1,8 +1,10 @@
+"use client"
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
+import { useTheme } from "@/lib/theme-provider";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
@@ -11,10 +13,10 @@ const buttonVariants = cva(
       variant: {
         default: "bg-[#21D0B2] text-[#2F455C] hover:bg-[#1DCFE0]",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-white text-white hover:bg-white/10",
+        outline: "border hover:bg-accent hover:text-accent-foreground",
         secondary: "bg-[#E2F163] text-[#2F455C] hover:bg-[#d8e859]",
-        ghost: "hover:bg-white/10 hover:text-white text-white",
-        link: "text-white underline-offset-4 hover:underline",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
         primary: "bg-[#21D0B2] text-[#2F455C] hover:bg-[#1DCFE0]",
         white: "bg-white text-[#2F455C] hover:bg-gray-100",
         dark: "bg-[#2F455C] text-white border border-white hover:bg-[#1a2e3d]",
@@ -43,9 +45,22 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
+    const { colors } = useTheme();
+    
+    // Appliquer les couleurs du thème pour la variante outline
+    const getButtonClasses = () => {
+      if (variant === 'outline') {
+        return cn(
+          buttonVariants({ variant: undefined, size, className }),
+          `${colors.border} ${colors.text} hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2`
+        );
+      }
+      return buttonVariants({ variant, size, className });
+    };
+    
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={getButtonClasses()}
         ref={ref}
         {...props}
       />

@@ -5,18 +5,29 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { 
-  UserPlus, 
-  Mail, 
-  User, 
+import {
+  UserPlus,
+  Mail,
+  User,
   MessageCircle,
   Loader2,
   CheckCircle,
-  X,
   Send
 } from 'lucide-react';
 import { useTheme } from '../../../lib/theme-provider';
-import { createPortal } from 'react-dom';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../../ui/dialog";
+import { Button } from "../../ui/button";
+import { Input } from "../../ui/input";
+import { Label } from "../../ui/label";
+import { Textarea } from "../../ui/textarea";
+import { Checkbox } from "../../ui/checkbox";
 
 const inviteClientSchema = z.object({
   email: z.string().email("Adresse email invalide"),
@@ -64,7 +75,6 @@ export const InviteClientForm = ({ isOpen, onClose, onSuccess }: InviteClientFor
 
     try {
       // Ici on appellerait l'API pour inviter le client
-      // Pour l'instant, on simule l'appel
       const response = await fetch('/api/coach/invite-client', {
         method: 'POST',
         headers: {
@@ -79,9 +89,9 @@ export const InviteClientForm = ({ isOpen, onClose, onSuccess }: InviteClientFor
       }
 
       const result = await response.json();
-      
+
       setSubmitStatus('success');
-      
+
       // Fermer après un délai pour montrer le succès
       setTimeout(() => {
         reset();
@@ -106,64 +116,36 @@ export const InviteClientForm = ({ isOpen, onClose, onSuccess }: InviteClientFor
     }
   };
 
-  if (!isOpen) return null;
-
-  return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Overlay */}
-      <div 
-        className="absolute inset-0 bg-black/60"
-        onClick={handleClose}
-      />
-      {/* Modal */}
-      <div className={`
-        relative w-full max-w-lg max-h-[90vh] overflow-y-auto
-        ${colors.cardBg} rounded-2xl shadow-2xl border ${colors.border}
-        animate-in zoom-in-95 slide-in-from-bottom-2 duration-200
-      `}>
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-border/50">
-          <div className="flex items-center space-x-3">
+  return (
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent
+        className="max-w-lg"
+      >
+        <DialogHeader>
+          <DialogTitle className="flex items-center space-x-2">
             <div className="p-2 bg-emerald-500 rounded-lg">
               <UserPlus className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h2 className={`${colors.text} text-xl font-bold`}>
-                Inviter un client
-              </h2>
-              <p className={`${colors.textSecondary} text-sm`}>
+              <span>Inviter un client</span>
+              <DialogDescription className="mt-1">
                 Ajoutez un nouveau client à votre liste
-              </p>
+              </DialogDescription>
             </div>
-          </div>
-          <button
-            onClick={handleClose}
-            disabled={isSubmitting}
-            className={`p-2 ${colors.hover} rounded-lg transition-colors`}
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
+          </DialogTitle>
+        </DialogHeader>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Email */}
           <div>
-            <label className={`block text-sm font-medium ${colors.text} mb-2`}>
-              Adresse email *
-            </label>
+            <Label htmlFor="email">Adresse email *</Label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
+              <Input
                 {...register('email')}
                 type="email"
                 placeholder="client@example.com"
-                className={`
-                  w-full pl-10 pr-4 py-3 rounded-lg border ${colors.border}
-                  ${colors.cardBg} ${colors.text}
-                  focus:ring-2 focus:ring-emerald-500 focus:border-transparent
-                  transition-colors
-                `}
+                className="pl-10"
               />
             </div>
             {errors.email && (
@@ -174,21 +156,14 @@ export const InviteClientForm = ({ isOpen, onClose, onSuccess }: InviteClientFor
           {/* Prénom et Nom */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className={`block text-sm font-medium ${colors.text} mb-2`}>
-                Prénom *
-              </label>
+              <Label htmlFor="firstName">Prénom *</Label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <input
+                <Input
                   {...register('firstName')}
                   type="text"
                   placeholder="Jean"
-                  className={`
-                    w-full pl-10 pr-4 py-3 rounded-lg border ${colors.border}
-                    ${colors.cardBg} ${colors.text}
-                    focus:ring-2 focus:ring-emerald-500 focus:border-transparent
-                    transition-colors
-                  `}
+                  className="pl-10"
                 />
               </div>
               {errors.firstName && (
@@ -197,19 +172,11 @@ export const InviteClientForm = ({ isOpen, onClose, onSuccess }: InviteClientFor
             </div>
 
             <div>
-              <label className={`block text-sm font-medium ${colors.text} mb-2`}>
-                Nom *
-              </label>
-              <input
+              <Label htmlFor="lastName">Nom *</Label>
+              <Input
                 {...register('lastName')}
                 type="text"
                 placeholder="Dupont"
-                className={`
-                  w-full px-4 py-3 rounded-lg border ${colors.border}
-                  ${colors.cardBg} ${colors.text}
-                  focus:ring-2 focus:ring-emerald-500 focus:border-transparent
-                  transition-colors
-                `}
               />
               {errors.lastName && (
                 <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>
@@ -219,45 +186,37 @@ export const InviteClientForm = ({ isOpen, onClose, onSuccess }: InviteClientFor
 
           {/* Message personnalisé */}
           <div>
-            <label className={`block text-sm font-medium ${colors.text} mb-2`}>
-              Message personnalisé (optionnel)
-            </label>
+            <Label htmlFor="message">Message personnalisé (optionnel)</Label>
             <div className="relative">
               <MessageCircle className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-              <textarea
+              <Textarea
                 {...register('message')}
                 rows={4}
                 placeholder="Ajoutez un message personnel pour votre invitation..."
-                className={`
-                  w-full pl-10 pr-4 py-3 rounded-lg border ${colors.border}
-                  ${colors.cardBg} ${colors.text}
-                  focus:ring-2 focus:ring-emerald-500 focus:border-transparent
-                  transition-colors resize-none
-                `}
+                className="pl-10"
               />
             </div>
             {errors.message && (
               <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
             )}
-            <p className={`text-xs ${colors.textSecondary} mt-1`}>
+            <p className="text-xs text-gray-600 mt-1">
               {watchedValues.message?.length || 0}/500 caractères
             </p>
           </div>
 
           {/* Options */}
-          <div className={`p-4 rounded-lg ${colors.cardBg} border ${colors.border}`}>
+          <div className={`p-4 rounded-lg ${colors.cardBg} ${colors.border} border`}>
             <div className="flex items-start space-x-3">
-              <input
+              <Checkbox
                 {...register('sendWelcomeEmail')}
-                type="checkbox"
                 id="sendWelcomeEmail"
-                className="mt-1 h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded"
+                className="mt-1"
               />
               <div>
-                <label htmlFor="sendWelcomeEmail" className={`text-sm font-medium ${colors.text}`}>
+                <Label htmlFor="sendWelcomeEmail" className="text-sm font-medium">
                   Envoyer un email de bienvenue
-                </label>
-                <p className={`text-xs ${colors.textSecondary} mt-1`}>
+                </Label>
+                <p className="text-xs text-gray-600 dark:text-gray-300 mt-1">
                   Le client recevra un email avec les instructions pour se connecter
                 </p>
               </div>
@@ -266,83 +225,76 @@ export const InviteClientForm = ({ isOpen, onClose, onSuccess }: InviteClientFor
 
           {/* Aperçu de l'invitation */}
           {(watchedValues.firstName || watchedValues.lastName) && (
-            <div className={`p-4 rounded-lg border-2 border-dashed border-emerald-200 bg-emerald-50 dark:bg-emerald-900/20`}>
-              <h4 className={`font-medium text-sm ${colors.text} mb-2`}>
+            <div className={`p-4 rounded-lg border-2 border-dashed border-emerald-200 ${colors.cardBg}`}>
+              <h4 className="font-medium text-sm mb-2">
                 Aperçu de l'invitation
               </h4>
-              <div className={`text-sm ${colors.textSecondary}`}>
+              <div className="text-sm text-gray-600 dark:text-gray-300">
                 <p>Bonjour {watchedValues.firstName} {watchedValues.lastName},</p>
                 <p className="mt-2">
                   Vous avez été invité(e) à rejoindre AthleteAxis en tant que client.
                 </p>
                 {watchedValues.message && (
-                  <div className="mt-2 p-2 bg-white/50 rounded italic">
+                  <div className="mt-2 p-2 bg-gray-100 dark:bg-gray-700 rounded italic">
                     "{watchedValues.message}"
                   </div>
                 )}
               </div>
             </div>
           )}
-
-          {/* Actions */}
-          <div className="flex items-center justify-between pt-4 border-t border-border/50">
-            <p className={`text-sm ${colors.textSecondary}`}>
-              Une invitation sera envoyée à {watchedValues.email || 'l\'adresse email'}
-            </p>
-            
-            <div className="flex items-center space-x-3">
-              <button
-                type="button"
-                onClick={handleClose}
-                disabled={isSubmitting}
-                className={`
-                  px-4 py-2 rounded-lg font-medium text-sm transition-colors
-                  ${colors.textSecondary} ${colors.hover}
-                  disabled:opacity-50 disabled:cursor-not-allowed
-                `}
-              >
-                Annuler
-              </button>
-              
-              <button
-                type="submit"
-                disabled={isSubmitting || !watchedValues.email}
-                className={`
-                  px-6 py-2 rounded-lg font-medium text-sm text-white
-                  transition-all duration-200 min-w-[120px]
-                  disabled:cursor-not-allowed disabled:opacity-50
-                  ${submitStatus === 'success' 
-                    ? 'bg-green-500' 
-                    : submitStatus === 'error'
-                    ? 'bg-red-500 hover:bg-red-600'
-                    : 'bg-emerald-500 hover:bg-emerald-600'
-                  }
-                `}
-              >
-                {isSubmitting ? (
-                  <div className="flex items-center justify-center">
-                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                    Envoi...
-                  </div>
-                ) : submitStatus === 'success' ? (
-                  <div className="flex items-center justify-center">
-                    <CheckCircle className="h-4 w-4 mr-2" />
-                    Envoyé !
-                  </div>
-                ) : submitStatus === 'error' ? (
-                  'Réessayer'
-                ) : (
-                  <div className="flex items-center justify-center">
-                    <Send className="h-4 w-4 mr-2" />
-                    Envoyer
-                  </div>
-                )}
-              </button>
-            </div>
-          </div>
         </form>
-      </div>
-    </div>,
-    document.body
+
+        <DialogFooter className="flex items-center justify-between pt-4 border-t">
+          <p className="text-sm text-gray-600">
+            Une invitation sera envoyée à {watchedValues.email || 'l\'adresse email'}
+          </p>
+
+          <div className="flex items-center space-x-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleClose}
+              disabled={isSubmitting}
+            >
+              Annuler
+            </Button>
+
+            <Button
+              type="submit"
+              onClick={handleSubmit(onSubmit)}
+              disabled={isSubmitting || !watchedValues.email}
+              className={`
+                min-w-[120px]
+                ${submitStatus === 'success'
+                  ? 'bg-green-500 hover:bg-green-600'
+                  : submitStatus === 'error'
+                  ? 'bg-red-500 hover:bg-red-600'
+                  : 'bg-emerald-500 hover:bg-emerald-600'
+                }
+              `}
+            >
+              {isSubmitting ? (
+                <div className="flex items-center">
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  Envoi...
+                </div>
+              ) : submitStatus === 'success' ? (
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                  Envoyé !
+                </div>
+              ) : submitStatus === 'error' ? (
+                'Réessayer'
+              ) : (
+                <div className="flex items-center">
+                  <Send className="h-4 w-4 mr-2" />
+                  Envoyer
+                </div>
+              )}
+            </Button>
+          </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
