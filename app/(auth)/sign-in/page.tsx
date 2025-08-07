@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { authClient } from '@/lib/auth-client';
+import { redirectAfterAuth } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
 import { Button, Spinner } from '@heroui/react';
 import Link from 'next/link';
@@ -24,7 +25,7 @@ export default function SignInPage() {
         password,
       }, {
         onSuccess: () => {
-          // Rediriger vers le dashboard, le middleware s'occupera de la redirection spécifique
+          // Laisser le middleware gérer la redirection spécifique
           router.push('/dashboard');
         },
         onError: (err) => {

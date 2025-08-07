@@ -63,15 +63,20 @@ export default async function middleware(request: NextRequest) {
           if (session.user?.isCoach === true) {
             const redirectUrl = `/dashboard/pro/${session.user.id}`;
             console.log("🏋️ Redirection vers:", redirectUrl);
+            console.log("📍 URL complète:", new URL(redirectUrl, request.url).toString());
             response = NextResponse.redirect(new URL(redirectUrl, request.url));
           } else if (session.user?.isCoach === false) {
             const redirectUrl = `/dashboard/client/${session.user.id}`;
             console.log("🏃 Redirection vers:", redirectUrl);
+            console.log("📍 URL complète:", new URL(redirectUrl, request.url).toString());
             response = NextResponse.redirect(new URL(redirectUrl, request.url));
           } else {
+            console.log("⚠️ isCoach n'est ni true ni false, passage libre");
             response = NextResponse.next();
           }
+          console.log("🔄 Réponse de redirection créée");
         } else {
+          console.log("📄 Page normale, pas de redirection");
           response = NextResponse.next();
         }
         
@@ -83,6 +88,8 @@ export default async function middleware(request: NextRequest) {
       response = NextResponse.redirect(new URL(`/sign-in`, request.url));
     }
   }
+  
+  return response;
 }
 
 export const config = {
