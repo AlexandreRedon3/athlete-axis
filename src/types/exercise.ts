@@ -24,6 +24,7 @@ export interface Exercise {
     instructions?: string;
     videoUrl?: string;
     imageUrl?: string;
+    difficulty: string;
   }
   
   export interface CreateExerciseInput {

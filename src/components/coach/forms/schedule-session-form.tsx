@@ -167,7 +167,7 @@ export const ScheduleSessionForm = ({ isOpen, onClose, onSuccess }: ScheduleSess
             <span>Planifier une séance</span>
           </DialogTitle>
           <DialogDescription>
-            Créez un nouveau rendez-vous avec un client
+                Créez un nouveau rendez-vous avec un client
           </DialogDescription>
         </DialogHeader>
 
@@ -186,11 +186,11 @@ export const ScheduleSessionForm = ({ isOpen, onClose, onSuccess }: ScheduleSess
                     <SelectValue placeholder="Sélectionner un client" />
                   </SelectTrigger>
                   <SelectContent>
-                    {clients.map((client) => (
+                  {clients.map((client) => (
                       <SelectItem key={client.id} value={client.id}>
-                        {client.name}
+                      {client.name}
                       </SelectItem>
-                    ))}
+                  ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -242,11 +242,11 @@ export const ScheduleSessionForm = ({ isOpen, onClose, onSuccess }: ScheduleSess
                     <SelectValue placeholder="Sélectionner" />
                   </SelectTrigger>
                   <SelectContent>
-                    {timeSlots.map((time) => (
+                  {timeSlots.map((time) => (
                       <SelectItem key={time} value={time}>
-                        {time}
+                      {time}
                       </SelectItem>
-                    ))}
+                  ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -367,49 +367,49 @@ export const ScheduleSessionForm = ({ isOpen, onClose, onSuccess }: ScheduleSess
           )}
         </form>
         <DialogFooter>
-          <div className="flex items-center space-x-2 text-sm text-gray-500">
+            <div className="flex items-center space-x-2 text-sm text-gray-500">
             <CalendarDays className="h-4 w-4" />
             <span>Champs obligatoires *</span>
-          </div>
-          
-          <div className="flex items-center space-x-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleClose}
-              disabled={isSubmitting}
-            >
-              Annuler
-            </Button>
+            </div>
             
+            <div className="flex items-center space-x-3">
             <Button
-              type="submit"
-              disabled={isSubmitting}
-              className={`
+                type="button"
+              variant="outline"
+                onClick={handleClose}
+                disabled={isSubmitting}
+              >
+                Annuler
+            </Button>
+              
+            <Button
+                type="submit"
+                disabled={isSubmitting}
+                className={`
                 min-w-[140px]
-                ${submitStatus === 'success' 
+                  ${submitStatus === 'success' 
                   ? 'bg-green-500 hover:bg-green-600' 
-                  : submitStatus === 'error'
-                  ? 'bg-red-500 hover:bg-red-600'
-                  : 'bg-purple-500 hover:bg-purple-600'
-                }
-              `}
-            >
-              {isSubmitting ? (
+                    : submitStatus === 'error'
+                    ? 'bg-red-500 hover:bg-red-600'
+                    : 'bg-purple-500 hover:bg-purple-600'
+                  }
+                `}
+              >
+                {isSubmitting ? (
                 <div className="flex items-center">
-                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  Planification...
-                </div>
-              ) : submitStatus === 'success' ? (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    Planification...
+                  </div>
+                ) : submitStatus === 'success' ? (
                 <div className="flex items-center">
-                  <CheckCircle className="h-4 w-4 mr-2" />
+                    <CheckCircle className="h-4 w-4 mr-2" />
                   Planifiée !
-                </div>
-              ) : submitStatus === 'error' ? (
-                'Réessayer'
-              ) : (
-                'Planifier la séance'
-              )}
+                  </div>
+                ) : submitStatus === 'error' ? (
+                  'Réessayer'
+                ) : (
+                  'Planifier la séance'
+                )}
             </Button>
           </div>
         </DialogFooter>

@@ -2,25 +2,71 @@
 "use client"
 
 import { useState } from 'react';
-import { Users, Activity, Calendar, Clock, Loader2, AlertCircle } from 'lucide-react';
-
-// Hooks
-import { useCoachStats } from '@/hooks/use-coach-stats';
-import { useCoachPrograms } from '@/hooks/use-coach-programs';
-import { useCoachClients } from '@/hooks/use-coach-client';
-
-// Composants (sans DashboardHeader)
+import { useTheme } from '../../../lib/theme-provider';
+import { 
+  Activity, 
+  Users, 
+  Calendar, 
+  Clock, 
+  TrendingUp,
+  Plus,
+  Eye,
+  Edit,
+  Share,
+  Download,
+  Printer,
+  Loader2,
+  AlertCircle,
+  Trash2,
+  Copy
+} from 'lucide-react';
+import { DashboardHeader } from './navigation/dashboard-header';
 import { DashboardNav } from './navigation/dashboard-nav';
-import { StatsCard } from './stats/stats-card';
-import { ClientsTable } from './clients/clients-table';
-import { DailySessions } from './sessions/daily-session';
+import { ClientsTable, Client as ClientTableType } from './clients/clients-table';
+import { DailySessions, Session as SessionType } from './sessions/daily-session';
 import { PerformancePanel } from './performance/performance-panel';
+import { useCoachStats } from '../../../hooks/use-coach-stats';
+import { useCoachPrograms } from '../../../hooks/use-coach-programs';
+import { useCoachClients } from '../../../hooks/use-coach-client';
+import { useProgramSessions } from '../../../hooks/use-program-sessions';
+import { useDeleteProgram, useDuplicateProgram, useUpdateProgram } from '../../../hooks/use-program-actions';
+import { ConfirmDialog } from '../../ui/confirm-dialog';
+import { EditProgramForm } from '../forms/edit-program-form';
+import { ProgramOverview } from '../programs/program-overview';
+import { ProgramSessionsManager } from '../programs/program-sessions-manager';
 import { PerformanceChart } from './charts/performance-chart';
 import { StatsChart } from './charts/stats-chart';
-import { useTheme } from '../../../lib/theme-provider';
-import { Client } from './clients/clients-table';
-import { Session } from './sessions/daily-session';
 
+// Types pour les données internes
+interface ClientData {
+  id: string;
+  name: string;
+  email: string;
+  program?: {
+    name: string;
+    level: string;
+  };
+  progress: number;
+  isActive: boolean;
+}
+
+interface SessionData {
+  id: string;
+  client: string;
+  type: string;
+  time: string;
+  status: 'upcoming' | 'completed' | 'cancelled';
+}
+
+interface StatsCardProps {
+  title: string;
+  value: string;
+  change?: number;
+  icon: any;
+  gradient: string;
+}
+
+// Composants manquants
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center h-64">
     <div className="text-center">
@@ -48,14 +94,65 @@ const ErrorMessage = ({ message, onRetry }: { message: string; onRetry: () => vo
   );
 };
 
+const StatsCard = ({ title, value, change, icon: Icon, gradient }: StatsCardProps) => {
+  const { colors } = useTheme();
+  
+  return (
+    <div className={`${colors.cardBg} rounded-xl p-4 shadow-sm ${colors.border} border`}>
+      <div className="flex items-center space-x-3">
+        <div className={`w-10 h-10 ${gradient} rounded-lg flex items-center justify-center`}>
+          <Icon className="h-5 w-5 text-white" />
+        </div>
+        <div>
+          <p className={`${colors.textSecondary} text-sm`}>{title}</p>
+          <p className={`${colors.text} text-xl font-bold`}>{value}</p>
+          {change !== undefined && (
+            <p className={`text-xs ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              {change >= 0 ? '+' : ''}{change}%
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const ModernCoachDashboard = () => {
   const [selectedTab, setSelectedTab] = useState('overview');
+  const [selectedProgram, setSelectedProgram] = useState<any>(null);
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
+  const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    type: 'delete-program' | 'duplicate-program' | null;
+    programId: string | null;
+    programName: string | null;
+  }>({
+    isOpen: false,
+    type: null,
+    programId: null,
+    programName: null
+  });
+  const [editingProgram, setEditingProgram] = useState<any>(null);
   const { colors } = useTheme();
 
   // Hooks API
   const { stats, isLoading: statsLoading, error: statsError, refetch: refetchStats } = useCoachStats();
   const { programs, isLoading: programsLoading, error: programsError, refetch: refetchPrograms } = useCoachPrograms();
   const { clients, isLoading: clientsLoading, error: clientsError, refetch: refetchClients } = useCoachClients();
+  
+  // Hook pour les sessions du programme sélectionné
+  const { 
+    sessions: programSessions, 
+    clientProgress,
+    isLoading: sessionsLoading, 
+    error: sessionsError, 
+    refetch: refetchSessions 
+  } = useProgramSessions(selectedProgram?.id || null);
+  
+  // Hooks pour les actions sur les programmes
+  const { deleteProgram, isDeleting } = useDeleteProgram();
+  const { duplicateProgram, isDuplicating } = useDuplicateProgram();
 
   // 📊 Préparation des données pour les graphiques
   const performanceData = [
@@ -72,17 +169,17 @@ export const ModernCoachDashboard = () => {
   ];
 
   // 📅 Données simulées pour les sessions (à remplacer par un hook API)
-  const todaySessions: Session[] = [
+  const todaySessions: SessionData[] = [
     { 
       id: '1', 
-      client: clients[0]?.name || "Sophie Martin", 
+      client: clients[0]?.name || "Thomas Dubois", 
       type: "Séance de renforcement", 
       time: "10:00",
       status: 'upcoming'
     },
     { 
       id: '2', 
-      client: clients[1]?.name || "Thomas Dubois", 
+      client: clients[1]?.name || "Sophie Martin", 
       type: "Cardio intensif", 
       time: "14:30",
       status: 'upcoming'
@@ -100,7 +197,7 @@ export const ModernCoachDashboard = () => {
     setSelectedTab('clients');
   };
 
-  const handleClientDetails = (client: Client) => {
+  const handleClientDetails = (client: ClientData) => {
     console.log('Voir détails client:', client);
   };
 
@@ -108,7 +205,7 @@ export const ModernCoachDashboard = () => {
     setSelectedTab('calendar');
   };
 
-  const handleSessionClick = (session: Session) => {
+  const handleSessionClick = (session: SessionData) => {
     console.log('Session cliquée:', session);
   };
 
@@ -120,12 +217,102 @@ export const ModernCoachDashboard = () => {
     console.log('Planifier séance');
   };
 
+  // Handlers pour les programmes
+  const handleViewProgram = (program: any) => {
+    setSelectedProgram(program);
+    setActiveModal('view-program');
+  };
+
+  const handleEditProgram = (program: any) => {
+    setSelectedProgram(program);
+    setActiveModal('edit-program');
+  };
+
+  const handleCloseModal = () => {
+    setActiveModal(null);
+    setSelectedProgram(null);
+    setSelectedSessionId(null);
+  };
+
+  const handlePublishProgram = () => {
+    console.log('Publier programme:', selectedProgram);
+    // TODO: Appel API pour publier
+    handleCloseModal();
+  };
+
+  // Gestionnaires pour les actions sur les programmes
+  const handleDeleteProgram = async () => {
+    if (!confirmDialog.programId) return;
+    
+    try {
+      await deleteProgram(confirmDialog.programId);
+      setConfirmDialog({ isOpen: false, type: null, programId: null, programName: null });
+      handleCloseModal();
+    } catch (error) {
+      console.error('Erreur lors de la suppression:', error);
+    }
+  };
+
+  const handleDuplicateProgram = async () => {
+    if (!confirmDialog.programId) return;
+    
+    try {
+      await duplicateProgram(confirmDialog.programId);
+      setConfirmDialog({ isOpen: false, type: null, programId: null, programName: null });
+      handleCloseModal();
+    } catch (error) {
+      console.error('Erreur lors de la duplication:', error);
+    }
+  };
+
+  const openConfirmDialog = (type: 'delete-program' | 'duplicate-program', programId: string, programName: string) => {
+    setConfirmDialog({
+      isOpen: true,
+      type,
+      programId,
+      programName
+    });
+  };
+
+  // Adaptateurs pour les types
+  const handleClientDetailsAdapter = (client: ClientTableType) => {
+    const clientData: ClientData = {
+      id: client.id || '',
+      name: client.name,
+      email: '', // Pas disponible dans ClientTableType
+      program: { name: client.program, level: '' },
+      progress: client.progress,
+      isActive: true // Valeur par défaut
+    };
+    handleClientDetails(clientData);
+  };
+
+  const handleSessionClickAdapter = (session: SessionType) => {
+    const sessionData: SessionData = {
+      id: session.id || '',
+      client: session.client,
+      type: session.type,
+      time: session.time,
+      status: session.status || 'upcoming'
+    };
+    handleSessionClick(sessionData);
+  };
+
   // Transformation des données clients pour le tableau
-  const clientsTableData: Client[] = clients.map(client => ({
+  const clientsTableData: ClientTableType[] = clients.map(client => ({
     id: client.id,
     name: client.name,
     program: client.program?.name || 'Aucun programme',
     progress: client.progress
+  }));
+
+  // Transformation des données sessions pour le composant
+  const sessionsForComponent: SessionType[] = todaySessions.map(session => ({
+    id: session.id,
+    client: session.client,
+    type: session.type,
+    time: session.time,
+    status: session.status
   }));
 
   // 📊 Statistiques basées sur les vraies données API
@@ -209,15 +396,15 @@ export const ModernCoachDashboard = () => {
                 <ClientsTable
                   clients={clientsTableData.slice(0, 4)}
                   onViewAll={handleViewAllClients}
-                  onViewDetails={handleClientDetails}
+                  onViewDetails={handleClientDetailsAdapter}
                 />
               )}
 
               {/* Daily Sessions */}
               <DailySessions
-                sessions={todaySessions}
+                sessions={sessionsForComponent}
                 onViewCalendar={handleViewCalendar}
-                onSessionClick={handleSessionClick}
+                onSessionClick={handleSessionClickAdapter}
               />
 
               {/* Performance Panel */}
@@ -289,12 +476,38 @@ export const ModernCoachDashboard = () => {
                     </div>
                     
                     <div className="flex space-x-2">
-                      <button className="flex-1 p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition-colors text-sm">
+                      <button 
+                        onClick={() => handleViewProgram(program)}
+                        className="flex-1 p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition-colors text-sm"
+                      >
                         Voir
                       </button>
-                      <button className="flex-1 p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition-colors text-sm">
+                      <button 
+                        onClick={() => setEditingProgram(program)}
+                        className="flex-1 p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition-colors text-sm"
+                      >
                         Modifier
                       </button>
+                    </div>
+                    
+                    {/* Menu d'actions pour le programme */}
+                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => openConfirmDialog('duplicate-program', program.id, program.name)}
+                          className="flex-1 p-2 hover:bg-green-50 text-green-600 rounded-lg transition-colors text-sm flex items-center justify-center"
+                        >
+                          <Copy className="h-3 w-3 mr-1" />
+                          Dupliquer
+                        </button>
+                        <button
+                          onClick={() => openConfirmDialog('delete-program', program.id, program.name)}
+                          className="flex-1 p-2 hover:bg-red-50 text-red-600 rounded-lg transition-colors text-sm flex items-center justify-center"
+                        >
+                          <Trash2 className="h-3 w-3 mr-1" />
+                          Supprimer
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -379,10 +592,10 @@ export const ModernCoachDashboard = () => {
                           <td className="py-4 px-6">
                             <div className="flex space-x-2">
                               <button 
-                                onClick={() => handleClientDetails({
+                                onClick={() => handleClientDetailsAdapter({
                                   id: client.id,
                                   name: client.name,
-                                  program: client.program?.name || 'Aucun',
+                                  program: client.program?.name || 'Aucun programme',
                                   progress: client.progress
                                 })}
                                 className="text-emerald-600 hover:text-emerald-700 text-sm font-medium transition-colors"
@@ -419,6 +632,64 @@ export const ModernCoachDashboard = () => {
           </div>
         )}
       </main>
+
+      {/* Modals */}
+      {selectedProgram && (
+        <>
+          {/* Modal Vue Programme */}
+          <ProgramOverview
+            program={selectedProgram}
+            sessions={programSessions || []}
+            clientProgress={clientProgress || undefined}
+            isOpen={activeModal === 'view-program'}
+            onClose={handleCloseModal}
+            onEdit={() => setActiveModal('edit-program')}
+            onPublish={handlePublishProgram}
+          />
+
+          {/* Modal Édition Programme */}
+          <ProgramSessionsManager
+            program={selectedProgram}
+            isOpen={activeModal === 'edit-program'}
+            onClose={handleCloseModal}
+          />
+        </>
+      )}
+
+      {/* Formulaire d'édition du programme */}
+      {editingProgram && (
+        <EditProgramForm
+          program={editingProgram}
+          isOpen={!!editingProgram}
+          onClose={() => setEditingProgram(null)}
+          onSuccess={(updatedProgram: any) => {
+            setEditingProgram(null);
+            console.log('Programme mis à jour:', updatedProgram);
+          }}
+        />
+      )}
+
+      {/* Dialogue de confirmation pour les actions sur les programmes */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        onClose={() => setConfirmDialog({ isOpen: false, type: null, programId: null, programName: null })}
+        onConfirm={confirmDialog.type === 'delete-program' ? handleDeleteProgram : handleDuplicateProgram}
+        title={
+          confirmDialog.type === 'delete-program' 
+            ? 'Supprimer le programme' 
+            : 'Dupliquer le programme'
+        }
+        description={
+          confirmDialog.type === 'delete-program'
+            ? `Êtes-vous sûr de vouloir supprimer le programme "${confirmDialog.programName}" ? Cette action est irréversible et supprimera toutes les sessions et exercices associés.`
+            : `Voulez-vous créer une copie du programme "${confirmDialog.programName}" ? Le nouveau programme sera en mode brouillon.`
+        }
+        confirmText={
+          confirmDialog.type === 'delete-program' ? 'Supprimer' : 'Dupliquer'
+        }
+        variant={confirmDialog.type === 'delete-program' ? 'destructive' : 'default'}
+        isLoading={isDeleting || isDuplicating}
+      />
     </div>
   );
 };

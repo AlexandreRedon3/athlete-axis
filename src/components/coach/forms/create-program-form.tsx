@@ -177,7 +177,7 @@ export const CreateProgramForm = ({
             <span>Créer un programme</span>
           </DialogTitle>
           <DialogDescription>
-            Configurez votre nouveau programme d'entraînement
+                Configurez votre nouveau programme d'entraînement
           </DialogDescription>
         </DialogHeader>
 
@@ -407,49 +407,49 @@ export const CreateProgramForm = ({
         </div>
 
         <DialogFooter>
-          <div className="flex items-center space-x-2 text-sm text-gray-500">
-            <FileText className="h-4 w-4" />
+            <div className="flex items-center space-x-2 text-sm text-gray-500">
+              <FileText className="h-4 w-4" />
             <span>Champs obligatoires *</span>
-          </div>
-          
-          <div className="flex items-center space-x-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleClose}
-              disabled={isSubmitting}
-            >
-              Annuler
-            </Button>
+            </div>
             
+            <div className="flex items-center space-x-3">
             <Button
-              type="submit"
-              disabled={isSubmitting}
-              className={`
+                type="button"
+              variant="outline"
+                onClick={handleClose}
+                disabled={isSubmitting}
+              >
+                Annuler
+            </Button>
+              
+            <Button
+                type="submit"
+                disabled={isSubmitting}
+                className={`
                 min-w-[140px]
-                ${submitStatus === 'success' 
+                  ${submitStatus === 'success' 
                   ? 'bg-green-500 hover:bg-green-600' 
-                  : submitStatus === 'error'
-                  ? 'bg-red-500 hover:bg-red-600'
-                  : 'bg-emerald-500 hover:bg-emerald-600'
-                }
-              `}
-            >
-              {isSubmitting ? (
+                    : submitStatus === 'error'
+                    ? 'bg-red-500 hover:bg-red-600'
+                    : 'bg-emerald-500 hover:bg-emerald-600'
+                  }
+                `}
+              >
+                {isSubmitting ? (
                 <div className="flex items-center">
-                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  Création...
-                </div>
-              ) : submitStatus === 'success' ? (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    Création...
+                  </div>
+                ) : submitStatus === 'success' ? (
                 <div className="flex items-center">
-                  <CheckCircle className="h-4 w-4 mr-2" />
-                  Créé !
-                </div>
-              ) : submitStatus === 'error' ? (
-                'Réessayer'
-              ) : (
-                'Créer le programme'
-              )}
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    Créé !
+                  </div>
+                ) : submitStatus === 'error' ? (
+                  'Réessayer'
+                ) : (
+                  'Créer le programme'
+                )}
             </Button>
           </div>
         </DialogFooter>

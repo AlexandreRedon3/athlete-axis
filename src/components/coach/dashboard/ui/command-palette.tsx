@@ -35,7 +35,6 @@ export const CommandPalette = ({ isOpen, onClose }: CommandPaletteProps) => {
       category: 'Création',
       shortcut: 'Ctrl+N',
       action: () => {
-        console.log('Créer un programme');
         onClose();
       }
     },
@@ -47,7 +46,6 @@ export const CommandPalette = ({ isOpen, onClose }: CommandPaletteProps) => {
       category: 'Clients',
       shortcut: 'Ctrl+I',
       action: () => {
-        console.log('Inviter un client');
         onClose();
       }
     },
@@ -59,7 +57,6 @@ export const CommandPalette = ({ isOpen, onClose }: CommandPaletteProps) => {
       category: 'Planning',
       shortcut: 'Ctrl+Shift+S',
       action: () => {
-        console.log('Planifier une séance');
         onClose();
       }
     },

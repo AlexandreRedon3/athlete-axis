@@ -5,10 +5,10 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import {
-  UserPlus,
-  Mail,
-  User,
+import { 
+  UserPlus, 
+  Mail, 
+  User, 
   MessageCircle,
   Loader2,
   CheckCircle,
@@ -89,9 +89,9 @@ export const InviteClientForm = ({ isOpen, onClose, onSuccess }: InviteClientFor
       }
 
       const result = await response.json();
-
+      
       setSubmitStatus('success');
-
+      
       // Fermer après un délai pour montrer le succès
       setTimeout(() => {
         reset();
@@ -246,51 +246,51 @@ export const InviteClientForm = ({ isOpen, onClose, onSuccess }: InviteClientFor
 
         <DialogFooter className="flex items-center justify-between pt-4 border-t">
           <p className="text-sm text-gray-600">
-            Une invitation sera envoyée à {watchedValues.email || 'l\'adresse email'}
-          </p>
-
-          <div className="flex items-center space-x-3">
+              Une invitation sera envoyée à {watchedValues.email || 'l\'adresse email'}
+            </p>
+            
+            <div className="flex items-center space-x-3">
             <Button
-              type="button"
+                type="button"
               variant="outline"
-              onClick={handleClose}
-              disabled={isSubmitting}
-            >
-              Annuler
+                onClick={handleClose}
+                disabled={isSubmitting}
+              >
+                Annuler
             </Button>
-
+              
             <Button
-              type="submit"
+                type="submit"
               onClick={handleSubmit(onSubmit)}
-              disabled={isSubmitting || !watchedValues.email}
-              className={`
+                disabled={isSubmitting || !watchedValues.email}
+                className={`
                 min-w-[120px]
-                ${submitStatus === 'success'
+                  ${submitStatus === 'success' 
                   ? 'bg-green-500 hover:bg-green-600'
-                  : submitStatus === 'error'
-                  ? 'bg-red-500 hover:bg-red-600'
-                  : 'bg-emerald-500 hover:bg-emerald-600'
-                }
-              `}
-            >
-              {isSubmitting ? (
+                    : submitStatus === 'error'
+                    ? 'bg-red-500 hover:bg-red-600'
+                    : 'bg-emerald-500 hover:bg-emerald-600'
+                  }
+                `}
+              >
+                {isSubmitting ? (
                 <div className="flex items-center">
-                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  Envoi...
-                </div>
-              ) : submitStatus === 'success' ? (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    Envoi...
+                  </div>
+                ) : submitStatus === 'success' ? (
                 <div className="flex items-center">
-                  <CheckCircle className="h-4 w-4 mr-2" />
-                  Envoyé !
-                </div>
-              ) : submitStatus === 'error' ? (
-                'Réessayer'
-              ) : (
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    Envoyé !
+                  </div>
+                ) : submitStatus === 'error' ? (
+                  'Réessayer'
+                ) : (
                 <div className="flex items-center">
-                  <Send className="h-4 w-4 mr-2" />
-                  Envoyer
-                </div>
-              )}
+                    <Send className="h-4 w-4 mr-2" />
+                    Envoyer
+                  </div>
+                )}
             </Button>
           </div>
         </DialogFooter>

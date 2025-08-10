@@ -36,8 +36,6 @@ export async function PUT(req: Request) {
     const body = await req.json()
     const result = updateCoachStatusSchema.safeParse(body)
 
-    console.log(result)
-
     if (!result.success) {
       return NextResponse.json(
         { 

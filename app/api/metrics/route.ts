@@ -80,7 +80,11 @@ export async function updateBusinessMetrics() {
     httpRequestsTotal.inc({ method: 'POST', status_code: '200' }, Math.floor(Math.random() * 50));
     httpRequestsTotal.inc({ method: 'GET', status_code: '404' }, Math.floor(Math.random() * 10));
     
-    console.log('✅ Business metrics updated successfully');
+    // Log seulement en mode debug
+    if (process.env.NODE_ENV === 'development' && process.env.DEBUG_METRICS === 'true') {
+      console.log('📊 Business metrics updated successfully');
+    }
+    
   } catch (error) {
     console.error('❌ Error updating business metrics:', error);
     
@@ -102,6 +106,11 @@ export async function GET() {
     
     // Générer et retourner les métriques au format Prometheus
     const metrics = await register.metrics();
+    
+    // Log seulement en mode debug ou si des métriques importantes changent
+    if (process.env.NODE_ENV === 'development' && process.env.DEBUG_METRICS === 'true') {
+      console.log('Metrics endpoint called - generating Prometheus metrics');
+    }
     
     return new NextResponse(metrics, {
       headers: {

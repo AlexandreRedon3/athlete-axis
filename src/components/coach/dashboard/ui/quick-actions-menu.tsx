@@ -47,9 +47,6 @@ export const QuickActionsMenu = () => {
   }, []);
 
   const handleFormSuccess = (data: any) => {
-    console.log('Formulaire soumis avec succès:', data);
-    // Ici on pourrait mettre à jour les données du dashboard
-    // ou déclencher un refetch
   };
 
   const quickActions: QuickAction[] = [
@@ -93,7 +90,6 @@ export const QuickActionsMenu = () => {
       description: 'Séance d\'entraînement personnalisée',
       color: 'bg-orange-500 hover:bg-orange-600',
       onClick: () => {
-        console.log('Créer un entraînement');
         setIsOpen(false);
       }
     },
@@ -104,7 +100,6 @@ export const QuickActionsMenu = () => {
       description: 'Créer un plan alimentaire',
       color: 'bg-green-500 hover:bg-green-600',
       onClick: () => {
-        console.log('Plan nutritionnel');
         setIsOpen(false);
       }
     },
@@ -115,7 +110,6 @@ export const QuickActionsMenu = () => {
       description: 'Communiquer avec vos clients',
       color: 'bg-indigo-500 hover:bg-indigo-600',
       onClick: () => {
-        console.log('Envoyer un message');
         setIsOpen(false);
       }
     }

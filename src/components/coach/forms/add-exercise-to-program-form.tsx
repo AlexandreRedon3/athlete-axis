@@ -40,6 +40,8 @@ import {
 import { Badge } from "../../ui/badge";
 import { validateAddExerciseForm } from '../../../lib/validations/exercise-schema';
 import type { AddExerciseFormData, ExerciseLibraryItem } from '../../../types/exercise';
+import { useCoachPrograms, useExerciseLibrary, useAddExercise } from '../../../hooks/use-exercise-data';
+import { useProgramSessions } from '../../../hooks/use-program-sessions';
 
 const addExerciseSchema = z.object({
   programId: z.string().min(1, "Veuillez sélectionner un programme"),
@@ -68,56 +70,6 @@ const addExerciseSchema = z.object({
 });
 
 type AddExerciseForm = z.infer<typeof addExerciseSchema>;
-
-// Données simulées pour les programmes et sessions
-const mockPrograms = [
-  { id: '1', name: 'Programme Force 4 semaines' },
-  { id: '2', name: 'Programme Hypertrophie' },
-  { id: '3', name: 'Programme Endurance' }
-];
-
-const mockSessions = [
-  { id: '1', name: 'Séance 1 - Haut du corps', programId: '1' },
-  { id: '2', name: 'Séance 2 - Bas du corps', programId: '1' },
-  { id: '3', name: 'Séance 1 - Push', programId: '2' },
-  { id: '4', name: 'Séance 2 - Pull', programId: '2' }
-];
-
-// Bibliothèque d'exercices simulée
-const mockExerciseLibrary: ExerciseLibraryItem[] = [
-  {
-    id: '1',
-    name: 'Développé couché',
-    category: 'Poitrine',
-    primaryMuscles: ['Pectoraux'],
-    secondaryMuscles: ['Triceps', 'Deltoïdes'],
-    equipment: 'Barre'
-  },
-  {
-    id: '2',
-    name: 'Squat',
-    category: 'Jambes',
-    primaryMuscles: ['Quadriceps'],
-    secondaryMuscles: ['Fessiers', 'Ischios'],
-    equipment: 'Barre'
-  },
-  {
-    id: '3',
-    name: 'Tractions',
-    category: 'Dos',
-    primaryMuscles: ['Grand dorsal'],
-    secondaryMuscles: ['Biceps', 'Rhomboïdes'],
-    equipment: 'Barre de traction'
-  },
-  {
-    id: '4',
-    name: 'Pompes',
-    category: 'Poitrine',
-    primaryMuscles: ['Pectoraux'],
-    secondaryMuscles: ['Triceps'],
-    equipment: 'Poids du corps'
-  }
-];
 
 interface AddExerciseToProgramFormProps {
   isOpen: boolean;
@@ -165,11 +117,22 @@ export const AddExerciseToProgramForm = ({
   });
 
   const watchedValues = watch();
-  const selectedProgram = mockPrograms.find(p => p.id === watchedValues.programId);
-  const availableSessions = mockSessions.filter(s => s.programId === watchedValues.programId);
+
+  // Hooks API
+  const { programs, isLoading: programsLoading, error: programsError } = useCoachPrograms();
+  const { sessions, isLoading: sessionsLoading, error: sessionsError } = useProgramSessions(watchedValues.programId);
+  const { exercises: libraryExercises, isLoading: libraryLoading, error: libraryError } = useExerciseLibrary(searchTerm);
+  const { addExercise, isSubmitting: isAddingExercise } = useAddExercise();
+  
+
+  console.log("sessions", sessions);
+  console.log("programId", watchedValues.programId);
+  const selectedProgram = programs.find(p => p.id === watchedValues.programId);
+  const availableSessions = sessions; // Toutes les sessions du programme sélectionné
+  console.log("availableSessions", availableSessions);
   
   // Filtrage des exercices de la bibliothèque
-  const filteredLibraryExercises = mockExerciseLibrary.filter(exercise =>
+  const filteredLibraryExercises = libraryExercises.filter(exercise =>
     exercise.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     exercise.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
     exercise.primaryMuscles.some(muscle => 
@@ -177,11 +140,14 @@ export const AddExerciseToProgramForm = ({
     )
   );
 
-  const selectedLibraryExercise = mockExerciseLibrary.find(
+  const selectedLibraryExercise = libraryExercises.find(
     ex => ex.id === watchedValues.libraryExerciseId
   );
 
+  const selectedSession = sessions.find(s => s.id === watchedValues.sessionId);
+
   const onSubmit = async (data: AddExerciseForm) => {
+    console.log('onSubmit called with data:', data);
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
@@ -192,6 +158,8 @@ export const AddExerciseToProgramForm = ({
         rpe: data.rpe ?? undefined,
         restSeconds: data.restSeconds ?? undefined
       };
+      console.log('validationData:', validationData);
+      
       const validationResult = validateAddExerciseForm(validationData);
       if (!validationResult.isValid) {
         console.error('Erreurs de validation:', validationResult.errors);
@@ -199,21 +167,10 @@ export const AddExerciseToProgramForm = ({
         return;
       }
 
+      console.log('Validation passed, calling addExercise...');
       // Appel API pour ajouter l'exercice
-      const response = await fetch('/api/programs/exercises', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Erreur lors de l\'ajout de l\'exercice');
-      }
-
-      const result = await response.json();
+      const result = await addExercise(data);
+      console.log('addExercise result:', result);
       
       setSubmitStatus('success');
       
@@ -237,7 +194,7 @@ export const AddExerciseToProgramForm = ({
     if (!isSubmitting) {
       reset({
         programId: preselectedProgramId || '',
-        sessionId: preselectedSessionId || '',
+        sessionId: selectedSession?.id || '',
         exerciseType: 'custom',
         name: '',
         libraryExerciseId: '',
@@ -295,12 +252,13 @@ export const AddExerciseToProgramForm = ({
                             field.onChange(value);
                             setValue('sessionId', ''); // Reset session when program changes
                           }}
+                          disabled={programsLoading}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="Sélectionner un programme" />
+                            <SelectValue placeholder={programsLoading ? "Chargement..." : "Sélectionner un programme"} />
                           </SelectTrigger>
                           <SelectContent>
-                            {mockPrograms.map((program) => (
+                            {programs.map((program) => (
                               <SelectItem key={program.id} value={program.id}>
                                 {program.name}
                               </SelectItem>
@@ -311,6 +269,9 @@ export const AddExerciseToProgramForm = ({
                     />
                     {errors.programId && (
                       <p className="text-red-500 text-sm mt-1">{errors.programId.message}</p>
+                    )}
+                    {programsError && (
+                      <p className="text-red-500 text-sm mt-1">Erreur lors du chargement des programmes</p>
                     )}
                   </div>
 
@@ -323,15 +284,15 @@ export const AddExerciseToProgramForm = ({
                         <Select
                           value={field.value}
                           onValueChange={field.onChange}
-                          disabled={!watchedValues.programId}
+                          disabled={!watchedValues.programId || sessionsLoading}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="Sélectionner une session" />
+                            <SelectValue placeholder={sessionsLoading ? "Chargement..." : "Sélectionner une session"} />
                           </SelectTrigger>
                           <SelectContent>
                             {availableSessions.map((session) => (
                               <SelectItem key={session.id} value={session.id}>
-                                {session.name}
+                                {session.name} - {session.weekNumber} - {session.dayNumber}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -340,6 +301,9 @@ export const AddExerciseToProgramForm = ({
                     />
                     {errors.sessionId && (
                       <p className="text-red-500 text-sm mt-1">{errors.sessionId.message}</p>
+                    )}
+                    {sessionsError && (
+                      <p className="text-red-500 text-sm mt-1">Erreur lors du chargement des sessions</p>
                     )}
                   </div>
                 </div>
@@ -425,33 +389,63 @@ export const AddExerciseToProgramForm = ({
                       />
                     </div>
                     <div className="max-h-40 overflow-y-auto border rounded-lg">
-                      {filteredLibraryExercises.map((exercise) => (
-                        <label
-                          key={exercise.id}
-                          className={`
-                            flex items-center p-3 cursor-pointer hover:bg-gray-50 border-b last:border-b-0
-                            ${watchedValues.libraryExerciseId === exercise.id ? 'bg-emerald-50' : ''}
-                          `}
-                        >
-                          <input
-                            {...register('libraryExerciseId')}
-                            type="radio"
-                            value={exercise.id}
-                            className="sr-only"
-                          />
-                          <div className="flex-1">
-                            <div className="font-medium text-sm">{exercise.name}</div>
-                            <div className="flex items-center space-x-2 mt-1">
-                              <Badge variant="outline" className="text-xs">
-                                {exercise.category}
-                              </Badge>
-                              <span className="text-xs text-gray-600">
-                                {exercise.primaryMuscles.join(', ')}
-                              </span>
+                      {libraryLoading ? (
+                        <div className="p-4 text-center text-gray-500">
+                          <Loader2 className="h-4 w-4 animate-spin mx-auto mb-2" />
+                          Chargement...
+                        </div>
+                      ) : libraryError ? (
+                        <div className="p-4 text-center text-red-500">
+                          Erreur lors du chargement
+                        </div>
+                      ) : filteredLibraryExercises.length === 0 ? (
+                        <div className="p-4 text-center text-gray-500">
+                          Aucun exercice trouvé
+                        </div>
+                      ) : (
+                        filteredLibraryExercises.map((exercise) => (
+                          <label
+                            key={exercise.id}
+                            className={`
+                              flex items-center p-3 cursor-pointer border-b last:border-b-0 transition-colors
+                              ${watchedValues.libraryExerciseId === exercise.id ? 'bg-emerald-50' : ''}
+                            `}
+                            style={{
+                              backgroundColor: watchedValues.libraryExerciseId === exercise.id 
+                                ? 'rgba(16, 185, 129, 0.1)' 
+                                : 'transparent'
+                            }}
+                            onMouseEnter={(e) => {
+                              if (watchedValues.libraryExerciseId !== exercise.id) {
+                                e.currentTarget.style.backgroundColor = colors.hover;
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (watchedValues.libraryExerciseId !== exercise.id) {
+                                e.currentTarget.style.backgroundColor = 'transparent';
+                              }
+                            }}
+                          >
+                            <input
+                              {...register('libraryExerciseId')}
+                              type="radio"
+                              value={exercise.id}
+                              className="sr-only"
+                            />
+                            <div className="flex-1">
+                              <div className="font-medium text-sm">{exercise.name}</div>
+                              <div className="flex items-center space-x-2 mt-1">
+                                <Badge variant="outline" className={`${colors.textSecondary} text-xs`}>
+                                  {exercise.category}
+                                </Badge>
+                                <p className="text-xs" style={{ color: colors.textSecondary }}>
+                                  {exercise.primaryMuscles.join(', ')}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        </label>
-                      ))}
+                          </label>
+                        ))
+                      )}
                     </div>
                     {errors.libraryExerciseId && (
                       <p className="text-red-500 text-sm mt-1">{errors.libraryExerciseId.message}</p>
@@ -555,13 +549,19 @@ export const AddExerciseToProgramForm = ({
 
               {/* Colonne de droite - Aperçu */}
               <div className="space-y-4">
-                <h3 className="text-lg font-bold">Aperçu de l'exercice</h3>
+                <h3 className="text-lg font-bold" style={{ color: colors.text }}>Aperçu de l'exercice</h3>
                 
-                <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 space-y-4">
+                <div 
+                  className="rounded-xl p-4 space-y-4"
+                  style={{ 
+                    backgroundColor: colors.cardBg,
+                    border: `1px solid ${colors.border}`
+                  }}
+                >
                   {/* Informations générales */}
                   <div>
-                    <h4 className="font-medium mb-2">Exercice</h4>
-                    <p className="text-lg font-semibold">
+                    <h4 className="font-medium mb-2" style={{ color: colors.text }}>Exercice</h4>
+                    <p className="text-lg font-semibold" style={{ color: colors.text }}>
                       {watchedValues.exerciseType === 'custom' 
                         ? watchedValues.name || 'Nom de l\'exercice' 
                         : selectedLibraryExercise?.name || 'Sélectionner un exercice'
@@ -569,9 +569,9 @@ export const AddExerciseToProgramForm = ({
                     </p>
                     {selectedLibraryExercise && (
                       <div className="flex flex-wrap gap-1 mt-2">
-                        <Badge variant="outline">{selectedLibraryExercise.category}</Badge>
+                        <Badge variant="outline" className={`${colors.textSecondary}`}>{selectedLibraryExercise.category}</Badge>
                         {selectedLibraryExercise.equipment && (
-                          <Badge variant="secondary">{selectedLibraryExercise.equipment}</Badge>
+                          <Badge variant="secondary" className={`${colors.textSecondary}`}>{selectedLibraryExercise.equipment}</Badge>
                         )}
                       </div>
                     )}
@@ -579,26 +579,26 @@ export const AddExerciseToProgramForm = ({
 
                   {/* Paramètres */}
                   <div>
-                    <h4 className="font-medium mb-2">Paramètres</h4>
+                    <h4 className="font-medium mb-2" style={{ color: colors.text }}>Paramètres</h4>
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div className="flex justify-between">
-                        <span>Séries:</span>
-                        <span className="font-medium">{watchedValues.sets}</span>
+                        <span style={{ color: colors.textSecondary }}>Séries:</span>
+                        <span className="font-medium" style={{ color: colors.text }}>{watchedValues.sets}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>Répétitions:</span>
-                        <span className="font-medium">{watchedValues.reps}</span>
+                        <span style={{ color: colors.textSecondary }}>Répétitions:</span>
+                        <span className="font-medium" style={{ color: colors.text }}>{watchedValues.reps}</span>
                       </div>
                       {watchedValues.rpe && (
                         <div className="flex justify-between">
-                          <span>RPE:</span>
-                          <span className="font-medium">{watchedValues.rpe}/10</span>
+                          <span style={{ color: colors.textSecondary }}>RPE:</span>
+                          <span className="font-medium" style={{ color: colors.text }}>{watchedValues.rpe}/10</span>
                         </div>
                       )}
                       {watchedValues.restSeconds && (
                         <div className="flex justify-between">
-                          <span>Repos:</span>
-                          <span className="font-medium">{formatRestTime(watchedValues.restSeconds)}</span>
+                          <span style={{ color: colors.textSecondary }}>Repos:</span>
+                          <span className="font-medium" style={{ color: colors.text }}>{formatRestTime(watchedValues.restSeconds)}</span>
                         </div>
                       )}
                     </div>
@@ -606,22 +606,24 @@ export const AddExerciseToProgramForm = ({
 
                   {/* Programme et session */}
                   <div>
-                    <h4 className="font-medium mb-2">Emplacement</h4>
+                    <h4 className="font-medium mb-2" style={{ color: colors.text }}>Emplacement</h4>
                     <p className="text-sm">
-                      <span className="font-medium">Programme:</span> {selectedProgram?.name || 'Non sélectionné'}
+                      <span className="font-medium" style={{ color: colors.text }}>Programme:</span> 
+                      <span style={{ color: colors.textSecondary }}> {selectedProgram?.name || 'Non sélectionné'}</span>
                     </p>
                     <p className="text-sm">
-                      <span className="font-medium">Session:</span> {
+                      <span className="font-medium" style={{ color: colors.text }}>Session:</span> 
+                      <span style={{ color: colors.textSecondary }}> {
                         availableSessions.find(s => s.id === watchedValues.sessionId)?.name || 'Non sélectionnée'
-                      }
+                      }</span>
                     </p>
                   </div>
 
                   {/* Notes */}
                   {watchedValues.notes && (
                     <div>
-                      <h4 className="font-medium mb-2">Notes</h4>
-                      <p className="text-sm text-gray-600 italic">{watchedValues.notes}</p>
+                      <h4 className="font-medium mb-2" style={{ color: colors.text }}>Notes</h4>
+                      <p className="text-sm italic" style={{ color: colors.textSecondary }}>{watchedValues.notes}</p>
                     </div>
                   )}
                 </div>
@@ -642,6 +644,9 @@ export const AddExerciseToProgramForm = ({
               <Button
                 type="submit"
                 disabled={isSubmitting}
+                onClick={() => {
+                  onSubmit(watchedValues);
+                }}
                 className={`
                   min-w-[120px]
                   ${submitStatus === 'success' 
