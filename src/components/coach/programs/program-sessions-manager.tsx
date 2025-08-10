@@ -15,7 +15,9 @@ import {
   Target,
   AlertCircle,
   Copy,
-  MoreVertical
+  MoreVertical,
+  Share,
+  X
 } from 'lucide-react';
 import {
   Dialog,
@@ -30,7 +32,7 @@ import { AddSessionForm } from '../forms/add-session-form';
 import { AddExerciseToProgramForm } from '../forms/add-exercise-to-program-form';
 import { useTheme } from '../../../lib/theme-provider';
 import { useProgramSessions } from '../../../hooks/use-program-sessions';
-import { useDeleteSession, useDuplicateSession } from '../../../hooks/use-program-actions';
+import { useDeleteSession, useDuplicateSession, usePublishProgram } from '../../../hooks/use-program-actions';
 import { ConfirmDialog } from '../../ui/confirm-dialog';
 import { EditProgramForm } from '../forms/edit-program-form';
 
@@ -98,6 +100,7 @@ export const ProgramSessionsManager = ({
   // Hooks pour les actions
   const { deleteSession, isDeleting } = useDeleteSession();
   const { duplicateSession, isDuplicating } = useDuplicateSession();
+  const { publishProgram, unpublishProgram, isPublishing, isUnpublishing } = usePublishProgram();
 
   // Hook pour récupérer les sessions du programme
   const { 
@@ -176,32 +179,85 @@ export const ProgramSessionsManager = ({
     });
   };
 
+  // Gestionnaires pour la publication
+  const handlePublishProgram = async () => {
+    try {
+      await publishProgram(program.id);
+    } catch (error) {
+      console.error('Erreur lors de la publication:', error);
+    }
+  };
+
+  const handleUnpublishProgram = async () => {
+    try {
+      await unpublishProgram(program.id);
+    } catch (error) {
+      console.error('Erreur lors de la dépublication:', error);
+    }
+  };
+
   return (
     <div>
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <Calendar className="h-5 w-5 text-white" />
+            <DialogTitle>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                    <Calendar className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <h2 className={`${colors.text} text-xl font-bold`}>{program.name}</h2>
+                    <p className={`${colors.textSecondary} text-sm mt-1`}>
+                      Gestion des sessions et exercices
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className={`${colors.text} text-xl font-bold`}>{program.name}</h2>
-                  <p className={`${colors.textSecondary} text-sm mt-1`}>
-                    Gestion des sessions et exercices
-                  </p>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    onClick={() => setShowEditProgram(true)}
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center space-x-2"
+                  >
+                    <Edit className="h-4 w-4" />
+                    <span>Modifier</span>
+                  </Button>
+                  
+                  {/* Bouton de publication */}
+                  {program.status === 'draft' ? (
+                    <Button
+                      onClick={handlePublishProgram}
+                      disabled={isPublishing}
+                      size="sm"
+                      className="bg-emerald-500 hover:bg-emerald-600 text-white flex items-center space-x-2"
+                    >
+                      {isPublishing ? (
+                        <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white mr-1"></div>
+                      ) : (
+                        <Share className="h-4 w-4" />
+                      )}
+                      <span>Publier</span>
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={handleUnpublishProgram}
+                      disabled={isUnpublishing}
+                      size="sm"
+                      variant="outline"
+                      className="flex items-center space-x-2"
+                    >
+                      {isUnpublishing ? (
+                        <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white mr-1"></div>
+                      ) : (
+                        <X className="h-4 w-4" />
+                      )}
+                      <span>Dépublier</span>
+                    </Button>
+                  )}
                 </div>
               </div>
-              <Button
-                onClick={() => setShowEditProgram(true)}
-                variant="outline"
-                size="sm"
-                className="flex items-center space-x-2"
-              >
-                <Edit className="h-4 w-4" />
-                <span>Modifier</span>
-              </Button>
             </DialogTitle>
           </DialogHeader>
 

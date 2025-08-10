@@ -1,7 +1,7 @@
 // src/components/coach/dashboard/modern-coach-dashboard-optimized.tsx
 "use client"
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTheme } from '../../../lib/theme-provider';
 import { 
   Activity, 
@@ -18,7 +18,8 @@ import {
   Loader2,
   AlertCircle,
   Trash2,
-  Copy
+  Copy,
+  X
 } from 'lucide-react';
 import { DashboardHeader } from './navigation/dashboard-header';
 import { DashboardNav } from './navigation/dashboard-nav';
@@ -29,7 +30,8 @@ import { useCoachStats } from '../../../hooks/use-coach-stats';
 import { useCoachPrograms } from '../../../hooks/use-coach-programs';
 import { useCoachClients } from '../../../hooks/use-coach-client';
 import { useProgramSessions } from '../../../hooks/use-program-sessions';
-import { useDeleteProgram, useDuplicateProgram, useUpdateProgram } from '../../../hooks/use-program-actions';
+import { useTodaySessions } from '../../../hooks/use-today-sessions';
+import { useDeleteProgram, useDuplicateProgram, useUpdateProgram, usePublishProgram } from '../../../hooks/use-program-actions';
 import { ConfirmDialog } from '../../ui/confirm-dialog';
 import { EditProgramForm } from '../forms/edit-program-form';
 import { ProgramOverview } from '../programs/program-overview';
@@ -140,6 +142,20 @@ export const ModernCoachDashboard = () => {
   const { stats, isLoading: statsLoading, error: statsError, refetch: refetchStats } = useCoachStats();
   const { programs, isLoading: programsLoading, error: programsError, refetch: refetchPrograms } = useCoachPrograms();
   const { clients, isLoading: clientsLoading, error: clientsError, refetch: refetchClients } = useCoachClients();
+  const { sessions: todaySessions, isLoading: todaySessionsLoading, error: todaySessionsError, refetch: refetchTodaySessions } = useTodaySessions();
+  
+  // Rechargement automatique lors du changement d'onglet
+  useEffect(() => {
+    if (selectedTab === 'overview') {
+      refetchStats();
+      refetchClients();
+      refetchTodaySessions();
+    } else if (selectedTab === 'training') {
+      refetchPrograms();
+    } else if (selectedTab === 'clients') {
+      refetchClients();
+    }
+  }, [selectedTab]); // Suppression des dépendances qui causent la boucle
   
   // Hook pour les sessions du programme sélectionné
   const { 
@@ -150,46 +166,46 @@ export const ModernCoachDashboard = () => {
     refetch: refetchSessions 
   } = useProgramSessions(selectedProgram?.id || null);
   
+  // Rechargement automatique des sessions quand un programme est sélectionné
+  useEffect(() => {
+    if (selectedProgram?.id) {
+      refetchSessions();
+    }
+  }, [selectedProgram?.id]); // Suppression de refetchSessions des dépendances
+  
   // Hooks pour les actions sur les programmes
   const { deleteProgram, isDeleting } = useDeleteProgram();
   const { duplicateProgram, isDuplicating } = useDuplicateProgram();
+  const { publishProgram, unpublishProgram, isPublishing, isUnpublishing } = usePublishProgram();
 
-  // 📊 Préparation des données pour les graphiques
-  const performanceData = [
-    { month: 'Jan', clients: stats?.activeClients || 0, programs: stats?.publishedPrograms || 0, sessions: 24 },
-    { month: 'Fév', clients: (stats?.activeClients || 0) + 2, programs: (stats?.publishedPrograms || 0) + 1, sessions: 28 },
-    { month: 'Mar', clients: (stats?.activeClients || 0) + 4, programs: (stats?.publishedPrograms || 0) + 2, sessions: 32 },
-    { month: 'Avr', clients: stats?.activeClients || 0, programs: stats?.publishedPrograms || 0, sessions: 30 },
+  // 📊 Préparation des données pour les graphiques (utilise les vraies données)
+  const performanceData = stats?.monthlyData || [
+    { month: 'Jan', clients: 0, programs: 0, sessions: 0 },
+    { month: 'Fév', clients: 0, programs: 0, sessions: 0 },
+    { month: 'Mar', clients: 0, programs: 0, sessions: 0 },
+    { month: 'Avr', clients: 0, programs: 0, sessions: 0 },
   ];
 
   const statsChartData = [
     { name: 'Clients actifs', value: stats?.activeClients || 0 },
-    { name: 'Programmes', value: stats?.publishedPrograms || 0 },
-    { name: 'Taux réussite', value: stats?.completionRate || 0 }
+    { name: 'Programmes publiés', value: stats?.publishedPrograms || 0 },
+    { name: 'Sessions totales', value: stats?.totalSessions || 0 },
+    { name: 'Exercices', value: stats?.totalExercises || 0 }
   ];
 
-  // 📅 Données simulées pour les sessions (à remplacer par un hook API)
-  const todaySessions: SessionData[] = [
-    { 
-      id: '1', 
-      client: clients[0]?.name || "Thomas Dubois", 
-      type: "Séance de renforcement", 
-      time: "10:00",
-      status: 'upcoming'
-    },
-    { 
-      id: '2', 
-      client: clients[1]?.name || "Sophie Martin", 
-      type: "Cardio intensif", 
-      time: "14:30",
-      status: 'upcoming'
-    }
-  ];
+  // 📅 Données réelles pour les sessions du jour
+  const todaySessionsData: SessionData[] = todaySessions.map(session => ({
+    id: session.id,
+    client: session.client,
+    type: session.type,
+    time: session.time,
+    status: session.status
+  }));
 
   const performanceMetrics = [
     { label: "Séances complétées", value: `${stats?.completionRate || 0}%`, percentage: stats?.completionRate || 0, color: "bg-blue-500" },
     { label: "Programmes publiés", value: `${stats?.publishRate || 0}%`, percentage: stats?.publishRate || 0, color: "bg-emerald-500" },
-    { label: "Clients actifs", value: `${Math.round(((stats?.activeClients || 0) / (stats?.totalClients || 1)) * 100)}%`, percentage: Math.round(((stats?.activeClients || 0) / (stats?.totalClients || 1)) * 100), color: "bg-yellow-500" }
+    { label: "Sessions ce mois", value: `${stats?.sessionsThisMonth || 0}`, percentage: Math.min((stats?.sessionsThisMonth || 0) / 10 * 100, 100), color: "bg-yellow-500" }
   ];
 
   // 🎯 Handlers
@@ -233,13 +249,7 @@ export const ModernCoachDashboard = () => {
     setSelectedProgram(null);
     setSelectedSessionId(null);
   };
-
-  const handlePublishProgram = () => {
-    console.log('Publier programme:', selectedProgram);
-    // TODO: Appel API pour publier
-    handleCloseModal();
-  };
-
+  
   // Gestionnaires pour les actions sur les programmes
   const handleDeleteProgram = async () => {
     if (!confirmDialog.programId) return;
@@ -272,6 +282,23 @@ export const ModernCoachDashboard = () => {
       programId,
       programName
     });
+  };
+
+  // Gestionnaires pour la publication
+  const handlePublishProgram = async (programId: string) => {
+    try {
+      await publishProgram(programId);
+    } catch (error) {
+      console.error('Erreur lors de la publication:', error);
+    }
+  };
+
+  const handleUnpublishProgram = async (programId: string) => {
+    try {
+      await unpublishProgram(programId);
+    } catch (error) {
+      console.error('Erreur lors de la dépublication:', error);
+    }
   };
 
   // Adaptateurs pour les types
@@ -307,13 +334,7 @@ export const ModernCoachDashboard = () => {
   }));
 
   // Transformation des données sessions pour le composant
-  const sessionsForComponent: SessionType[] = todaySessions.map(session => ({
-    id: session.id,
-    client: session.client,
-    type: session.type,
-    time: session.time,
-    status: session.status
-  }));
+  const sessionsForComponent: SessionType[] = todaySessionsData;
 
   // 📊 Statistiques basées sur les vraies données API
   const statsCards = [
@@ -492,7 +513,7 @@ export const ModernCoachDashboard = () => {
                     
                     {/* Menu d'actions pour le programme */}
                     <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-                      <div className="flex space-x-2">
+                      <div className="flex space-x-2 mb-2">
                         <button
                           onClick={() => openConfirmDialog('duplicate-program', program.id, program.name)}
                           className="flex-1 p-2 hover:bg-green-50 text-green-600 rounded-lg transition-colors text-sm flex items-center justify-center"
@@ -507,6 +528,37 @@ export const ModernCoachDashboard = () => {
                           <Trash2 className="h-3 w-3 mr-1" />
                           Supprimer
                         </button>
+                      </div>
+                      
+                      {/* Bouton de publication */}
+                      <div className="flex space-x-2">
+                        {program.status === 'draft' ? (
+                          <button
+                            onClick={() => handlePublishProgram(program.id)}
+                            disabled={isPublishing}
+                            className="flex-1 p-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors text-sm flex items-center justify-center disabled:opacity-50"
+                          >
+                            {isPublishing ? (
+                              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white mr-1"></div>
+                            ) : (
+                              <Share className="h-3 w-3 mr-1" />
+                            )}
+                            Publier
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => handleUnpublishProgram(program.id)}
+                            disabled={isUnpublishing}
+                            className="flex-1 p-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors text-sm flex items-center justify-center disabled:opacity-50"
+                          >
+                            {isUnpublishing ? (
+                              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white mr-1"></div>
+                            ) : (
+                              <X className="h-3 w-3 mr-1" />
+                            )}
+                            Dépublier
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -644,7 +696,7 @@ export const ModernCoachDashboard = () => {
             isOpen={activeModal === 'view-program'}
             onClose={handleCloseModal}
             onEdit={() => setActiveModal('edit-program')}
-            onPublish={handlePublishProgram}
+            onPublish={() => handlePublishProgram(selectedProgram.id)}
           />
 
           {/* Modal Édition Programme */}

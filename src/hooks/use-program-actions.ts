@@ -179,4 +179,72 @@ export const useUpdateProgram = () => {
   };
 
   return { updateProgram, isUpdating };
+};
+
+// Hook pour publier/dépublier un programme
+export const usePublishProgram = () => {
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [isUnpublishing, setIsUnpublishing] = useState(false);
+  const triggerRefresh = useRefreshStore(state => state.triggerRefresh);
+
+  const publishProgram = async (programId: string) => {
+    setIsPublishing(true);
+    try {
+      const response = await fetch(`/api/programs/${programId}/publish`, {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erreur lors de la publication');
+      }
+
+      const result = await response.json();
+
+      // Déclencher le rafraîchissement des données
+      triggerRefresh('programs');
+      triggerRefresh(`program-${programId}`);
+
+      return result;
+    } catch (error) {
+      console.error('Erreur lors de la publication du programme:', error);
+      throw error;
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
+  const unpublishProgram = async (programId: string) => {
+    setIsUnpublishing(true);
+    try {
+      const response = await fetch(`/api/programs/${programId}/publish`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erreur lors de la dépublication');
+      }
+
+      const result = await response.json();
+
+      // Déclencher le rafraîchissement des données
+      triggerRefresh('programs');
+      triggerRefresh(`program-${programId}`);
+
+      return result;
+    } catch (error) {
+      console.error('Erreur lors de la dépublication du programme:', error);
+      throw error;
+    } finally {
+      setIsUnpublishing(false);
+    }
+  };
+
+  return { 
+    publishProgram, 
+    unpublishProgram, 
+    isPublishing, 
+    isUnpublishing 
+  };
 }; 

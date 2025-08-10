@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface CoachStats {
   totalClients: number;
@@ -9,8 +9,17 @@ interface CoachStats {
   publishedPrograms: number;
   newClientsThisMonth: number;
   newProgramsThisMonth: number;
+  totalSessions: number;
+  sessionsThisMonth: number;
+  totalExercises: number;
   completionRate: number;
   publishRate: number;
+  monthlyData: Array<{
+    month: string;
+    clients: number;
+    programs: number;
+    sessions: number;
+  }>;
 }
 
 interface UseCoachStatsReturn {
@@ -25,7 +34,7 @@ export const useCoachStats = (): UseCoachStatsReturn => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -48,7 +57,7 @@ export const useCoachStats = (): UseCoachStatsReturn => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchStats();
