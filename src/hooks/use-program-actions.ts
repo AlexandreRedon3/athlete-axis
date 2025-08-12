@@ -1,14 +1,12 @@
-import { useState } from 'react';
-import { useRefreshStore } from '../lib/refresh-store';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 // Hook pour supprimer une session
 export const useDeleteSession = () => {
-  const [isDeleting, setIsDeleting] = useState(false);
-  const triggerRefresh = useRefreshStore(state => state.triggerRefresh);
+  const queryClient = useQueryClient();
 
-  const deleteSession = async (programId: string, sessionId: string) => {
-    setIsDeleting(true);
-    try {
+  const mutation = useMutation({
+    mutationFn: async ({ programId, sessionId }: { programId: string; sessionId: string }) => {
       const response = await fetch(`/api/programs/${programId}/sessions/${sessionId}`, {
         method: 'DELETE',
       });
@@ -18,30 +16,30 @@ export const useDeleteSession = () => {
         throw new Error(errorData.error || 'Erreur lors de la suppression');
       }
 
-      // Déclencher le rafraîchissement des données
-      triggerRefresh(`program-${programId}`);
-      triggerRefresh('programs');
-
       return { success: true };
-    } catch (error) {
-      console.error('Erreur lors de la suppression de la session:', error);
-      throw error;
-    } finally {
-      setIsDeleting(false);
-    }
-  };
+    },
+    onSuccess: (_, { programId }) => {
+      queryClient.invalidateQueries({ queryKey: ['programs'] });
+      queryClient.invalidateQueries({ queryKey: ['programs', programId] });
+      toast.success('Session supprimée avec succès');
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : 'Erreur lors de la suppression');
+    },
+  });
 
-  return { deleteSession, isDeleting };
+  return {
+    deleteSession: mutation.mutateAsync,
+    isDeleting: mutation.isPending,
+  };
 };
 
 // Hook pour dupliquer une session
 export const useDuplicateSession = () => {
-  const [isDuplicating, setIsDuplicating] = useState(false);
-  const triggerRefresh = useRefreshStore(state => state.triggerRefresh);
+  const queryClient = useQueryClient();
 
-  const duplicateSession = async (programId: string, sessionId: string) => {
-    setIsDuplicating(true);
-    try {
+  const mutation = useMutation({
+    mutationFn: async ({ programId, sessionId }: { programId: string; sessionId: string }) => {
       const response = await fetch(`/api/programs/${programId}/sessions/${sessionId}`, {
         method: 'POST',
       });
@@ -51,105 +49,104 @@ export const useDuplicateSession = () => {
         throw new Error(errorData.error || 'Erreur lors de la duplication');
       }
 
-      const result = await response.json();
+      return await response.json();
+    },
+    onSuccess: (_, { programId }) => {
+      queryClient.invalidateQueries({ queryKey: ['programs'] });
+      queryClient.invalidateQueries({ queryKey: ['programs', programId] });
+      toast.success('Session dupliquée avec succès');
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : 'Erreur lors de la duplication');
+    },
+  });
 
-      // Déclencher le rafraîchissement des données
-      triggerRefresh(`program-${programId}`);
-      triggerRefresh('programs');
-
-      return result;
-    } catch (error) {
-      console.error('Erreur lors de la duplication de la session:', error);
-      throw error;
-    } finally {
-      setIsDuplicating(false);
-    }
+  return {
+    duplicateSession: mutation.mutateAsync,
+    isDuplicating: mutation.isPending,
   };
-
-  return { duplicateSession, isDuplicating };
 };
 
 // Hook pour supprimer un programme
 export const useDeleteProgram = () => {
-  const [isDeleting, setIsDeleting] = useState(false);
-  const triggerRefresh = useRefreshStore(state => state.triggerRefresh);
+  const queryClient = useQueryClient();
 
-  const deleteProgram = async (programId: string) => {
-    setIsDeleting(true);
-    try {
+  const mutation = useMutation({
+    mutationFn: async (programId: string) => {
       const response = await fetch(`/api/programs/${programId}`, {
         method: 'DELETE',
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Erreur lors de la suppression');
+        throw new Error(errorData.error || 'Erreur de suppression');
       }
 
-      // Déclencher le rafraîchissement des données
-      triggerRefresh('programs');
-
       return { success: true };
-    } catch (error) {
-      console.error('Erreur lors de la suppression du programme:', error);
-      throw error;
-    } finally {
-      setIsDeleting(false);
-    }
-  };
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['programs'] });
+      toast.success('Programme supprimé');
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : 'Erreur de suppression');
+    },
+  });
 
-  return { deleteProgram, isDeleting };
+  return {
+    deleteProgram: mutation.mutateAsync,
+    isDeleting: mutation.isPending,
+  };
 };
 
 // Hook pour dupliquer un programme
 export const useDuplicateProgram = () => {
-  const [isDuplicating, setIsDuplicating] = useState(false);
-  const triggerRefresh = useRefreshStore(state => state.triggerRefresh);
+  const queryClient = useQueryClient();
 
-  const duplicateProgram = async (programId: string) => {
-    setIsDuplicating(true);
-    try {
+  const mutation = useMutation({
+    mutationFn: async (programId: string) => {
       const response = await fetch(`/api/programs/${programId}`, {
         method: 'POST',
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Erreur lors de la duplication');
+        throw new Error(errorData.error || 'Erreur de duplication');
       }
 
-      const result = await response.json();
+      return await response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['programs'] });
+      toast.success('Programme dupliqué');
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : 'Erreur de duplication');
+    },
+  });
 
-      // Déclencher le rafraîchissement des données
-      triggerRefresh('programs');
-
-      return result;
-    } catch (error) {
-      console.error('Erreur lors de la duplication du programme:', error);
-      throw error;
-    } finally {
-      setIsDuplicating(false);
-    }
+  return {
+    duplicateProgram: mutation.mutateAsync,
+    isDuplicating: mutation.isPending,
   };
-
-  return { duplicateProgram, isDuplicating };
 };
 
 // Hook pour mettre à jour un programme
 export const useUpdateProgram = () => {
-  const [isUpdating, setIsUpdating] = useState(false);
-  const triggerRefresh = useRefreshStore(state => state.triggerRefresh);
+  const queryClient = useQueryClient();
 
-  const updateProgram = async (programId: string, programData: {
-    name?: string;
-    description?: string;
-    type?: string;
-    level?: string;
-    durationWeeks?: number;
-    sessionsPerWeek?: number;
-  }) => {
-    setIsUpdating(true);
-    try {
+  const mutation = useMutation({
+    mutationFn: async ({ programId, programData }: {
+      programId: string;
+      programData: {
+        name?: string;
+        description?: string;
+        type?: string;
+        level?: string;
+        durationWeeks?: number;
+        sessionsPerWeek?: number;
+      };
+    }) => {
       const response = await fetch(`/api/programs/${programId}`, {
         method: 'PUT',
         headers: {
@@ -163,88 +160,78 @@ export const useUpdateProgram = () => {
         throw new Error(errorData.error || 'Erreur lors de la mise à jour');
       }
 
-      const result = await response.json();
+      return await response.json();
+    },
+    onSuccess: (_, { programId }) => {
+      queryClient.invalidateQueries({ queryKey: ['programs'] });
+      queryClient.invalidateQueries({ queryKey: ['programs', programId] });
+      toast.success('Programme mis à jour avec succès');
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : 'Erreur lors de la mise à jour');
+    },
+  });
 
-      // Déclencher le rafraîchissement des données
-      triggerRefresh('programs');
-      triggerRefresh(`program-${programId}`);
-
-      return result;
-    } catch (error) {
-      console.error('Erreur lors de la mise à jour du programme:', error);
-      throw error;
-    } finally {
-      setIsUpdating(false);
-    }
+  return {
+    updateProgram: mutation.mutateAsync,
+    isUpdating: mutation.isPending,
   };
-
-  return { updateProgram, isUpdating };
 };
 
 // Hook pour publier/dépublier un programme
 export const usePublishProgram = () => {
-  const [isPublishing, setIsPublishing] = useState(false);
-  const [isUnpublishing, setIsUnpublishing] = useState(false);
-  const triggerRefresh = useRefreshStore(state => state.triggerRefresh);
+  const queryClient = useQueryClient();
 
-  const publishProgram = async (programId: string) => {
-    setIsPublishing(true);
-    try {
+  const publishMutation = useMutation({
+    mutationFn: async (programId: string) => {
       const response = await fetch(`/api/programs/${programId}/publish`, {
         method: 'POST',
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Erreur lors de la publication');
+        throw new Error(errorData.error || 'Erreur de publication');
       }
 
-      const result = await response.json();
+      return await response.json();
+    },
+    onSuccess: (_, programId) => {
+      queryClient.invalidateQueries({ queryKey: ['programs'] });
+      queryClient.invalidateQueries({ queryKey: ['programs', programId] });
+      toast.success('Programme publié');
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : 'Erreur de publication');
+    },
+  });
 
-      // Déclencher le rafraîchissement des données
-      triggerRefresh('programs');
-      triggerRefresh(`program-${programId}`);
-
-      return result;
-    } catch (error) {
-      console.error('Erreur lors de la publication du programme:', error);
-      throw error;
-    } finally {
-      setIsPublishing(false);
-    }
-  };
-
-  const unpublishProgram = async (programId: string) => {
-    setIsUnpublishing(true);
-    try {
+  const unpublishMutation = useMutation({
+    mutationFn: async (programId: string) => {
       const response = await fetch(`/api/programs/${programId}/publish`, {
         method: 'DELETE',
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Erreur lors de la dépublication');
+        throw new Error(errorData.error || 'Erreur de dépublication');
       }
 
-      const result = await response.json();
+      return await response.json();
+    },
+    onSuccess: (_, programId) => {
+      queryClient.invalidateQueries({ queryKey: ['programs'] });
+      queryClient.invalidateQueries({ queryKey: ['programs', programId] });
+      toast.success('Programme retiré de la publication');
+    },
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : 'Erreur de dépublication');
+    },
+  });
 
-      // Déclencher le rafraîchissement des données
-      triggerRefresh('programs');
-      triggerRefresh(`program-${programId}`);
-
-      return result;
-    } catch (error) {
-      console.error('Erreur lors de la dépublication du programme:', error);
-      throw error;
-    } finally {
-      setIsUnpublishing(false);
-    }
-  };
-
-  return { 
-    publishProgram, 
-    unpublishProgram, 
-    isPublishing, 
-    isUnpublishing 
+  return {
+    publishProgram: publishMutation.mutateAsync,
+    unpublishProgram: unpublishMutation.mutateAsync,
+    isPublishing: publishMutation.isPending,
+    isUnpublishing: unpublishMutation.isPending,
   };
 }; 

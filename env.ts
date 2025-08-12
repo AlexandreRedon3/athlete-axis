@@ -7,7 +7,6 @@ export const env = createEnv({
     NODE_ENV: z.enum(["development", "production", "test"]),
   },
   client: {
-    // Add your client-side environment variables here
     NEXT_PUBLIC_APP_URL: z.string().url(),
   },
   runtimeEnv: {

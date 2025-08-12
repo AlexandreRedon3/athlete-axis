@@ -42,12 +42,12 @@ export const useCoachStats = (): UseCoachStatsReturn => {
       const response = await fetch('/api/coach/stats');
       
       if (!response.ok) {
-        throw new Error('Erreur lors de la récupération des statistiques');
+        throw new Error('Erreur lors du chargement des statistiques');
       }
       
       const data = await response.json();
       
-      if (data.success) {
+      if (data.stats !== undefined) {
         setStats(data.stats);
       } else {
         throw new Error(data.error || 'Erreur inconnue');

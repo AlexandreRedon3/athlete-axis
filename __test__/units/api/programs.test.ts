@@ -1,10 +1,9 @@
 // __tests__/api/programs.test.ts
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { GET, POST } from "../../app/api/programs/route";
 import { NextRequest } from "next/server";
 
-// Mocks
-vi.mock("../../src/lib/auth", () => ({
+// Mocks - IMPORTANT: Ces mocks doivent être définis AVANT d'importer les modules
+vi.mock("../../../src/lib/auth", () => ({
   auth: {
     api: {
       getSession: vi.fn(),
@@ -12,7 +11,7 @@ vi.mock("../../src/lib/auth", () => ({
   },
 }));
 
-vi.mock("../../src/lib/db", () => ({
+vi.mock("../../../src/lib/db", () => ({
   db: {
     query: {
       program: {
@@ -30,8 +29,31 @@ vi.mock("../../src/lib/db", () => ({
   },
 }));
 
-import { auth } from "../../src/lib/auth";
-import { db } from "../../src/lib/db";
+// Mock des modules de base de données
+vi.mock("../../../src/db/program", () => ({
+  program: {
+    coachId: "coachId",
+    userId: "userId",
+  },
+}));
+
+vi.mock("../../../src/db/program-assignment", () => ({
+  programAssignment: {
+    athleteId: "athleteId",
+    isActive: "isActive",
+  },
+}));
+
+// Mock de drizzle-orm
+vi.mock("drizzle-orm/sql", () => ({
+  eq: vi.fn(),
+  and: vi.fn(),
+}));
+
+// Import des modules après les mocks
+import { GET, POST } from "../../../app/api/programs/route";
+import { auth } from "../../../src/lib/auth";
+import { db } from "../../../src/lib/db";
 
 describe("API /api/programs", () => {
   beforeEach(() => {

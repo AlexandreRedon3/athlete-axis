@@ -14,6 +14,11 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:unit": "vitest run __test__/units",
+    "test:integration": "vitest run __test__/integration",
+    "test:security": "vitest run __test__/security",
+    "test:accessibility": "vitest run __test__/accessibility",
+    "test:all": "npm run test:unit && npm run test:integration && npm run test:security",
     "type-check": "tsc --noEmit",
     "unused-deps": "depcheck --ignores=\"@types/*,eslint-*,prettier,tailwindcss\"",
     "clean": "rm -rf .next && rm -rf node_modules/.cache",
@@ -31,7 +36,11 @@
     "monitoring:logs": "docker-compose -f docker/monitoring/docker-compose.monitoring.yml logs -f",
     "quality:check": "npm run type-check && npm run lint && npm run format:check && npm run unused-deps",
     "quality:fix": "npm run lint:fix && npm run format",
-    "ci:test": "npm run quality:check && npm run test && npm run build"
+    "ci:test": "npm run quality:check && npm run test && npm run build",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug"
   },
   "dependencies": {
     "@auth/core": "^0.39.0",
@@ -94,6 +103,8 @@
     "zustand": "^5.0.6"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.54.2",
     "@tailwindcss/typography": "^0.5.16",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",

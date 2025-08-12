@@ -36,12 +36,12 @@ export const useCoachClients = (): UseCoachClientsReturn => {
       const response = await fetch('/api/coach/clients');
       
       if (!response.ok) {
-        throw new Error('Erreur lors de la récupération des clients');
+        throw new Error('Erreur lors du chargement des clients');
       }
       
       const data = await response.json();
       
-      if (data.success) {
+      if (data.clients !== undefined) {
         setClients(data.clients);
       } else {
         throw new Error(data.error || 'Erreur inconnue');

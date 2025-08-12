@@ -121,7 +121,7 @@ export function useUpdateProgram() {
       });
 
       if (!response.ok) {
-        throw new Error("Erreur lors de la modification");
+        throw new Error("Erreur de mise à jour");
       }
 
       const data = await response.json();
@@ -130,10 +130,10 @@ export function useUpdateProgram() {
     onSuccess: (_, { programId }) => {
       queryClient.invalidateQueries({ queryKey: ["programs"] });
       queryClient.invalidateQueries({ queryKey: ["programs", programId] });
-      toast.success("Programme modifié avec succès");
+      toast.success("Programme mis à jour avec succès");
     },
     onError: () => {
-      toast.error("Erreur lors de la modification");
+      toast.error("Erreur de mise à jour");
     },
   });
 }

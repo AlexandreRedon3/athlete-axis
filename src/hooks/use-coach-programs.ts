@@ -41,12 +41,12 @@ export const useCoachPrograms = (): UseCoachProgramsReturn => {
       const response = await fetch('/api/coach/programs');
       
       if (!response.ok) {
-        throw new Error('Erreur lors de la récupération des programmes');
+        throw new Error('Erreur lors du chargement des programmes');
       }
       
       const data = await response.json();
       
-      if (data.success) {
+      if (data.programs) {
         setPrograms(data.programs);
       } else {
         throw new Error(data.error || 'Erreur inconnue');

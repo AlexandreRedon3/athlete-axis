@@ -77,7 +77,8 @@ export const useExerciseLibrary = (searchTerm: string = '') => {
         setExercises(data.exercises || []);
         setFilters(data.filters || { categories: [], difficulties: [] });
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Erreur inconnue');
+        const errorMessage = err instanceof Error ? err.message : 'Erreur inconnue';
+        setError(errorMessage);
         console.error('Erreur bibliothèque:', err);
       } finally {
         setIsLoading(false);
@@ -97,6 +98,8 @@ export const useAddExercise = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const addExercise = async (exerciseData: any) => {
+    if (isSubmitting) return;
+    
     setIsSubmitting(true);
     try {
       const response = await fetch('/api/programs/exercises', {
@@ -108,7 +111,7 @@ export const useAddExercise = () => {
       });
       
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || 'Erreur lors de l\'ajout de l\'exercice');
       }
       

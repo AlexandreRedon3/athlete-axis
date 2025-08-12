@@ -31,12 +31,12 @@ export const useTodaySessions = (): UseTodaySessionsReturn => {
       const response = await fetch('/api/coach/today-sessions');
       
       if (!response.ok) {
-        throw new Error('Erreur lors de la récupération des sessions du jour');
+        throw new Error('Erreur lors du chargement des sessions du jour');
       }
       
       const data = await response.json();
       
-      if (data.success) {
+      if (data.sessions) {
         setSessions(data.sessions);
       } else {
         throw new Error(data.error || 'Erreur inconnue');
