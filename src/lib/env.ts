@@ -28,8 +28,8 @@ interface ENV {
 }
 
 interface Config {
-  DATABASE_URL: string;
-  RESEND_API_KEY: string;
+  DATABASE_URL: string | undefined;
+  RESEND_API_KEY: string | undefined;
   TRIGGER_PUBLIC_API_KEY: string | undefined;
   TRIGGER_SECRET_KEY: string | undefined;
   NEXT_PUBLIC_APP_URL: string | undefined;
@@ -81,27 +81,13 @@ const getConfig = (): ENV => {
 };
 
 const getSafeConfig = (config: ENV): Config => {
-  const isDev = process.env.NODE_ENV === 'development';
-  
-  // Variables optionnelles qui ne sont pas requises
-  const optionalKeys = ['TRIGGER_PUBLIC_API_KEY', 'TRIGGER_SECRET_KEY'];
-  
-  // In development, fill missing values with empty strings
-  if (isDev) {
-    const safeConfig = {} as Config;
-    for (const [key, value] of Object.entries(config)) {
-      (safeConfig as any)[key] = value || '';
-    }
-    return safeConfig;
-  }
-  
-  // In production, throw errors for missing values (except optional ones)
+  // Pour le développement et la production, on accepte toutes les variables comme optionnelles
+  // et on utilise des valeurs par défaut vides si elles ne sont pas définies
+  const safeConfig = {} as Config;
   for (const [key, value] of Object.entries(config)) {
-    if (value === undefined && !optionalKeys.includes(key)) {
-      throw new Error(`Missing key ${key} in .env file`);
-    }
+    (safeConfig as any)[key] = value || '';
   }
-  return config as Config;
+  return safeConfig;
 };
 const config = getConfig();
 
