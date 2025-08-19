@@ -3,7 +3,7 @@
 
 import { LucideIcon } from 'lucide-react';
 import { TrendingUp } from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { useTheme } from '../theme-provider';
 
 interface StatsCardProps {
   title: string;
@@ -14,14 +14,14 @@ interface StatsCardProps {
 }
 
 export const StatsCard = ({ title, value, change, icon: Icon, gradient }: StatsCardProps) => {
-  const { theme } = useTheme();
+  const { colors } = useTheme();
 
   return (
-    <div className="bg-card rounded-xl p-4 shadow-sm border hover:shadow-md transition-all duration-300">
+    <div className={`${colors.cardBg} rounded-xl p-4 shadow-sm ${colors.border} border hover:shadow-md transition-all duration-300`}>
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <p className="text-muted-foreground text-xs font-medium mb-1">{title}</p>
-          <p className="text-foreground text-xl font-bold">{value}</p>
+          <p className={`${colors.textSecondary} text-xs font-medium mb-1`}>{title}</p>
+          <p className={`${colors.text} text-xl font-bold`}>{value}</p>
           {change && (
             <p className="text-xs mt-1 flex items-center text-green-600">
               <TrendingUp className="w-3 h-3 mr-1" />
