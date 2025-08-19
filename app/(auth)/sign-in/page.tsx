@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { authClient } from '@/lib/auth-client';
+import { logger } from 'better-auth';
 
 export default function SignInPage() {
   const router = useRouter();
@@ -20,6 +21,9 @@ export default function SignInPage() {
     setLoading(true);
     setError(null);
 
+    logger.info('Connexion en cours', { email, password });
+
+    
     try {
       await authClient.signIn.email({
         email,
