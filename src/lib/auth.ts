@@ -18,6 +18,7 @@ import { safeConfig } from "./env";
 export const auth = betterAuth({
   appName: "Athlete-Axis",
   secret: safeConfig.BETTER_AUTH_SECRET,
+  baseURL: safeConfig.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
@@ -61,7 +62,11 @@ export const auth = betterAuth({
     username(),
     twoFactor(),
   ],
-  trustedOrigins: ["https://athlete-axis-*.vercel.app"],
+  trustedOrigins: [
+    "https://athlete-axis-*.vercel.app",
+    "https://*.vercel.app",
+    "http://localhost:3000"
+  ],
 });
 
 export type BaseUser = {
