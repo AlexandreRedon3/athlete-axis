@@ -1,7 +1,11 @@
-// app/page.ts
 "use client";
-import { UserLanding } from "../src/components/landing-page/user-landing";
 
-export default async function Page() {
-  return <UserLanding />;
+import { UserLanding } from "@/components/landing-page/user-landing";
+
+export default function HomePage() {
+  return (
+    <div className="horizontal-gradient">
+      <UserLanding />
+    </div>
+  );
 }
