@@ -1,13 +1,12 @@
 // app/api/programs/route.ts
-import { db } from "@/lib/db"
-import { program } from "@/db/program"
-import { NextRequest, NextResponse } from "next/server"
-import { getSession } from "@/lib/auth-client"
-import { z } from "zod"
-import { auth } from "@/lib/auth"
-import { headers } from "next/headers"
 import { and, eq } from "drizzle-orm/sql"
+import { NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
+
+import { program } from "@/db/program"
 import { programAssignment } from "@/db/program-assignment"
+import { auth } from "@/lib/auth"
+import { db } from "@/lib/db"
 
 // Schéma de validation pour créer un programme
 const createProgramSchema = z.object({

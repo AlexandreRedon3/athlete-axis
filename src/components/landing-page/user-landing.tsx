@@ -1,14 +1,15 @@
-import HeroSection from "./sections/hero-section"
-import ProgrammesSection from "./sections/programmes-section"
-import CoachingSection from "./sections/coaching-section"
-import TestimonialsSection from "./sections/testimonials-section"
-import FAQSection from "./sections/faq-section"
-import CTASection from "./sections/cta-section"
-import FooterSection from "./sections/footer-section"
-import Link from "next/link"
 import { Dumbbell } from "lucide-react"
+import Link from "next/link"
+
 import { Button } from "../ui/button"
 import { MobileMenu } from "../ui/mobile-menu"
+import CoachingSection from "./sections/coaching-section"
+import CTASection from "./sections/cta-section"
+import FAQSection from "./sections/faq-section"
+import FooterSection from "./sections/footer-section"
+import HeroSection from "./sections/hero-section"
+import ProgrammesSection from "./sections/programmes-section"
+import TestimonialsSection from "./sections/testimonials-section"
 
 export const UserLanding = () => {
   const navLinks = [

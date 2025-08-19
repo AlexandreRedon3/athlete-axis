@@ -4,7 +4,7 @@ import "@testing-library/jest-dom";
 import { TextEncoder, TextDecoder } from "util";
 
 // Polyfills pour Node.js
-global.TextEncoder = TextEncoder;
+global.TextEncoder = TextEncoder as any;
 global.TextDecoder = TextDecoder as any;
 
 // Mock de next/navigation

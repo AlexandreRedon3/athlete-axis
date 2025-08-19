@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server"
-import { auth } from "@/lib/auth"
-import { headers } from "next/headers"
-import { db } from "@/lib/db"
-import { invites } from "@/db/invites"
 import { nanoid } from "nanoid"
+import { headers } from "next/headers"
+import { NextResponse } from "next/server"
+
+import { invites } from "@/db/invites"
+import { auth } from "@/lib/auth"
+import { db } from "@/lib/db"
 
 export async function POST(req: Request) {
   try {

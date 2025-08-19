@@ -1,8 +1,9 @@
-import { NextResponse } from "next/server"
-import { db } from "@/lib/db"
-import { user } from "@/db/user"
 import { eq } from "drizzle-orm"
+import { NextResponse } from "next/server"
 import { z } from "zod"
+
+import { user } from "@/db/user"
+import { db } from "@/lib/db"
 
 // Schéma de validation pour la mise à jour du statut coach
 const updateCoachStatusSchema = z.object({
@@ -35,8 +36,6 @@ export async function PUT(req: Request) {
     // Parser le body
     const body = await req.json()
     const result = updateCoachStatusSchema.safeParse(body)
-
-    console.log(result)
 
     if (!result.success) {
       return NextResponse.json(

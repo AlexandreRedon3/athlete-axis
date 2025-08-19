@@ -1,7 +1,12 @@
 import { useSearchParams } from "next/navigation";
-import { HeaderProps, SessionProps } from "./types";
+
 import { cn } from "@/lib/utils";
+
 import { Button } from "../../ui/button";
+import { ThemeToggle } from "../../ui/theme-toggle";
+
+import { HeaderProps, SessionProps } from "./types";
+import { UserNav } from "./UserNav";
 
 export const DesktopMenu = ({
     isScrolled,
@@ -15,15 +20,20 @@ export const DesktopMenu = ({
             "items-center transition-all duration-300", 
             isScrolled ? "hidden lg:flex gap-3" : "hidden lg:flex gap-4")}
             >
-                <ClientSwitch />
-
-                <ModeToggle />
+                <ThemeToggle />
 
                 {
                     session ? (
                         <UserNav />
                     ) : (
-
+                        <div className="flex items-center gap-2">
+                            <Button variant="outline" size="sm">
+                                Se connecter
+                            </Button>
+                            <Button size="sm">
+                                S'inscrire
+                            </Button>
+                        </div>
                     )
                 }
         </div>

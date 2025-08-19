@@ -1,7 +1,8 @@
+import { ChevronRight, Clock, Target, Users } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+
 import { Button } from "../../ui/button"
-import { ChevronRight, Clock, Target, Users } from "lucide-react"
 
 export default function CoachingSection() {
   return (

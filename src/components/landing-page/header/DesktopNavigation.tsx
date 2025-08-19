@@ -1,9 +1,11 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { HeaderProps } from "./types";
-import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+
+import { cn } from "@/lib/utils";
+
+import { HeaderProps } from "./types";
 
 const baseNavigationItems = [
     { label: "Fonctionnalités", href: "#features" },

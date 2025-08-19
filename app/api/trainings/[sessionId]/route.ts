@@ -1,15 +1,16 @@
 // app/api/sessions/[sessionId]/route.ts
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { trainingSession } from "@/db";
 import { eq } from "drizzle-orm";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
+import { trainingSession } from "@/db";
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
+
 interface RouteParams {
-  params: {
+  params: Promise<{
     sessionId: string;
-  };
+  }>;
 }
 
 const updateSessionSchema = z.object({
@@ -21,6 +22,7 @@ const updateSessionSchema = z.object({
 // PUT /api/sessions/:sessionId - Modifier une session
 export async function PUT(req: NextRequest, { params }: RouteParams) {
   try {
+    const { sessionId } = await params;
     const session = await auth.api.getSession({
       headers: req.headers,
     });
@@ -30,7 +32,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     }
 
     const trainingSessionData = await db.query.trainingSession.findFirst({
-      where: eq(trainingSession.id, params.sessionId),
+      where: eq(trainingSession.id, sessionId),
       with: {
         program: true,
       },
@@ -49,7 +51,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
         ...validatedData,
         updatedAt: new Date(),
       })
-      .where(eq(trainingSession.id, params.sessionId))
+      .where(eq(trainingSession.id, sessionId))
       .returning();
 
     return NextResponse.json({ session: updated[0] });
@@ -72,6 +74,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 // DELETE /api/sessions/:sessionId - Supprimer une session
 export async function DELETE(req: NextRequest, { params }: RouteParams) {
   try {
+    const { sessionId } = await params;
     const session = await auth.api.getSession({
       headers: req.headers,
     });
@@ -81,7 +84,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
     }
 
     const trainingSessionData = await db.query.trainingSession.findFirst({
-      where: eq(trainingSession.id, params.sessionId),
+      where: eq(trainingSession.id, sessionId),
       with: {
         program: true,
       },
@@ -91,7 +94,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "Accès refusé" }, { status: 403 });
     }
 
-    await db.delete(trainingSession).where(eq(trainingSession.id, params.sessionId));
+    await db.delete(trainingSession).where(eq(trainingSession.id, sessionId));
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -1,36 +1,253 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏃‍♂️ Athlete Axis - Plateforme de Coaching Sportif
 
-## Getting Started
+[![CI/CD Pipeline](https://github.com/your-username/athlete-axis/actions/workflows/main.yml/badge.svg)](https://github.com/your-username/athlete-axis/actions/workflows/main.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Next.js](https://img.shields.io/badge/Next.js-15.3.0-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 
-First, run the development server:
+## 📋 Description
 
+Athlete Axis est une plateforme moderne de coaching sportif qui connecte les coachs professionnels avec leurs clients. L'application offre une gestion complète des programmes d'entraînement, un suivi des performances, et une interface intuitive pour optimiser l'expérience utilisateur.
+
+## ✨ Fonctionnalités Principales
+
+### 🎯 Pour les Coachs
+- **Dashboard personnalisé** avec statistiques en temps réel
+- **Gestion des clients** et invitations
+- **Création de programmes** d'entraînement personnalisés
+- **Suivi des performances** avec graphiques interactifs
+- **Planification des séances** avec calendrier intégré
+
+### 🏋️‍♂️ Pour les Athlètes
+- **Interface client** intuitive et responsive
+- **Accès aux programmes** assignés par le coach
+- **Suivi des séances** et progression
+- **Historique des entraînements** détaillé
+
+### 🔧 Fonctionnalités Techniques
+- **Authentification sécurisée** avec Better Auth
+- **Base de données** PostgreSQL avec Drizzle ORM
+- **API REST** complète avec validation Zod
+- **Tests automatisés** (unitaires, intégration, e2e)
+- **Monitoring** avec Prometheus et Grafana
+- **Accessibilité** RGAA/WCAG 2.1
+
+## 🚀 Démarrage Rapide
+
+### Prérequis
+- Node.js 18+ 
+- PostgreSQL 15+
+- npm ou yarn
+
+### Installation
+
+1. **Cloner le repository**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/your-username/athlete-axis.git
+cd athlete-axis
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Installer les dépendances**
+```bash
+npm install --legacy-peer-deps
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Configuration de l'environnement**
+```bash
+cp .env.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Remplir les variables d'environnement dans `.env.local` :
+```env
+# Base de données
+DATABASE_URL="postgresql://user:password@localhost:5432/athlete_axis"
 
-## Learn More
+# Authentification
+BETTER_AUTH_SECRET="your-secret-key"
+NEXT_PUBLIC_BETTER_AUTH_URL="http://localhost:3000"
 
-To learn more about Next.js, take a look at the following resources:
+# Application
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. **Migration de la base de données**
+```bash
+npm run db:push
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+5. **Lancer le serveur de développement**
+```bash
+npm run dev
+```
 
-## Deploy on Vercel
+L'application sera accessible sur [http://localhost:3000](http://localhost:3000)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🧪 Tests
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Exécuter tous les tests
+```bash
+npm run test
+```
+
+### Tests spécifiques
+```bash
+# Tests unitaires
+npm run test:unit
+
+# Tests d'intégration
+npm run test:integration
+
+# Tests de sécurité
+npm run test:security
+
+# Tests d'accessibilité
+npm run test:accessibility
+
+# Tests e2e avec Playwright
+npm run test:e2e
+```
+
+### Couverture de code
+```bash
+npm run test:coverage
+```
+
+## 🏗️ Architecture
+
+```
+athlete-axis/
+├── app/                    # App Router Next.js 15
+│   ├── (auth)/            # Routes d'authentification
+│   ├── (main)/            # Routes principales
+│   └── api/               # API Routes
+├── src/
+│   ├── components/        # Composants React
+│   ├── hooks/            # Custom hooks
+│   ├── lib/              # Utilitaires et configuration
+│   └── db/               # Schémas de base de données
+├── __test__/             # Tests automatisés
+├── docker/               # Configuration Docker
+└── scripts/              # Scripts utilitaires
+```
+
+## 🛠️ Technologies Utilisées
+
+### Frontend
+- **Next.js 15** - Framework React avec App Router
+- **React 19** - Bibliothèque UI
+- **TypeScript** - Typage statique
+- **Tailwind CSS** - Framework CSS utilitaire
+- **HeroUI** - Composants UI modernes
+- **Framer Motion** - Animations
+
+### Backend
+- **Next.js API Routes** - API REST
+- **Drizzle ORM** - ORM TypeScript-first
+- **PostgreSQL** - Base de données relationnelle
+- **Better Auth** - Authentification sécurisée
+- **Zod** - Validation de schémas
+
+### Tests & Qualité
+- **Vitest** - Framework de tests
+- **Playwright** - Tests e2e
+- **ESLint** - Linting
+- **Prettier** - Formatage de code
+
+### DevOps
+- **GitHub Actions** - CI/CD
+- **Docker** - Containerisation
+- **Prometheus** - Monitoring
+- **Grafana** - Visualisation
+
+## 📊 Monitoring
+
+Le projet inclut un stack de monitoring complet :
+
+```bash
+# Démarrer le monitoring
+npm run monitoring:up
+
+# Voir les logs
+npm run monitoring:logs
+
+# Arrêter le monitoring
+npm run monitoring:down
+```
+
+- **Grafana** : [http://localhost:3001](http://localhost:3001)
+- **Prometheus** : [http://localhost:9090](http://localhost:9090)
+
+## 🔒 Sécurité
+
+- Authentification sécurisée avec Better Auth
+- Validation des données avec Zod
+- Tests de sécurité automatisés
+- Audit de dépendances régulier
+- Conformité RGAA/WCAG 2.1
+
+## 📈 Déploiement
+
+### Vercel (Recommandé)
+1. Connecter le repository GitHub à Vercel
+2. Configurer les variables d'environnement
+3. Déployer automatiquement sur push vers `main`
+
+### Docker
+```bash
+# Build de l'image
+docker build -t athlete-axis .
+
+# Lancer le container
+docker run -p 3000:3000 athlete-axis
+```
+
+## 🤝 Contribution
+
+1. Fork le projet
+2. Créer une branche feature (`git checkout -b feature/AmazingFeature`)
+3. Commit les changements (`git commit -m 'Add some AmazingFeature'`)
+4. Push vers la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrir une Pull Request
+
+## 📝 Scripts Disponibles
+
+```bash
+# Développement
+npm run dev              # Serveur de développement
+npm run build            # Build de production
+npm run start            # Serveur de production
+
+# Tests
+npm run test             # Tous les tests
+npm run test:watch       # Tests en mode watch
+npm run test:coverage    # Couverture de code
+
+# Qualité
+npm run lint             # Linting
+npm run lint:fix         # Correction automatique
+npm run format           # Formatage
+npm run type-check       # Vérification TypeScript
+
+# Base de données
+npm run db:generate      # Générer les migrations
+npm run db:push          # Appliquer les migrations
+npm run db:studio        # Interface Drizzle Studio
+
+# Monitoring
+npm run monitoring:up    # Démarrer le monitoring
+npm run monitoring:down  # Arrêter le monitoring
+```
+
+## 📄 Licence
+
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+## 📞 Support
+
+- **Documentation API** : [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
+- **Issues** : [GitHub Issues](https://github.com/your-username/athlete-axis/issues)
+- **Discussions** : [GitHub Discussions](https://github.com/your-username/athlete-axis/discussions)
+
+---
+
+**Développé avec ❤️ par l'équipe Athlete Axis**

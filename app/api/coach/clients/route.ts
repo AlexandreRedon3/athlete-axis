@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
-import { user } from "@/db/user";
-import { coachClient } from "@/db/coach_client";
 import { eq } from "drizzle-orm";
+import { NextResponse } from "next/server";
+
+import { coachClient } from "@/db/coach_client";
+import { user } from "@/db/user";
 import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
 
 export async function GET(req: Request) {
   try {
