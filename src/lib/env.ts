@@ -32,24 +32,24 @@ interface Config {
   RESEND_API_KEY: string;
   TRIGGER_PUBLIC_API_KEY: string | undefined;
   TRIGGER_SECRET_KEY: string | undefined;
-  NEXT_PUBLIC_APP_URL: string;
-  NODE_ENV: string;
-  NEXT_PUBLIC_POSTHOG_KEY: string;
-  NEXT_PUBLIC_POSTHOG_HOST: string;
-  STRIPE_SECRET_KEY: string;
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: string;
-  BETTER_AUTH_SECRET: string;
-  BETTER_AUTH_URL: string;
-  UPLOADTHING_TOKEN: string;
-  STRIPE_BASIC_PLAN_ID: string;
-  STRIPE_PRO_PLAN_ID: string;
-  STRIPE_ULTIMATE_PLAN_ID: string;
-  STRIPE_WEBHOOK_BASIC_SECRET: string;
-  STRIPE_WEBHOOK_PRO_SECRET: string;
-  STRIPE_WEBHOOK_ULTIMATE_SECRET: string;
-  GOOGLE_CLIENT_ID: string;
-  GOOGLE_CLIENT_SECRET: string;
-  NEXT_PUBLIC_BETTER_AUTH_URL: string;
+  NEXT_PUBLIC_APP_URL: string | undefined;
+  NODE_ENV: string | undefined;
+  NEXT_PUBLIC_POSTHOG_KEY: string | undefined;
+  NEXT_PUBLIC_POSTHOG_HOST: string | undefined;
+  STRIPE_SECRET_KEY: string | undefined;
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: string | undefined;
+  BETTER_AUTH_SECRET: string | undefined;
+  BETTER_AUTH_URL: string | undefined;
+  UPLOADTHING_TOKEN: string | undefined;
+  STRIPE_BASIC_PLAN_ID: string | undefined;
+  STRIPE_PRO_PLAN_ID: string | undefined;
+  STRIPE_ULTIMATE_PLAN_ID: string | undefined;
+  STRIPE_WEBHOOK_BASIC_SECRET: string | undefined;
+  STRIPE_WEBHOOK_PRO_SECRET: string | undefined;
+  STRIPE_WEBHOOK_ULTIMATE_SECRET: string | undefined;
+  GOOGLE_CLIENT_ID: string | undefined;
+  GOOGLE_CLIENT_SECRET: string | undefined;
+  NEXT_PUBLIC_BETTER_AUTH_URL: string | undefined;
 }
 
 const getConfig = (): ENV => {
