@@ -36,7 +36,7 @@ const nextConfig = {
     ],
   },
 
-  // Configuration Webpack pour éviter les conflits avec better-call
+  // Configuration Webpack pour éviter les conflits
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
@@ -50,19 +50,16 @@ const nextConfig = {
       };
     }
 
-    // Ignorer better-call côté client pour éviter les erreurs
+    // Exclure better-call du bundle client
     if (!isServer) {
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        'better-call': false,
-      };
+      config.externals = config.externals || [];
+      config.externals.push('better-call');
     }
 
     return config;
   },
 
   // Optimisations pour Vercel
-  outputFileTracing: true,
   poweredByHeader: false,
 };
 
