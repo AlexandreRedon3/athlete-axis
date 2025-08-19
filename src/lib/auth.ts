@@ -18,6 +18,7 @@ import { safeConfig } from "./env";
 export const auth = betterAuth({
   appName: "Athlete-Axis",
   secret: safeConfig.BETTER_AUTH_SECRET,
+  url: safeConfig.BETTER_AUTH_URL,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
