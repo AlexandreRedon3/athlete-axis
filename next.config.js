@@ -50,11 +50,11 @@ const nextConfig = {
       };
     }
 
-    // Exclure better-call du bundle client
-    if (!isServer) {
-      config.externals = config.externals || [];
-      config.externals.push('better-call');
-    }
+    // Ignorer better-call complètement
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'better-call': false,
+    };
 
     return config;
   },
