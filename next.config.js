@@ -2,14 +2,8 @@
 const nextConfig = {
     reactStrictMode: true,
     experimental: {
-      turbo: {
-        rules: {
-          '*.svg': {
-            loaders: ['@svgr/webpack'],
-            as: '*.js',
-          },
-        },
-      },
+      // Désactiver Turbo pour éviter les problèmes de build
+      turbo: false,
     },
     webpack: (config) => {
       config.optimization.moduleIds = 'deterministic';        
