@@ -1,11 +1,7 @@
 'use client';
 
-<<<<<<< HEAD
-import { Button, Spinner } from '@heroui/react';
-=======
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
->>>>>>> 956a6d9 (feat: finalize first version - clean codebase and fix build issues)
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
