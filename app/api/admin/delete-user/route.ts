@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server"
-import { db } from "@/lib/db"
-import { user } from "@/db/user"
-import { account } from "@/db/account"
 import { eq } from "drizzle-orm"
+import { NextResponse } from "next/server"
 import { z } from "zod"
+
+import { account } from "@/db/account"
+import { user } from "@/db/user"
+import { db } from "@/lib/db"
 
 // Schéma de validation pour la suppression d'utilisateur
 const deleteUserSchema = z.object({

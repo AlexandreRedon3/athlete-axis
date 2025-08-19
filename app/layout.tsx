@@ -1,14 +1,16 @@
-import type { Metadata } from "next";
 import "./globals.css";
+
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { cookies } from "next/headers";
+import NextTopLoader from "nextjs-toploader";
+import { NuqsAdapter } from "nuqs/adapters/next";
+import { extractRouterConfig } from "uploadthing/server";
+
+import { ourFileRouter } from "../app/api/uploadthing/core";
 import Providers from "../src/context/providers";
 import { cn } from "../src/lib/utils";
-import { Inter } from "next/font/google";
-import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
-import { extractRouterConfig } from "uploadthing/server";
-import { cookies } from "next/headers";
-import { ourFileRouter } from "../app/api/uploadthing/core";
-import { NuqsAdapter } from "nuqs/adapters/next";
-import NextTopLoader from "nextjs-toploader";
 
 // Define the Inter font
 const inter = Inter({

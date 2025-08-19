@@ -1,7 +1,11 @@
 import { useSearchParams } from "next/navigation";
-import { HeaderProps, SessionProps } from "./types";
+
 import { cn } from "@/lib/utils";
+
 import { Button } from "../../ui/button";
+import { ThemeToggle } from "../../ui/theme-toggle";
+import { ClientSwitch } from "../client-switch";
+import { HeaderProps, SessionProps } from "./types";
 
 export const DesktopMenu = ({
     isScrolled,
@@ -17,13 +21,20 @@ export const DesktopMenu = ({
             >
                 <ClientSwitch />
 
-                <ModeToggle />
+                <ThemeToggle />
 
                 {
                     session ? (
-                        <UserNav />
+                        <div>User Logged In</div>
                     ) : (
-
+                        <div className="flex gap-2">
+                            <Button variant="ghost" className="text-sm">
+                                Connexion
+                            </Button>
+                            <Button className="text-sm">
+                                {isPro ? "Commencer gratuitement" : "S'inscrire"}
+                            </Button>
+                        </div>
                     )
                 }
         </div>

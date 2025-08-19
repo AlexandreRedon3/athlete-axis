@@ -1,9 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { program } from '@/db';
 import { eq } from 'drizzle-orm';
-import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
+
+import { program } from '@/db';
+import { auth } from '@/lib/auth';
+import { db } from '@/lib/db';
 
 // POST - Publier un programme
 export async function POST(

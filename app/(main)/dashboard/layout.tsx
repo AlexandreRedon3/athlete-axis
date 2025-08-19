@@ -1,15 +1,16 @@
 // app/(main)/dashboard/layout.tsx
-import type React from "react"
-import { Dumbbell, Bell, Plus, Users, Calendar, UserPlus, Activity } from "lucide-react"
-import Link from "next/link"
-import { LogoutButton } from "@/components/ui/logout-button"
-import { Button } from "@/components/ui/button"
+import {Bell, Dumbbell } from "lucide-react"
 import { User } from "lucide-react"
-import { authClient } from "@/lib/auth-client"
 import { headers } from "next/headers"
-import { ThemeProvider } from "@/lib/theme-provider"
+import Link from "next/link"
+import type React from "react"
+
 import { ModernThemeToggle } from "@/components/coach/dashboard/ui/modern-theme-toggle"
 import { QuickActionsMenu } from "@/components/coach/dashboard/ui/quick-actions-menu"
+import { Button } from "@/components/ui/button"
+import { LogoutButton } from "@/components/ui/logout-button"
+import { authClient } from "@/lib/auth-client"
+import { ThemeProvider } from "@/lib/theme-provider"
 
 interface DashboardLayoutProps {
   children: React.ReactNode

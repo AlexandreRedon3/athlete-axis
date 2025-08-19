@@ -1,9 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/neon';
-import { trainingSession, exercise, program } from '@/db';
-import { eq, count, and, max } from 'drizzle-orm';
-import { auth } from '@/lib/auth';
+import { count, eq, max } from 'drizzle-orm';
 import { headers } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
+
+import { exercise, program,trainingSession } from '@/db';
+import { auth } from '@/lib/auth';
+import { db } from '@/lib/neon';
 
 export async function GET(
   request: NextRequest,

@@ -1,7 +1,7 @@
 // src/hooks/use-add-from-library.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useExerciseLibrary } from "./use-exercise-librairy";
+
 
 interface AddFromLibraryInput {
   libraryExerciseId: string;

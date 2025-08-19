@@ -1,10 +1,11 @@
 // app/api/sessions/[sessionId]/exercises/route.ts
+import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+
+import { exercise, trainingSession } from "@/db";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { exercise, trainingSession } from "@/db";
-import { eq } from "drizzle-orm";
-import { z } from "zod";
 
 interface RouteParams {
   params: {

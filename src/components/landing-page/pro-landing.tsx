@@ -36,7 +36,7 @@ export const ProLanding = () => {
               </h2>
               <div className="relative h-48 w-full overflow-hidden rounded-lg">
                 <Image
-                  src={"/images/client-management.jpg" ? "/images/client-management.jpg" : "https://heroui.com/images/hero-card-complete.jpeg"}
+                  src="/images/client-management.jpg"
                   alt="Gestion des clients"
                   fill
                   className="object-cover"
@@ -63,7 +63,7 @@ export const ProLanding = () => {
               </h2>
               <div className="relative h-48 w-full overflow-hidden rounded-lg">
                 <Image
-                  src={"/images/program-creation.jpg" ? "/images/program-creation.jpg" : "https://heroui.com/images/hero-card-complete.jpeg"}
+                  src="/images/program-creation.jpg"
                   alt="Création de programmes"
                   fill
                   className="object-cover"
@@ -90,7 +90,7 @@ export const ProLanding = () => {
               </h2>
               <div className="relative h-48 w-full overflow-hidden rounded-lg">
                 <Image
-                  src={"/images/statistics.jpg" ? "/images/statistics.jpg" : "https://heroui.com/images/hero-card-complete.jpeg"}
+                  src="/images/statistics.jpg"
                   alt="Statistiques"
                   fill
                   className="object-cover"

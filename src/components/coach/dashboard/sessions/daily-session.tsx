@@ -1,8 +1,8 @@
 // src/components/coach/dashboard/sessions/daily-sessions.tsx
 "use client"
 
-import { SessionItem } from './session-item';
 import { useTheme } from '../../../../lib/theme-provider';
+import { SessionItem } from './session-item';
 
 export interface Session {
   id?: string;

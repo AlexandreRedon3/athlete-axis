@@ -1,16 +1,16 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useRouter, useParams } from "next/navigation"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { AlertCircle,ChevronRight, Dumbbell, Loader2 } from "lucide-react"
+import Link from "next/link"
+import { useParams,useRouter } from "next/navigation"
+import { useEffect,useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
+
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import Link from "next/link"
-import { z } from "zod"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Dumbbell, Loader2, ChevronRight, AlertCircle } from "lucide-react"
-import Image from "next/image"
-import { toast } from "sonner"
 
 const registerSchema = z.object({
   name: z.string().min(2, "Le nom doit comporter au moins 2 caractères"),

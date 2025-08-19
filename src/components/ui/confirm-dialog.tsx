@@ -1,5 +1,6 @@
 "use client"
 
+import { useTheme } from "../../lib/theme-provider"
 import {
   Dialog,
   DialogContent,
@@ -8,7 +9,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./dialog" 
-import { useTheme } from "../../lib/theme-provider"
 
 interface ConfirmDialogProps {
   isOpen: boolean

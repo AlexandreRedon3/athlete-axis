@@ -1,11 +1,13 @@
 "use client"
 
-import { useState } from "react"
-import { Button } from "./button"
 import { LogOut } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { authClient } from "@/lib/auth-client"
+import { useState } from "react"
 import { toast } from "sonner"
+
+import { authClient } from "@/lib/auth-client"
+
+import { Button } from "./button"
 
 interface LogoutButtonProps {
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | "primary" | "white" | "dark"

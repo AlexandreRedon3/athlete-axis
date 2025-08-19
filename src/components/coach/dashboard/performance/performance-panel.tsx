@@ -1,10 +1,11 @@
 // src/components/coach/dashboard/performance/performance-panel.tsx
 "use client"
 
-import { MiniChart } from './mini-chart';
-import { QuickActionButton } from '../ui/quick-action-button';
-import { Plus, Calendar } from 'lucide-react';
+import { Calendar,Plus } from 'lucide-react';
+
 import { useTheme } from '../../../../lib/theme-provider';
+import { QuickActionButton } from '../ui/quick-action-button';
+import { MiniChart } from './mini-chart';
 
 interface PerformanceData {
   label: string;

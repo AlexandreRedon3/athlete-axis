@@ -1,6 +1,8 @@
+import {eq } from 'drizzle-orm';
+
+import { coachClient,program, user } from '@/db';
+
 import { db } from './db';
-import { user, program, coachClient } from '@/db';
-import { eq, and } from 'drizzle-orm';
 
 export async function getBusinessMetrics() {
   try {

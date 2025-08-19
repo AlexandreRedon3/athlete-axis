@@ -1,7 +1,7 @@
 "use client";
 
-import { useSession } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
+import { useSession } from "@/lib/auth-client";
 
 export default function TestAuthPage() {
   const { data: session, isPending } = useSession();

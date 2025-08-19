@@ -1,20 +1,22 @@
 // src/components/coach/forms/invite-client-form.tsx
 "use client"
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { 
+  CheckCircle,
+  Loader2,
+  Mail, 
+  MessageCircle,
+  Send,
+  User, 
+  UserPlus} from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { 
-  UserPlus, 
-  Mail, 
-  User, 
-  MessageCircle,
-  Loader2,
-  CheckCircle,
-  Send
-} from 'lucide-react';
+
 import { useTheme } from '../../../lib/theme-provider';
+import { Button } from "../../ui/button";
+import { Checkbox } from "../../ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -23,11 +25,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../../ui/dialog";
-import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 import { Textarea } from "../../ui/textarea";
-import { Checkbox } from "../../ui/checkbox";
 
 const inviteClientSchema = z.object({
   email: z.string().email("Adresse email invalide"),

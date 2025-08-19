@@ -1,12 +1,13 @@
 // src/lib/auth-client.ts
-import { createAuthClient } from "better-auth/react";
 import {
   inferAdditionalFields,
   twoFactorClient,
   usernameClient,
 } from "better-auth/client/plugins";
-import { safeConfig } from "./env";
+import { createAuthClient } from "better-auth/react";
 import React from "react";
+
+import { safeConfig } from "./env";
 
 export const authClient = createAuthClient({
   baseURL: safeConfig.NEXT_PUBLIC_BETTER_AUTH_URL,

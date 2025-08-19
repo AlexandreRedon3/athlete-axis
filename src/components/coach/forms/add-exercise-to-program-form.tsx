@@ -1,23 +1,28 @@
 // src/components/coach/forms/add-exercise-to-program-form.tsx
 "use client"
 
-import { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { 
-  Plus, 
   Activity, 
-  Hash,
-  Clock, 
-  FileText,
-  Loader2,
   CheckCircle,
-  Search,
+  Clock, 
   Dumbbell,
-  X
+  FileText,
+  Hash,
+  Loader2,
+  Plus, 
+  Search
 } from 'lucide-react';
+import { useState } from 'react';
+import { Controller,useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { useAddExercise,useCoachPrograms, useExerciseLibrary } from '../../../hooks/use-exercise-data';
+import { useProgramSessions } from '../../../hooks/use-program-sessions';
 import { useTheme } from '../../../lib/theme-provider';
+import { validateAddExerciseForm } from '../../../lib/validations/exercise-schema';
+import { Badge } from "../../ui/badge";
+import { Button } from "../../ui/button";
 import {
   Dialog,
   DialogContent,
@@ -26,10 +31,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../../ui/dialog";
-import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
-import { Textarea } from "../../ui/textarea";
 import {
   Select,
   SelectContent,
@@ -37,11 +40,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../ui/select";
-import { Badge } from "../../ui/badge";
-import { validateAddExerciseForm } from '../../../lib/validations/exercise-schema';
-import type { AddExerciseFormData, ExerciseLibraryItem } from '../../../types/exercise';
-import { useCoachPrograms, useExerciseLibrary, useAddExercise } from '../../../hooks/use-exercise-data';
-import { useProgramSessions } from '../../../hooks/use-program-sessions';
+import { Textarea } from "../../ui/textarea";
 
 const addExerciseSchema = z.object({
   programId: z.string().min(1, "Veuillez sélectionner un programme"),
