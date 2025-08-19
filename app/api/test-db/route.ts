@@ -1,5 +1,5 @@
-// app/api/test-db/route.ts
 import { NextResponse } from "next/server";
+import { Pool } from "pg";
 
 export async function GET() {
   try {
@@ -18,7 +18,6 @@ export async function GET() {
     }
 
     // Connexion basique avec pg
-    const { Pool } = require('pg');
     const pool = new Pool({
       connectionString: databaseUrl,
       ssl: { rejectUnauthorized: false }
