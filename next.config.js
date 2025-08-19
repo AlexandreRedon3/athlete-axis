@@ -69,7 +69,7 @@ module.exports = {
       return [
         {
           source: '/api/:path*',
-          destination: 'https://athlete-axis-8i7l33apk-alexandres-projects-31374818.vercel.app/:path*',
+          destination: 'https://athlete-axis-git-26-api-ses-2a7aae-alexandres-projects-31374818.vercel.app/:path*',
         },
       ]
     },
