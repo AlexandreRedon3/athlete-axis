@@ -1,36 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
-  experimental: {
-    // Correction : objet au lieu de booléen
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
-    // Autres options expérimentales si nécessaires
-    serverComponentsExternalPackages: ['better-auth'],
-  },
-  typescript: {
-    ignoreBuildErrors: false,
-  },
-  eslint: {
-    ignoreDuringBuilds: false,
-  },
-  // Configuration spécifique pour better-auth
-  webpack: (config, { dev, isServer }) => {
-    config.optimization.moduleIds = 'deterministic';
+  
+  // Nouvelle syntaxe Next.js 15
+  serverExternalPackages: ['better-auth', 'better-call'],
     
-    // Correction pour better-auth/better-call
-    config.resolve.alias = {
-      ...config.resolve.alias,
-    };
-    
-    // Exclure better-auth du bundling côté client si nécessaire
+  // Configuration Webpack pour gérer better-auth côté client
+  webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
@@ -38,13 +14,16 @@ const nextConfig = {
         net: false,
         tls: false,
         crypto: false,
+        stream: false,
+        buffer: false,
       };
     }
-    
     return config;
   },
-  // Optimisations pour la compatibilité
-  transpilePackages: ['better-auth', 'better-call'],
+  
+  // Optimisations pour Vercel
+  outputFileTracing: true,
+  poweredByHeader: false,
 };
 
 module.exports = nextConfig;
