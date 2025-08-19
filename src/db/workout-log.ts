@@ -1,8 +1,9 @@
-import { pgTable, text, integer, timestamp, real } from "drizzle-orm/pg-core";
-import { user } from "./user";
-import { exercise } from "./exercice";
 import { InferSelectModel, relations } from "drizzle-orm";
+import { integer, pgTable, real,text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
+
+import { exercise } from "./exercice";
+import { user } from "./user";
 
 export const workoutLog = pgTable("workoutLog", {
     id: text("id").primaryKey(),

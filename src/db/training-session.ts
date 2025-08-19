@@ -1,8 +1,9 @@
 import { InferSelectModel, relations } from "drizzle-orm";
 import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
-import { program } from "./program";
+
 import { exercise } from "./exercice";
+import { program } from "./program";
 
 export const trainingSession = pgTable("trainingSession", {
     id: text("id").primaryKey(),

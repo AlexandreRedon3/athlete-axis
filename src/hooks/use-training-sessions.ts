@@ -1,5 +1,5 @@
 // src/hooks/use-sessions.ts
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 interface CreateSessionInput {

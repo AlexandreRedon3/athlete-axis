@@ -1,6 +1,6 @@
 // src/lib/validations/exercise-schema.ts
 
-import { AddExerciseFormData, ValidationResult, ValidationError } from '@/types/exercise';
+import { AddExerciseFormData, ValidationError,ValidationResult } from '@/types/exercise';
 
 export function validateAddExerciseForm(data: Partial<AddExerciseFormData>): ValidationResult {
   const errors: ValidationError[] = [];

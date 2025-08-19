@@ -1,6 +1,7 @@
+import { InferInsertModel, InferSelectModel, relations,sql } from "drizzle-orm";
 import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { InferSelectModel, InferInsertModel, sql, relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
+
 import { program } from "./program";
 import { programAssignment } from "./program-assignment";
 import { workoutLog } from "./workout-log";

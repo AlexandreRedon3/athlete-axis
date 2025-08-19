@@ -1,9 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { trainingSession, exercise } from '@/db';
-import { eq, and } from 'drizzle-orm';
-import { auth } from '@/lib/auth';
+import { and,eq } from 'drizzle-orm';
 import { headers } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
+
+import { exercise,trainingSession } from '@/db';
+import { auth } from '@/lib/auth';
+import { db } from '@/lib/db';
 
 // DELETE - Supprimer une session
 export async function DELETE(

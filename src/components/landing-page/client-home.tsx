@@ -1,10 +1,11 @@
 "use client"
 
-import { useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { UserLanding } from "./user-landing";
+import { useSearchParams } from "next/navigation";
+import { useEffect,useState } from "react";
+
 import { ProLanding } from "./pro-landing";
+import { UserLanding } from "./user-landing";
 
 export default function ClientHome() {
     const searchParams = useSearchParams();

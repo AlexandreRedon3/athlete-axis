@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import { authClient } from '@/lib/auth-client';
-import { redirectAfterAuth } from '@/lib/auth-client';
-import { useRouter } from 'next/navigation';
 import { Button, Spinner } from '@heroui/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
+import { authClient } from '@/lib/auth-client';
 
 export default function SignInPage() {
   const router = useRouter();

@@ -1,19 +1,17 @@
 // src/components/coach/dashboard/ui/quick-actions-menu-with-forms.tsx
 "use client"
 
-import { useState, useRef, useEffect } from 'react';
 import { 
-  Plus, 
-  Users, 
-  Calendar, 
-  UserPlus, 
   Activity, 
   BookOpen,
-  Clock,
+  Calendar, 
   ChevronDown,
   Dumbbell,
-  Mail
-} from 'lucide-react';
+  Mail,
+  Plus, 
+  UserPlus} from 'lucide-react';
+import { useEffect,useRef, useState } from 'react';
+
 import { useTheme } from '../../../../lib/theme-provider';
 import { CreateProgramForm } from '../../forms/create-program-form';
 import { InviteClientForm } from '../../forms/invite-client-form';

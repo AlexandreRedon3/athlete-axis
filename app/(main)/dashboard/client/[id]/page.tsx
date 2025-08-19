@@ -1,7 +1,8 @@
+import { Activity, BarChart, Calendar, ChevronRight,Clock } from "lucide-react"
+import Link from "next/link"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Dumbbell, User, Calendar, Activity, BarChart, Clock, ChevronRight } from "lucide-react"
-import Link from "next/link"
 import { authClient } from "@/lib/auth-client";
 
 export default async function UserDashboard() {

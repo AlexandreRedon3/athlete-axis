@@ -1,13 +1,11 @@
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
-
 import { useRouter } from "next/navigation";
-
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
-
 import { useState } from "react";
-import { UserAvatar } from "../ui/user-avatar";
+
+// import { UserAvatar } from "../ui/user-avatar"; // Component not found
 import { cn } from "@/lib/utils";
 
 export const ClientSwitch = (
@@ -75,12 +73,12 @@ export const ClientSwitch = (
               <span className="relative flex items-center gap-1.5">
                 {version === "user" ? (
                   <>
-                    <UserAvatar className="w-3.5 h-3.5" />
+                    <div className="w-3.5 h-3.5 rounded-full bg-gray-400" />
                     <span>Propriétaires</span>
                   </>
                 ) : (
                   <>
-                    <UserAvatar className="w-3.5 h-3.5" />
+                    <div className="w-3.5 h-3.5 rounded-full bg-gray-400" />
                     <span>Professionnels</span>
                   </>
                 )}

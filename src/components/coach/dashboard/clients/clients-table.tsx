@@ -1,8 +1,8 @@
 // src/components/coach/dashboard/clients/clients-table.tsx
 "use client"
 
-import { ClientRow } from './clients-row';
 import { useTheme } from '../../../../lib/theme-provider';
+import { ClientRow } from './clients-row';
 
 export interface Client {
   id?: string;

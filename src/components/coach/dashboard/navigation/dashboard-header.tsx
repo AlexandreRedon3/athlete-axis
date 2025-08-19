@@ -1,9 +1,10 @@
 "use client"
 
 import { Bell, Dumbbell, Plus } from 'lucide-react';
-import { QuickActionButton } from '../ui/quick-action-button';
-import { ModernThemeToggle } from '../ui/modern-theme-toggle';
+
 import { useTheme } from '../../../../lib/theme-provider';
+import { ModernThemeToggle } from '../ui/modern-theme-toggle';
+import { QuickActionButton } from '../ui/quick-action-button';
 
 interface DashboardHeaderProps {
   onCreateProgram?: () => void;

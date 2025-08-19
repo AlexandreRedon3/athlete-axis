@@ -1,6 +1,7 @@
 "use client"
 
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer,Tooltip, XAxis, YAxis } from 'recharts';
+
 import { useTheme } from '../../../../lib/theme-provider';
 
 interface PerformanceData {

@@ -1,8 +1,10 @@
-import { z } from 'zod';
-import { router, publicProcedure } from '../trpc';
-import { db } from '@/lib/db';
-import { User, user } from '@/db/user';
 import { eq } from 'drizzle-orm';
+import { z } from 'zod';
+
+import { user } from '@/db/user';
+import { db } from '@/lib/db';
+
+import { publicProcedure,router } from '../trpc';
 
 const userInput = z.object({
   email: z.string().email(),

@@ -1,10 +1,11 @@
 // app/api/sessions/reorder/route.ts
+import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+
+import { program,trainingSession } from "@/db";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { trainingSession, program } from "@/db";
-import { eq } from "drizzle-orm";
-import { z } from "zod";
 
 const reorderSchema = z.object({
   programId: z.string(),

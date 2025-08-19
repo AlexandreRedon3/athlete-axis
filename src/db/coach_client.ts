@@ -1,5 +1,6 @@
 import { relations, sql } from "drizzle-orm"
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core"
+
 import { user } from "./user"
 
 export const coachClient = pgTable("coach_client", {

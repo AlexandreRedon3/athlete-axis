@@ -1,13 +1,13 @@
+import bcrypt from "bcryptjs"
+import { eq } from "drizzle-orm"
 import { NextResponse } from "next/server"
-import { db } from "@/lib/db"
-import { invites } from "@/db/invites"
-import { user } from "@/db/user"
+import { z } from "zod"
+
 import { account } from "@/db/account"
 import { coachClient } from "@/db/coach_client"
-import { eq } from "drizzle-orm"
-import { z } from "zod"
-import { auth } from "@/lib"
-import bcrypt from "bcryptjs"
+import { invites } from "@/db/invites"
+import { user } from "@/db/user"
+import { db } from "@/lib/db"
 
 const registerSchema = z.object({
   name: z.string().min(2),

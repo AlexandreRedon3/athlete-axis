@@ -1,9 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/neon';
-import { exercise, program, trainingSession } from '@/db';
-import { eq, and, max } from 'drizzle-orm';
-import { auth } from '@/lib/auth';
+import { and, eq, max } from 'drizzle-orm';
 import { headers } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
+
+import { exercise, program, trainingSession } from '@/db';
+import { auth } from '@/lib/auth';
+import { db } from '@/lib/neon';
 import { validateAddExerciseForm } from '@/lib/validations/exercise-schema';
 
 export async function POST(request: NextRequest) {

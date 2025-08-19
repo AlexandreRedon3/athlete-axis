@@ -1,9 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { program, trainingSession, exercise } from '@/db';
 import { eq } from 'drizzle-orm';
-import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
+
+import { exercise,program, trainingSession } from '@/db';
+import { auth } from '@/lib/auth';
+import { db } from '@/lib/db';
 
 // PUT - Mettre à jour un programme
 export async function PUT(

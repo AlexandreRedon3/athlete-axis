@@ -1,39 +1,40 @@
 // src/components/coach/programs/program-sessions-manager.tsx
 "use client"
 
-import { useState } from 'react';
 import { 
-  Plus, 
-  Calendar, 
-  Clock, 
-  Dumbbell,
-  TrendingUp,
-  Edit,
-  Trash2,
-  ChevronRight,
-  ChevronDown,
-  Target,
   AlertCircle,
+  Calendar, 
+  ChevronDown,
+  ChevronRight,
+  Clock, 
   Copy,
+  Dumbbell,
+  Edit,
   MoreVertical,
+  Plus, 
   Share,
+  Target,
+  Trash2,
+  TrendingUp,
   X
 } from 'lucide-react';
+import { useState } from 'react';
+
+import { useDeleteSession, useDuplicateSession, usePublishProgram } from '../../../hooks/use-program-actions';
+import { useProgramSessions } from '../../../hooks/use-program-sessions';
+import { useTheme } from '../../../lib/theme-provider';
+import { Badge } from "../../ui/badge";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
+import { ConfirmDialog } from '../../ui/confirm-dialog';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "../../ui/dialog";
-import { Button } from "../../ui/button";
-import { Badge } from "../../ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
-import { AddSessionForm } from '../forms/add-session-form';
 import { AddExerciseToProgramForm } from '../forms/add-exercise-to-program-form';
-import { useTheme } from '../../../lib/theme-provider';
-import { useProgramSessions } from '../../../hooks/use-program-sessions';
-import { useDeleteSession, useDuplicateSession, usePublishProgram } from '../../../hooks/use-program-actions';
-import { ConfirmDialog } from '../../ui/confirm-dialog';
+import { AddSessionForm } from '../forms/add-session-form';
 import { EditProgramForm } from '../forms/edit-program-form';
 
 interface Exercise {
@@ -152,7 +153,7 @@ export const ProgramSessionsManager = ({
     if (!confirmDialog.sessionId) return;
     
     try {
-      await deleteSession(program.id, confirmDialog.sessionId);
+      await deleteSession({ programId: program.id, sessionId: confirmDialog.sessionId });
       setConfirmDialog({ isOpen: false, type: null, sessionId: null, sessionName: null });
     } catch (error) {
       console.error('Erreur lors de la suppression:', error);
@@ -163,7 +164,7 @@ export const ProgramSessionsManager = ({
     if (!confirmDialog.sessionId) return;
     
     try {
-      await duplicateSession(program.id, confirmDialog.sessionId);
+      await duplicateSession({ programId: program.id, sessionId: confirmDialog.sessionId });
       setConfirmDialog({ isOpen: false, type: null, sessionId: null, sessionName: null });
     } catch (error) {
       console.error('Erreur lors de la duplication:', error);

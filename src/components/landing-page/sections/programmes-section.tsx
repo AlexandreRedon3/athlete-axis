@@ -1,7 +1,8 @@
+import { Check, Dumbbell, Target, Zap } from "lucide-react"
 import Link from "next/link"
+
 import { Button } from "../../ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../ui/card"
-import { Check, Dumbbell, Target, Zap } from "lucide-react"
 
 export default function ProgrammesSection() {
   return (

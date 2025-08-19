@@ -1,34 +1,30 @@
 // src/components/coach/programs/program-overview.tsx
 "use client"
 
-import { useState } from 'react';
-import { 
-  Calendar, 
+import {
+  BarChart3,
+  Calendar,
   Clock, 
+  Download,
+  Dumbbell,
+  Edit,
+  Printer,
+  Share,
   Target,
   TrendingUp,
-  BarChart3,
-  Dumbbell,
-  Users,
-  CheckCircle,
-  AlertTriangle,
-  Eye,
-  Edit,
-  Share,
-  Download,
-  Printer
-} from 'lucide-react';
+  Users} from 'lucide-react';
+import { useState } from 'react';
+
 import { useTheme } from '../../../lib/theme-provider';
+import { Badge } from "../../ui/badge";
+import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "../../ui/dialog";
-import { Button } from "../../ui/button";
-import { Badge } from "../../ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 
 interface Exercise {

@@ -1,43 +1,37 @@
 // src/components/coach/dashboard/modern-coach-dashboard-optimized.tsx
 "use client"
 
-import { useEffect, useState } from 'react';
-import { useTheme } from '../../../lib/theme-provider';
 import { 
   Activity, 
-  Users, 
+  AlertCircle,
   Calendar, 
   Clock, 
-  TrendingUp,
-  Plus,
-  Eye,
-  Edit,
-  Share,
-  Download,
-  Printer,
-  Loader2,
-  AlertCircle,
-  Trash2,
   Copy,
+  Loader2,
+  Share,
+  Trash2,
+  Users, 
   X
 } from 'lucide-react';
-import { DashboardHeader } from './navigation/dashboard-header';
-import { DashboardNav } from './navigation/dashboard-nav';
-import { ClientsTable, Client as ClientTableType } from './clients/clients-table';
-import { DailySessions, Session as SessionType } from './sessions/daily-session';
-import { PerformancePanel } from './performance/performance-panel';
-import { useCoachStats } from '../../../hooks/use-coach-stats';
-import { useCoachPrograms } from '../../../hooks/use-coach-programs';
+import { useEffect, useState } from 'react';
+
 import { useCoachClients } from '../../../hooks/use-coach-client';
+import { useCoachPrograms } from '../../../hooks/use-coach-programs';
+import { useCoachStats } from '../../../hooks/use-coach-stats';
+import { useDeleteProgram, useDuplicateProgram, usePublishProgram } from '../../../hooks/use-program-actions';
 import { useProgramSessions } from '../../../hooks/use-program-sessions';
 import { useTodaySessions } from '../../../hooks/use-today-sessions';
-import { useDeleteProgram, useDuplicateProgram, useUpdateProgram, usePublishProgram } from '../../../hooks/use-program-actions';
+import { useTheme } from '../../../lib/theme-provider';
 import { ConfirmDialog } from '../../ui/confirm-dialog';
 import { EditProgramForm } from '../forms/edit-program-form';
 import { ProgramOverview } from '../programs/program-overview';
 import { ProgramSessionsManager } from '../programs/program-sessions-manager';
 import { PerformanceChart } from './charts/performance-chart';
 import { StatsChart } from './charts/stats-chart';
+import { Client as ClientTableType,ClientsTable } from './clients/clients-table';
+import { DashboardNav } from './navigation/dashboard-nav';
+import { PerformancePanel } from './performance/performance-panel';
+import { DailySessions, Session as SessionType } from './sessions/daily-session';
 
 // Types pour les données internes
 interface ClientData {
