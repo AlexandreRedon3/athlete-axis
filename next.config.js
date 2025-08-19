@@ -63,3 +63,14 @@ const nextConfig = {
 };
 
 module.exports = withNextIntl(nextConfig);
+
+module.exports = {
+  async rewrites() {
+      return [
+        {
+          source: '/api/:path*',
+          destination: 'https://athlete-axis-8i7l33apk-alexandres-projects-31374818.vercel.app/:path*',
+        },
+      ]
+    },
+};

@@ -20,9 +20,6 @@ export default function SignInPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
-    logger.info('Connexion en cours', { email, password });
-
     
     try {
       await authClient.signIn.email({
@@ -127,7 +124,7 @@ export default function SignInPage() {
               className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors"
               disabled={loading}
             >
-                              {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
               {loading ? 'Connexion en cours...' : 'Se connecter'}
             </Button>
           </form>
