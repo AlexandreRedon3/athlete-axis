@@ -1,15 +1,16 @@
 // app/api/exercises/[exerciseId]/route.ts
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { exercise } from "@/db";
 import { eq } from "drizzle-orm";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
+import { exercise } from "@/db";
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
+
 interface RouteParams {
-  params: {
+  params: Promise<{
     exerciseId: string;
-  };
+  }>;
 }
 
 const updateExerciseSchema = z.object({
@@ -25,6 +26,7 @@ const updateExerciseSchema = z.object({
 // PUT /api/exercises/:exerciseId - Modifier un exercice
 export async function PUT(req: NextRequest, { params }: RouteParams) {
   try {
+    const { exerciseId } = await params;
     const session = await auth.api.getSession({
       headers: req.headers,
     });
@@ -35,7 +37,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 
     // Vérifier que l'exercice appartient au coach
     const exerciseData = await db.query.exercise.findFirst({
-      where: eq(exercise.id, params.exerciseId),
+      where: eq(exercise.id, exerciseId),
       with: {
         trainingSession: {
           with: {
@@ -58,7 +60,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
         ...validatedData,
         updatedAt: new Date(),
       })
-      .where(eq(exercise.id, params.exerciseId))
+      .where(eq(exercise.id, exerciseId))
       .returning();
 
     return NextResponse.json({ exercise: updated[0] });
@@ -81,6 +83,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 // DELETE /api/exercises/:exerciseId - Supprimer un exercice
 export async function DELETE(req: NextRequest, { params }: RouteParams) {
   try {
+    const { exerciseId } = await params;
     const session = await auth.api.getSession({
       headers: req.headers,
     });
@@ -91,7 +94,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
 
     // Vérifier permissions
     const exerciseData = await db.query.exercise.findFirst({
-      where: eq(exercise.id, params.exerciseId),
+      where: eq(exercise.id, exerciseId),
       with: {
         trainingSession: {
           with: {
@@ -105,7 +108,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: "Accès refusé" }, { status: 403 });
     }
 
-    await db.delete(exercise).where(eq(exercise.id, params.exerciseId));
+    await db.delete(exercise).where(eq(exercise.id, exerciseId));
 
     return NextResponse.json({ success: true });
   } catch (error) {

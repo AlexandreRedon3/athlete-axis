@@ -1,19 +1,19 @@
 // src/lib/auth.ts
+import bcrypt from "bcryptjs";
 import { betterAuth } from "better-auth";
-import { safeConfig } from "./env";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "../lib/db";
+import { nextCookies } from "better-auth/next-js";
+import { twoFactor } from "better-auth/plugins/two-factor";
+import { username } from "better-auth/plugins/username";
+
+import { session } from "@/db/session";
+import { twoFactor as twoFactorSchema } from "@/db/twoFactor";
+import { verification } from "@/db/verification";
+
 import { user as dbUsers } from "../db";
 import { account } from "../db";
-import { verification } from "@/db/verification";
-import { twoFactor as twoFactorSchema } from "@/db/twoFactor";
-import { session } from "@/db/session";
-import { stripe } from "./stripe";
-import { eq } from "drizzle-orm";
-import { nextCookies } from "better-auth/next-js";
-import { username } from "better-auth/plugins/username";
-import { twoFactor } from "better-auth/plugins/two-factor";
-import bcrypt from "bcryptjs";
+import { db } from "../lib/db";
+import { safeConfig } from "./env";
 
 export const auth = betterAuth({
   appName: "Athlete-Axis",

@@ -1,9 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/neon';
-import { program, coachClient, user } from '@/db';
-import { eq, and } from 'drizzle-orm';
-import { auth } from '@/lib/auth';
+import { and,eq } from 'drizzle-orm';
 import { headers } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
+
+import { coachClient, program, user } from '@/db';
+import { auth } from '@/lib/auth';
+import { db } from '@/lib/neon';
 
 export async function GET(
   request: NextRequest,

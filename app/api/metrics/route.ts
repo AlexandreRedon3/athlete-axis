@@ -1,6 +1,7 @@
 // app/api/metrics/route.ts - VERSION COMPATIBLE EDGE RUNTIME
 import { NextResponse } from 'next/server';
-import { register, collectDefaultMetrics, Counter, Histogram, Gauge } from 'prom-client';
+import { Counter, Gauge, register } from 'prom-client';
+
 import { getBusinessMetrics } from '@/lib/metrics';
 
 // Réinitialiser le registre pour éviter les doublons
@@ -52,7 +53,7 @@ const httpRequestsTotal = new Counter({
 });
 
 // Fonction pour mettre à jour les métriques business
-export async function updateBusinessMetrics() {
+async function updateBusinessMetrics() {
   try {
     const businessMetrics = await getBusinessMetrics();
     

@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server"
-import { db } from "@/lib/db"
-import { user } from "@/db/user"
-import { eq } from "drizzle-orm"
-import { z } from "zod"
 import bcrypt from "bcryptjs"
+import { eq } from "drizzle-orm"
+import { NextResponse } from "next/server"
+import { z } from "zod"
+
+import { user } from "@/db/user"
+import { db } from "@/lib/db"
 
 // Schéma de validation pour la mise à jour d'utilisateur
 const updateUserSchema = z.object({

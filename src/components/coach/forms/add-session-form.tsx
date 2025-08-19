@@ -1,20 +1,21 @@
 // src/components/coach/forms/add-session-form.tsx
 "use client"
 
-import { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { 
-  Plus, 
   Calendar, 
+  CheckCircle,
   Clock, 
+  Loader2, 
   Target,
-  TrendingUp,
-  Loader2,
-  CheckCircle
-} from 'lucide-react';
+  TrendingUp} from 'lucide-react';
+import { useState } from 'react';
+import {useForm } from 'react-hook-form';
+import { z } from 'zod';
+
 import { useTheme } from '../../../lib/theme-provider';
+import { Badge } from '../../ui/badge';
+import { Button } from "../../ui/button";
 import {
   Dialog,
   DialogContent,
@@ -23,18 +24,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../../ui/dialog";
-import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 import { Textarea } from "../../ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../ui/select";
-import { Badge } from '../../ui/badge';
 
 const addSessionSchema = z.object({
   name: z.string().min(1, "Le nom est requis").max(100, "Maximum 100 caractères"),

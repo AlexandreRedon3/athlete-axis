@@ -1,16 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { 
-  user, 
-  program, 
-  coachClient, 
-  trainingSession, 
-  exercise,
-  workoutLog 
-} from '@/db';
-import { eq, and, count, sql, gte, lte, desc } from 'drizzle-orm';
-import { auth } from '@/lib/auth';
+import { and, count,eq, gte, lte } from 'drizzle-orm';
 import { headers } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
+
+import { 
+  coachClient, 
+  exercise,
+  program, 
+  trainingSession 
+} from '@/db';
+import { auth } from '@/lib/auth';
+import { db } from '@/lib/db';
 
 export async function GET(request: NextRequest) {
   try {

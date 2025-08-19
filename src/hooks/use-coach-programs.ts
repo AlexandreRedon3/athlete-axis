@@ -1,7 +1,8 @@
 // src/hooks/use-coach-programs.ts
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useEffect,useState } from 'react';
+
 import { useRefreshStore } from '../lib/refresh-store';
 
 interface Program {

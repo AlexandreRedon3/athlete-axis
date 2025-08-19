@@ -1,8 +1,9 @@
-import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
-import { user } from "./user";
-import { program } from "./program";
 import { InferSelectModel, relations } from "drizzle-orm";
+import { boolean,pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
+
+import { program } from "./program";
+import { user } from "./user";
 
 export const programAssignment = pgTable("programAssignment", {
     id: text("id").primaryKey(),

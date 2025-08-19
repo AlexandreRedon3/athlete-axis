@@ -1,15 +1,16 @@
 // app/api/sessions/[sessionId]/exercises/route.ts
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { exercise, trainingSession } from "@/db";
 import { eq } from "drizzle-orm";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
+import { exercise, trainingSession } from "@/db";
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
+
 interface RouteParams {
-  params: {
+  params: Promise<{
     sessionId: string;
-  };
+  }>;
 }
 
 const createExerciseSchema = z.object({
@@ -25,6 +26,7 @@ const createExerciseSchema = z.object({
 // POST /api/sessions/:sessionId/exercises - Ajouter un exercice
 export async function POST(req: NextRequest, { params }: RouteParams) {
   try {
+    const { sessionId } = await params;
     const session = await auth.api.getSession({
       headers: req.headers,
     });
@@ -35,7 +37,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
 
     // Vérifier que la session existe et appartient au coach
     const trainingSessionData = await db.query.trainingSession.findFirst({
-      where: eq(trainingSession.id, params.sessionId),
+      where: eq(trainingSession.id, sessionId),
       with: {
         program: true,
       },
@@ -51,7 +53,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     const newExercise = await db.insert(exercise).values({
       id: crypto.randomUUID(),
       ...validatedData,
-      trainingSessionId: params.sessionId,
+      trainingSessionId: sessionId,
       createdAt: new Date(),
       updatedAt: new Date(),
     }).returning();
@@ -76,6 +78,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
 // GET /api/sessions/:sessionId/exercises - Liste des exercices d'une session
 export async function GET(req: NextRequest, { params }: RouteParams) {
   try {
+    const { sessionId } = await params;
     const session = await auth.api.getSession({
       headers: req.headers,
     });
@@ -85,7 +88,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     }
 
     const exercises = await db.query.exercise.findMany({
-      where: eq(exercise.trainingSessionId, params.sessionId),
+      where: eq(exercise.trainingSessionId, sessionId),
       orderBy: (exercises, { asc }) => [asc(exercises.order)],
     });
 

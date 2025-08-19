@@ -1,22 +1,23 @@
 // src/components/coach/forms/schedule-session-form.tsx
 "use client"
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { 
   Calendar, 
+  CalendarDays,
+  CheckCircle,
   Clock, 
-  User, 
-  MapPin,
   FileText,
   Loader2,
-  CheckCircle,
-  CalendarDays,
-  X
+  MapPin,
+  User
 } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
 import { useTheme } from '../../../lib/theme-provider';
+import { Button } from "../../ui/button";
 import {
   Dialog,
   DialogContent,
@@ -25,10 +26,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../../ui/dialog";
-import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
-import { Textarea } from "../../ui/textarea";
 import {
   Select,
   SelectContent,
@@ -36,6 +35,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../ui/select";
+import { Textarea } from "../../ui/textarea";
 
 const scheduleSessionSchema = z.object({
   clientId: z.string().min(1, "Veuillez sélectionner un client"),
@@ -148,7 +148,7 @@ export const ScheduleSessionForm = ({ isOpen, onClose, onSuccess }: ScheduleSess
   // Générer les créneaux horaires
   const timeSlots = [];
   for (let hour = 6; hour <= 22; hour++) {
-    for (let minute of [0, 30]) {
+    for (const minute of [0, 30]) {
       const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
       timeSlots.push(time);
     }

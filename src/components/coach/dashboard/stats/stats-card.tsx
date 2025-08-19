@@ -3,6 +3,7 @@
 
 import { LucideIcon } from 'lucide-react';
 import { TrendingUp } from 'lucide-react';
+
 import { useTheme } from '../../../../lib/theme-provider';
 
 interface StatsCardProps {

@@ -1,6 +1,5 @@
 "use client"
 
-import { bytesToMegabytes } from "@/lib/utils"
 import { Button, useDisclosure } from "@heroui/react"
 import { Crop, Trash, Upload } from "lucide-react"
 import Image from "next/image"
@@ -8,6 +7,7 @@ import { InputHTMLAttributes, useCallback, useEffect, useState } from "react"
 import { Accept, useDropzone } from "react-dropzone"
 import { toast } from "react-toastify"
 
+import { bytesToMegabytes } from "@/lib/utils"
 import { cn } from "@/lib/utils"
 
 import ImageCrop from "./image-crop"

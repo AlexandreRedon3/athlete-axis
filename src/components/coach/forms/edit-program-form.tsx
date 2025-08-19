@@ -1,23 +1,24 @@
 "use client"
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Edit, Save, X } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Edit, Save, X } from 'lucide-react';
+
+import { useUpdateProgram } from '../../../hooks/use-program-actions';
+import { useTheme } from '../../../lib/theme-provider';
+import { Button } from '../../ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from '../../ui/dialog';
-import { Button } from '../../ui/button';
 import { Input } from '../../ui/input';
 import { Label } from '../../ui/label';
-import { Textarea } from '../../ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
-import { useTheme } from '../../../lib/theme-provider';
-import { useUpdateProgram } from '../../../hooks/use-program-actions';
+import { Textarea } from '../../ui/textarea';
 
 const editProgramSchema = z.object({
   name: z.string().min(1, 'Le nom est requis'),
@@ -81,7 +82,7 @@ export const EditProgramForm = ({
     setSubmitStatus('idle');
 
     try {
-      const result = await updateProgram(program.id, data);
+      const result = await updateProgram({ programId: program.id, programData: data });
       
       setSubmitStatus('success');
       

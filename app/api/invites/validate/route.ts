@@ -1,8 +1,9 @@
+import { eq } from "drizzle-orm"
 import { NextResponse } from "next/server"
-import { db } from "@/lib/db"
+
 import { invites } from "@/db/invites"
 import { user } from "@/db/user"
-import { eq } from "drizzle-orm"
+import { db } from "@/lib/db"
 
 export async function GET(req: Request) {
   try {

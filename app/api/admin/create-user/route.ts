@@ -1,12 +1,11 @@
-import { NextResponse } from "next/server"
-import { auth } from "@/lib/auth"
-import { db } from "@/lib/db"
-import { user } from "@/db/user"
-import { account } from "@/db/account"
-import { eq } from "drizzle-orm"
-import { z } from "zod"
 import bcrypt from "bcryptjs"
+import { eq } from "drizzle-orm"
+import { NextResponse } from "next/server"
+import { z } from "zod"
+
+import { user } from "@/db/user"
 import { authClient } from "@/lib/auth-client"
+import { db } from "@/lib/db"
 
 // Schéma de validation pour la création d'utilisateur
 const createUserSchema = z.object({

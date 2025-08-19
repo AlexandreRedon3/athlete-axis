@@ -1,21 +1,23 @@
 // src/components/coach/forms/create-program-form.tsx
 "use client"
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { 
   Activity, 
+  CheckCircle,
   Clock, 
-  Users, 
   FileText, 
   Image as ImageIcon,
   Loader2,
-  CheckCircle,
-  X
+  Users
 } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { useRefreshData } from '../../../lib/refresh-store';
 import { useTheme } from '../../../lib/theme-provider';
+import { Button } from "../../ui/button";
 import {
   Dialog,
   DialogContent,
@@ -24,11 +26,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../../ui/dialog";
-import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 import { Textarea } from "../../ui/textarea";
-import { useRefreshData } from '../../../lib/refresh-store';
 
 const createProgramSchema = z.object({
   name: z.string().min(1, "Le nom est requis").max(100, "Maximum 100 caractères"),
