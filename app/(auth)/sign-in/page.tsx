@@ -1,6 +1,11 @@
 'use client';
 
+<<<<<<< HEAD
 import { Button, Spinner } from '@heroui/react';
+=======
+import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
+>>>>>>> 956a6d9 (feat: finalize first version - clean codebase and fix build issues)
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -122,7 +127,7 @@ export default function SignInPage() {
               className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors"
               disabled={loading}
             >
-              {loading ? <Spinner className="mr-2" /> : null}
+                              {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
               {loading ? 'Connexion en cours...' : 'Se connecter'}
             </Button>
           </form>

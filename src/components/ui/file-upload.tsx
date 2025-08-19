@@ -1,6 +1,6 @@
 "use client"
 
-import { Button, useDisclosure } from "@heroui/react"
+import { Button } from "./button"
 import { Crop, Trash, Upload } from "lucide-react"
 import Image from "next/image"
 import { InputHTMLAttributes, useCallback, useEffect, useState } from "react"
@@ -23,7 +23,7 @@ function File({
   removeFile: (index: number) => void
   handleCrop: (index: number, file: File) => void
 }) {
-  const { isOpen: isCroppingOpen, onOpen: onCroppingOpen, onOpenChange: onCroppingOpenChange } = useDisclosure()
+  const [isCroppingOpen, setIsCroppingOpen] = useState(false)
 
   const setFile = useCallback(
     (file: File) => {
@@ -40,15 +40,15 @@ function File({
           <span className="text-muted-foreground ml-1 block">({bytesToMegabytes(file.size, true)}Mo)</span>
         </p>
         <div className="flex gap-1">
-          <Button color="primary" className="h-[unset] min-w-0 shrink-0 rounded-full p-1" onPress={onCroppingOpen}>
-            <Crop className="size-4" />
+          <Button variant="outline" size="sm" className="h-8 w-8 p-0" onClick={() => setIsCroppingOpen(true)}>
+            <Crop className="h-4 w-4" />
           </Button>
-          <Button color="danger" className="h-[unset] min-w-0 shrink-0 rounded-full p-1" onPress={() => removeFile(i)}>
-            <Trash className="size-4" />
+          <Button variant="destructive" size="sm" className="h-8 w-8 p-0" onClick={() => removeFile(i)}>
+            <Trash className="h-4 w-4" />
           </Button>
         </div>
       </div>
-      <ImageCrop originalFile={file} setFile={setFile} onOpenChange={onCroppingOpenChange} isOpen={isCroppingOpen} />
+      <ImageCrop originalFile={file} setFile={setFile} onOpenChange={() => setIsCroppingOpen(false)} isOpen={isCroppingOpen} />
     </li>
   )
 }

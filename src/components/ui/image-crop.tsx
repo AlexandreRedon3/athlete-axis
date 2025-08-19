@@ -1,8 +1,8 @@
 "use client"
 
-import { Button } from "@heroui/button"
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@heroui/modal"
-import { Spinner } from "@heroui/spinner"
+import { Button } from "./button"
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "./dialog"
+import { Loader2 } from "lucide-react"
 import { ReactEventHandler, useCallback, useEffect, useRef, useState } from "react"
 
 import { cn } from "@/lib/utils"
@@ -381,7 +381,7 @@ function CropContent({
 
   return (
     <>
-      <ModalBody className="flex items-center justify-center">
+      <div className="flex items-center justify-center p-6">
         <div className="relative flex size-[500px] max-h-full max-w-full items-center justify-center">
           <div className="relative flex touch-none select-none">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -492,18 +492,17 @@ function CropContent({
             />
           </div>
           {isImageLoading && (
-            <div className="absolute inset-0 flex touch-none flex-col items-center justify-center gap-1 bg-content1/50">
-              <Spinner color="primary" />
-              <span className="text-base font-bold text-foreground">Loading</span>
+            <div className="absolute inset-0 flex touch-none flex-col items-center justify-center gap-1 bg-background/50">
+              <Loader2 className="h-6 w-6 animate-spin" />
+              <span className="text-base font-bold">Loading</span>
             </div>
           )}
         </div>
-      </ModalBody>
-      <ModalFooter>
+      </div>
+      <DialogFooter>
         <Button
-          color="danger"
-          variant="light"
-          onPress={() => {
+          variant="outline"
+          onClick={() => {
             if (!isTouched) {
               onClose()
               return
@@ -519,15 +518,14 @@ function CropContent({
           {!isTouched ? "Cancel" : "Reset"}
         </Button>
         <Button
-          color="primary"
-          onPress={() => {
+          onClick={() => {
             cropImage()
           }}
-          isLoading={isProcessing}
+          disabled={isProcessing}
         >
-          Save
+          {isProcessing ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save"}
         </Button>
-      </ModalFooter>
+      </DialogFooter>
     </>
   )
 }
@@ -544,15 +542,13 @@ export default function ImageCrop({
   onOpenChange: () => void
 }) {
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
-      <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className="flex flex-col gap-1">Recadrer l&apos;image</ModalHeader>
-            <CropContent onClose={onClose} originalFile={originalFile} setFile={setFile} onOpenChange={onOpenChange} />
-          </>
-        )}
-      </ModalContent>
-    </Modal>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>Recadrer l&apos;image</DialogTitle>
+        </DialogHeader>
+        <CropContent onClose={() => onOpenChange()} originalFile={originalFile} setFile={setFile} onOpenChange={onOpenChange} />
+      </DialogContent>
+    </Dialog>
   )
 }
