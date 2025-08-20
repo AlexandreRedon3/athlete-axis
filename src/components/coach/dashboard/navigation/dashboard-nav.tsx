@@ -3,7 +3,7 @@
 
 import { Activity, BarChart3, LucideIcon, Settings,Target, Users } from 'lucide-react';
 
-import { useTheme } from '../../../../lib/theme-provider';
+import { useTheme } from '@/lib/theme-provider';
 
 interface NavItem {
   id: string;

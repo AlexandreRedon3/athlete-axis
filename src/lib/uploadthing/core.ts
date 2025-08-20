@@ -1,15 +1,23 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { headers } from "next/headers";
+
+import { auth } from "@/lib/auth";
 
 const f = createUploadthing();
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
   // Define as many FileRoutes as you like, each with a unique route key
-  imageUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 10 } })
+  imageUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
     // Set permissions and file types for this FileRoute
     .middleware(async () => {
-      // This middleware needs to be expanded with proper auth
-      return { userId: "user-id" };
+      // Vérifier l'authentification
+      const session = await auth.api.getSession({ headers: await headers() });
+      if (!session?.user?.id) {
+        throw new Error("Non authentifié");
+      }
+      
+      return { userId: session.user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       console.log("Upload complete for userId:", metadata.userId);
@@ -20,7 +28,12 @@ export const ourFileRouter = {
   
   documentUploader: f({ pdf: { maxFileSize: "4MB", maxFileCount: 5 } })
     .middleware(async () => {
-      return { userId: "user-id" };
+      const session = await auth.api.getSession({ headers: await headers() });
+      if (!session?.user?.id) {
+        throw new Error("Non authentifié");
+      }
+      
+      return { userId: session.user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       console.log("Upload complete for userId:", metadata.userId);

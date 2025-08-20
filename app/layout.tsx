@@ -8,7 +8,7 @@ import NextTopLoader from "nextjs-toploader";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { extractRouterConfig } from "uploadthing/server";
 
-import { ourFileRouter } from "../app/api/uploadthing/core";
+import { ourFileRouter } from "../src/lib/uploadthing/core";
 import Providers from "../src/context/providers";
 import { cn } from "../src/lib/utils";
 

@@ -45,6 +45,7 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       image: { type: "string", defaultValue: "", required: false },
+      bio: { type: "string", defaultValue: "", required: false },
       isCoach: { type: "boolean", defaultValue: false, required: false },
       onBoardingComplete: { type: "boolean", defaultValue: false, required: false },
       stripeId: { type: "string", defaultValue: "", required: false },

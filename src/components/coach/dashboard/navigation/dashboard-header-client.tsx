@@ -12,7 +12,8 @@ import { useTheme } from "@/lib/theme-provider"
 
 interface DashboardHeaderClientProps {
   user: {
-    name?: string
+    id?: string
+    name?: string | null
     isCoach?: boolean | null
   } | null
 }
@@ -65,14 +66,16 @@ export const DashboardHeaderClient = ({ user }: DashboardHeaderClientProps) => {
           
           <ModernThemeToggle />
           
-          <Button 
-            variant="ghost" 
-            size="sm"
-            className={`${colors.text} hover:text-emerald-600 ${colors.hover} transition-colors duration-200`}
-          >
-            <User className="h-4 w-4" />
-            <span className="ml-2 hidden md:inline">Mon profil</span>
-          </Button>
+          <Link href="/dashboard/profile">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              className={`${colors.text} hover:text-emerald-600 ${colors.hover} transition-colors duration-200`}
+            >
+              <User className="h-4 w-4" />
+              <span className="ml-2 hidden md:inline">Mon profil</span>
+            </Button>
+          </Link>
           
           <LogoutButton />
         </div>

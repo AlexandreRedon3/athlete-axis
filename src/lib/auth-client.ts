@@ -26,6 +26,7 @@ export const authClient = createAuthClient({
         phoneNumber: { type: "string", defaultValue: "", required: false },
         smsNotifications: { type: "boolean", defaultValue: false, required: false },
         emailNotifications: { type: "boolean", defaultValue: false, required: false },
+        bio: { type: "string", defaultValue: "", required: false },
       },
     }),
   ],
