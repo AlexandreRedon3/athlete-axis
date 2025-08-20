@@ -1,6 +1,7 @@
 "use client"
 
-import { createContext, ReactNode,useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { useTheme as useNextTheme } from 'next-themes';
 
 export type Theme = 'light' | 'dark';
 
@@ -45,15 +46,30 @@ const themes: Record<Theme, ThemeColors> = {
 };
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+  const { theme: nextTheme, setTheme: setNextTheme } = useNextTheme();
   const [theme, setTheme] = useState<Theme>('light');
 
+  // Synchroniser avec next-themes
+  useEffect(() => {
+    if (nextTheme === 'light' || nextTheme === 'dark') {
+      setTheme(nextTheme);
+    }
+  }, [nextTheme]);
+
   const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    setNextTheme(newTheme);
+  };
+
+  const handleSetTheme = (newTheme: Theme) => {
+    setTheme(newTheme);
+    setNextTheme(newTheme);
   };
 
   const value = {
     theme,
-    setTheme,
+    setTheme: handleSetTheme,
     colors: themes[theme],
     toggleTheme
   };

@@ -1,12 +1,5 @@
 "use client";
 
-<<<<<<< HEAD
-import "swagger-ui-react/swagger-ui.css";
-=======
->>>>>>> 956a6d9 (feat: finalize first version - clean codebase and fix build issues)
-
-import SwaggerUI from "swagger-ui-react";
-
 export default function ApiDocsPage() {
   return (
     <div className="container mx-auto px-4 py-8">

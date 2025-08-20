@@ -1,6 +1,11 @@
-// app/page.tsx
-import LandingPage from "./(landing)/page";
+"use client";
 
-export default async function Page() {
-  return <LandingPage />;
+import { UserLanding } from "@/components/landing-page/user-landing";
+
+export default function HomePage() {
+  return (
+    <div className="horizontal-gradient">
+      <UserLanding />
+    </div>
+  );
 }

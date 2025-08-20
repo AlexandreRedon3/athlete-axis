@@ -18,6 +18,7 @@ import { safeConfig } from "./env";
 export const auth = betterAuth({
   appName: "Athlete-Axis",
   secret: safeConfig.BETTER_AUTH_SECRET,
+  baseURL: safeConfig.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
@@ -44,6 +45,7 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       image: { type: "string", defaultValue: "", required: false },
+      bio: { type: "string", defaultValue: "", required: false },
       isCoach: { type: "boolean", defaultValue: false, required: false },
       onBoardingComplete: { type: "boolean", defaultValue: false, required: false },
       stripeId: { type: "string", defaultValue: "", required: false },
@@ -60,6 +62,11 @@ export const auth = betterAuth({
     nextCookies(),
     username(),
     twoFactor(),
+  ],
+  trustedOrigins: [
+    "https://athlete-axis-*.vercel.app",
+    "https://*.vercel.app",
+    "http://localhost:3000"
   ],
 });
 

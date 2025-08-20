@@ -1,5 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { useRefreshStore } from '@/lib/refresh-store';
+
+// Fonction utilitaire pour déclencher le refresh des programmes
+const triggerProgramsRefresh = () => {
+  try {
+    const { triggerRefresh } = useRefreshStore.getState();
+    triggerRefresh('programs');
+  } catch (error) {
+    console.warn('Impossible de déclencher le refresh Zustand:', error);
+  }
+};
 
 // Hook pour supprimer une session
 export const useDeleteSession = () => {
@@ -21,6 +32,10 @@ export const useDeleteSession = () => {
     onSuccess: (_, { programId }) => {
       queryClient.invalidateQueries({ queryKey: ['programs'] });
       queryClient.invalidateQueries({ queryKey: ['programs', programId] });
+      
+      // Déclencher le refresh Zustand pour useCoachPrograms
+      triggerProgramsRefresh();
+      
       toast.success('Session supprimée avec succès');
     },
     onError: (error) => {
@@ -54,6 +69,10 @@ export const useDuplicateSession = () => {
     onSuccess: (_, { programId }) => {
       queryClient.invalidateQueries({ queryKey: ['programs'] });
       queryClient.invalidateQueries({ queryKey: ['programs', programId] });
+      
+      // Déclencher le refresh Zustand pour useCoachPrograms
+      triggerProgramsRefresh();
+      
       toast.success('Session dupliquée avec succès');
     },
     onError: (error) => {
@@ -86,6 +105,10 @@ export const useDeleteProgram = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['programs'] });
+      
+      // Déclencher le refresh Zustand pour useCoachPrograms
+      triggerProgramsRefresh();
+      
       toast.success('Programme supprimé');
     },
     onError: (error) => {
@@ -118,6 +141,10 @@ export const useDuplicateProgram = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['programs'] });
+      
+      // Déclencher le refresh Zustand pour useCoachPrograms
+      triggerProgramsRefresh();
+      
       toast.success('Programme dupliqué');
     },
     onError: (error) => {
@@ -165,6 +192,10 @@ export const useUpdateProgram = () => {
     onSuccess: (_, { programId }) => {
       queryClient.invalidateQueries({ queryKey: ['programs'] });
       queryClient.invalidateQueries({ queryKey: ['programs', programId] });
+      
+      // Déclencher le refresh Zustand pour useCoachPrograms
+      triggerProgramsRefresh();
+      
       toast.success('Programme mis à jour avec succès');
     },
     onError: (error) => {
@@ -196,8 +227,13 @@ export const usePublishProgram = () => {
       return await response.json();
     },
     onSuccess: (_, programId) => {
+      // Invalider les queries React Query
       queryClient.invalidateQueries({ queryKey: ['programs'] });
       queryClient.invalidateQueries({ queryKey: ['programs', programId] });
+      
+      // Déclencher le refresh Zustand pour useCoachPrograms
+      triggerProgramsRefresh();
+      
       toast.success('Programme publié');
     },
     onError: (error) => {
@@ -219,8 +255,13 @@ export const usePublishProgram = () => {
       return await response.json();
     },
     onSuccess: (_, programId) => {
+      // Invalider les queries React Query
       queryClient.invalidateQueries({ queryKey: ['programs'] });
       queryClient.invalidateQueries({ queryKey: ['programs', programId] });
+      
+      // Déclencher le refresh Zustand pour useCoachPrograms
+      triggerProgramsRefresh();
+      
       toast.success('Programme retiré de la publication');
     },
     onError: (error) => {
