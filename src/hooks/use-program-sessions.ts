@@ -1,4 +1,3 @@
-// src/hooks/use-program-sessions.ts
 import { useEffect,useState } from 'react';
 
 import { useRefreshStore } from '../lib/refresh-store';

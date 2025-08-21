@@ -1,4 +1,3 @@
-// app/api/metrics/route.ts - VERSION COMPATIBLE EDGE RUNTIME
 import { NextResponse } from 'next/server';
 import { Counter, Gauge, register } from 'prom-client';
 

@@ -1,4 +1,3 @@
-// app/api/exercises/[exerciseId]/route.ts
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";

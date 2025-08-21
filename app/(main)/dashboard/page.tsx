@@ -1,4 +1,3 @@
-// app/(main)/dashboard/page.tsx
 // Cette page sert de point d'entrée pour que le middleware puisse rediriger
 // vers le bon dashboard selon le type d'utilisateur
 

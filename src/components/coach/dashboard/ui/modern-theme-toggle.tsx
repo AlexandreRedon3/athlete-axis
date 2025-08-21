@@ -1,4 +1,3 @@
-// src/components/coach/dashboard/ui/modern-theme-toggle.tsx
 "use client"
 
 import { Moon,Sun } from 'lucide-react';

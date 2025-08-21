@@ -1,4 +1,3 @@
-// src/components/coach/forms/add-exercise-to-program-form.tsx
 "use client"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { 

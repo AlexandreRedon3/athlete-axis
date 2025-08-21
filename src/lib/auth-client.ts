@@ -1,4 +1,3 @@
-// src/lib/auth-client.ts
 import {
   inferAdditionalFields,
   twoFactorClient,

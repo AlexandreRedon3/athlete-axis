@@ -1,4 +1,3 @@
-// app/api/programs/route.ts
 import { and, eq } from "drizzle-orm/sql"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"

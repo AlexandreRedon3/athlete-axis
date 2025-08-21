@@ -1,4 +1,3 @@
-// __test__/units/hooks/use-coach-stats.test.tsx
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { renderHook, waitFor } from "@testing-library/react";
 import { useCoachStats } from "../../../src/hooks/use-coach-stats";
