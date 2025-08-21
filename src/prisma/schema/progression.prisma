@@ -1,8 +1,0 @@
-model WeeklyProgression {
-  id         String   @id @default(uuid())
-  exercise   Exercise @relation(fields: [exerciseId], references: [id])
-  exerciseId String
-  week       Int
-  rpe        Int?
-  load       Float?
-}

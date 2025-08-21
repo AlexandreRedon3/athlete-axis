@@ -1,6 +1,13 @@
-export * from "./user";
 export * from "./account";
-export * from "./member";
+export * from "./coach_client"; 
+export * from "./exercice";
+export * from "./exercise-library";
+export * from "./invites";
 export * from "./program";
+export * from "./program-assignment";
 export * from "./session";
-
+export * from "./training-session";
+export * from "./twoFactor";
+export * from "./user";
+export * from "./verification";
+export * from "./workout-log";

@@ -1,0 +1,229 @@
+openapi: 3.0.3
+info:
+  title: Athlete Axis API
+  version: 1.0.0
+  description: Documentation des endpoints custom (hors Better Auth)
+servers:
+  - url: http://localhost:3000
+paths:
+  /api/invites/generate:
+    post:
+      summary: Génère un lien d'invitation pour un coaché
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Lien d'invitation généré
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  inviteLink:
+                    type: string
+        '401':
+          description: Non autorisé
+  /api/invites/validate:
+    get:
+      summary: Valide un token d'invitation
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Token valide
+        '400':
+          description: Token invalide ou expiré
+  /api/admin/update-coach-status:
+    put:
+      summary: Met à jour le rôle d'un utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                isCoach:
+                  type: boolean
+      responses:
+        '200':
+          description: Statut mis à jour
+        '401':
+          description: Non autorisé
+  /api/admin/create-user:
+    post:
+      summary: Crée un utilisateur (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                name:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Utilisateur créé
+        '401':
+          description: Non autorisé
+  /api/admin/delete-user:
+    delete:
+      summary: Supprime un utilisateur (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+      responses:
+        '200':
+          description: Utilisateur supprimé
+        '401':
+          description: Non autorisé
+  /api/admin/update-user:
+    put:
+      summary: Modifie un utilisateur (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                name:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Utilisateur modifié
+        '401':
+          description: Non autorisé
+  /api/coach/clients:
+    get:
+      summary: Liste les clients d'un coach
+      responses:
+        '200':
+          description: Liste des clients
+        '401':
+          description: Non autorisé
+  /api/coach/programs:
+    get:
+      summary: Liste les programmes d'un coach
+      responses:
+        '200':
+          description: Liste des programmes
+        '401':
+          description: Non autorisé
+  /api/coach/stats:
+    get:
+      summary: Statistiques du coach
+      responses:
+        '200':
+          description: Statistiques
+        '401':
+          description: Non autorisé
+  /api/programs:
+    get:
+      summary: Liste tous les programmes
+      responses:
+        '200':
+          description: Liste des programmes
+    post:
+      summary: Crée un programme
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Programme créé
+  /api/programs/{id}:
+    get:
+      summary: Détail d'un programme
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Détail du programme
+    put:
+      summary: Modifie un programme
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Programme modifié
+    delete:
+      summary: Supprime un programme
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Programme supprimé
+  /api/uploadthing:
+    post:
+      summary: Upload de fichiers
+      responses:
+        '200':
+          description: Fichier uploadé
+  /api/uploadthing/core:
+    post:
+      summary: Upload de fichiers (core)
+      responses:
+        '200':
+          description: Fichier uploadé 

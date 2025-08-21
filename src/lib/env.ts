@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -22,28 +22,34 @@ interface ENV {
   STRIPE_WEBHOOK_BASIC_SECRET: string | undefined;
   STRIPE_WEBHOOK_PRO_SECRET: string | undefined;
   STRIPE_WEBHOOK_ULTIMATE_SECRET: string | undefined;
+  GOOGLE_CLIENT_ID: string | undefined;
+  GOOGLE_CLIENT_SECRET: string | undefined;
+  NEXT_PUBLIC_BETTER_AUTH_URL: string | undefined;
 }
 
 interface Config {
-  DATABASE_URL: string;
-  RESEND_API_KEY: string;
-  TRIGGER_PUBLIC_API_KEY: string;
-  TRIGGER_SECRET_KEY: string;
-  NEXT_PUBLIC_APP_URL: string;
-  NODE_ENV: string;
-  NEXT_PUBLIC_POSTHOG_KEY: string;
-  NEXT_PUBLIC_POSTHOG_HOST: string;
-  STRIPE_SECRET_KEY: string;
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: string;
-  BETTER_AUTH_SECRET: string;
-  BETTER_AUTH_URL: string;
-  UPLOADTHING_TOKEN: string;
-  STRIPE_BASIC_PLAN_ID: string;
-  STRIPE_PRO_PLAN_ID: string;
-  STRIPE_ULTIMATE_PLAN_ID: string;
-  STRIPE_WEBHOOK_BASIC_SECRET: string;
-  STRIPE_WEBHOOK_PRO_SECRET: string;
-  STRIPE_WEBHOOK_ULTIMATE_SECRET: string;
+  DATABASE_URL: string | undefined;
+  RESEND_API_KEY: string | undefined;
+  TRIGGER_PUBLIC_API_KEY: string | undefined;
+  TRIGGER_SECRET_KEY: string | undefined;
+  NEXT_PUBLIC_APP_URL: string | undefined;
+  NODE_ENV: string | undefined;
+  NEXT_PUBLIC_POSTHOG_KEY: string | undefined;
+  NEXT_PUBLIC_POSTHOG_HOST: string | undefined;
+  STRIPE_SECRET_KEY: string | undefined;
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: string | undefined;
+  BETTER_AUTH_SECRET: string | undefined;
+  BETTER_AUTH_URL: string | undefined;
+  UPLOADTHING_TOKEN: string | undefined;
+  STRIPE_BASIC_PLAN_ID: string | undefined;
+  STRIPE_PRO_PLAN_ID: string | undefined;
+  STRIPE_ULTIMATE_PLAN_ID: string | undefined;
+  STRIPE_WEBHOOK_BASIC_SECRET: string | undefined;
+  STRIPE_WEBHOOK_PRO_SECRET: string | undefined;
+  STRIPE_WEBHOOK_ULTIMATE_SECRET: string | undefined;
+  GOOGLE_CLIENT_ID: string | undefined;
+  GOOGLE_CLIENT_SECRET: string | undefined;
+  NEXT_PUBLIC_BETTER_AUTH_URL: string | undefined;
 }
 
 const getConfig = (): ENV => {
@@ -68,28 +74,20 @@ const getConfig = (): ENV => {
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    NEXT_PUBLIC_BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
   };
 };
 
 const getSafeConfig = (config: ENV): Config => {
-  const isDev = process.env.NODE_ENV === 'development';
-  
-  // In development, fill missing values with empty strings
-  if (isDev) {
-    const safeConfig = {} as Config;
-    for (const [key, value] of Object.entries(config)) {
-      (safeConfig as any)[key] = value || '';
-    }
-    return safeConfig;
-  }
-  
-  // In production, throw errors for missing values
+  // Pour le développement et la production, on accepte toutes les variables comme optionnelles
+  // et on utilise des valeurs par défaut vides si elles ne sont pas définies
+  const safeConfig = {} as Config;
   for (const [key, value] of Object.entries(config)) {
-    if (value === undefined) {
-      throw new Error(`Missing key ${key} in .env file`);
-    }
+    (safeConfig as any)[key] = value || '';
   }
-  return config as Config;
+  return safeConfig;
 };
 const config = getConfig();
 

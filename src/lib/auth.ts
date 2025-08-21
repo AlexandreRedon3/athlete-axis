@@ -1,164 +1,84 @@
-import { createAccessControl } from "better-auth/plugins/access";
+// src/lib/auth.ts
+import bcrypt from "bcryptjs";
 import { betterAuth } from "better-auth";
-import { safeConfig } from "./env";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "../lib/db";
-import { user as dbUsers} from "../db"
-import { account, memberSchema } from "../db";
-import { verification } from "@/db/verification";
-import { twoFactor as twoFactorSchema } from "@/db/twoFactor";
-import { session } from "@/db/session";
-import { stripe } from "./stripe";
-import { eq } from "drizzle-orm";
 import { nextCookies } from "better-auth/next-js";
-import { username } from "better-auth/plugins/username";
 import { twoFactor } from "better-auth/plugins/two-factor";
+import { username } from "better-auth/plugins/username";
 
-const statement = {
-    project: ["create", "share", "update", "delete"],
-  } as const;
-  
-export const ac = createAccessControl(statement);
+import { session } from "@/db/session";
+import { twoFactor as twoFactorSchema } from "@/db/twoFactor";
+import { verification } from "@/db/verification";
 
-export const member = ac.newRole({
-project: ["create"],
-});
-
-export const admin = ac.newRole({
-project: ["create", "share", "update"],
-});
-
-export const owner = ac.newRole({
-project: ["create", "share", "update", "delete"],
-});
-
-export type BaseUser = {
-    id: string;
-    name: string;
-    email: string;
-    emailVerified: boolean;
-    image?: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-export type BaseMember = {
-    id: string;
-    email: string;
-    role: string;
-}
+import { user as dbUsers } from "../db";
+import { account } from "../db";
+import { db } from "../lib/db";
+import { safeConfig } from "./env";
 
 export const auth = betterAuth({
-    appName: "Athlete-Axis",
-    secret: safeConfig.BETTER_AUTH_SECRET,
-    database: drizzleAdapter(db, {
-        provider: "pg",
-        schema: {
-            user: dbUsers,
-            account: account,
-            member: member,
-            verification: verification,
-            twoFactor: twoFactorSchema,
-            session: session,
-            members: memberSchema,
-        },
-        usePlural: true,
-    }),
-    emailAndPassword: {
-        enabled: true,
+  appName: "Athlete-Axis",
+  secret: safeConfig.BETTER_AUTH_SECRET,
+  baseURL: safeConfig.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  database: drizzleAdapter(db, {
+    provider: "pg",
+    schema: {
+      users: dbUsers,
+      accounts: account,
+      verifications: verification,
+      twoFactors: twoFactorSchema,
+      sessions: session,
     },
-    user: {
-        additionalFields: {
-            image: {
-                type: "string",
-                required: false,
-                defaultValue: "",
-            },
-            isCoach: {
-                type: "boolean",
-                defaultValue: false,
-                required: false,
-            },
-            onBoardingComplete: {
-                type: "boolean",
-                defaultValue: false,
-                required: false,
-            },
-            stripeId: {
-                type: "string",
-                defaultValue: "",
-                required: false,
-            },
-            address: {
-                type: "string",
-                defaultValue: "",
-                required: false,
-            },
-            zipCode: {
-                type: "string",
-                defaultValue: "",
-                required: false,
-            },
-            country: {
-                type: "string",
-                defaultValue: "",
-                required: false,
-            },
-            city: {
-                type: "string",
-                defaultValue: "",
-                required: false,
-            },
-            phoneNumber: {
-                type: "string",
-                defaultValue: "",
-                required: false,
-            },
-            smsNotifications: {
-                type: "boolean",
-                defaultValue: false,
-                required: false,
-            },
-            emailNotifications: {
-                type: "boolean",
-                defaultValue: false,
-                required: false,
-            },
-
-        }
+    usePlural: true,
+  }),
+  emailAndPassword: {
+    enabled: true,
+    requireEmailVerification: false,
+    password: {
+      hash(password) {
+        return bcrypt.hash(password, 12);
+      },
+      verify(data) {
+        return bcrypt.compare(data.password, data.hash);
+      },
     },
-    databaseHooks: {
-        user: {
-            create: {
-                after: async (user) => {
-                    const username = user.name;
-                    const email = user.email;
-
-                const customer = await stripe.customers.create({
-                    email: email,
-                    name: username,
-                });
-
-                await db.update(dbUsers).set({
-                    stripeId: customer.id,
-                }).where(eq(dbUsers.id, user.id));
-            },
-        },
-        update: {
-            after: async (user) => {
-                await db.update(dbUsers).set({
-                    updatedAt: new Date(),
-                }).where(eq(dbUsers.id, user.id));
-            },
-        },
+  },
+  user: {
+    additionalFields: {
+      image: { type: "string", defaultValue: "", required: false },
+      bio: { type: "string", defaultValue: "", required: false },
+      isCoach: { type: "boolean", defaultValue: false, required: false },
+      onBoardingComplete: { type: "boolean", defaultValue: false, required: false },
+      stripeId: { type: "string", defaultValue: "", required: false },
+      address: { type: "string", defaultValue: "", required: false },
+      zipCode: { type: "string", defaultValue: "", required: false },
+      country: { type: "string", defaultValue: "", required: false },
+      city: { type: "string", defaultValue: "", required: false },
+      phoneNumber: { type: "string", defaultValue: "", required: false },
+      smsNotifications: { type: "boolean", defaultValue: false, required: false },
+      emailNotifications: { type: "boolean", defaultValue: false, required: false },
     },
-},
-plugins: [
+  },
+  plugins: [
     nextCookies(),
     username(),
     twoFactor(),
-],
+  ],
+  trustedOrigins: [
+    "https://athlete-axis-*.vercel.app",
+    "https://*.vercel.app",
+    "http://localhost:3000"
+  ],
 });
 
-export type User = BaseUser & typeof auth.$Infer.Session.user;
+export type BaseUser = {
+  id: string;
+  name: string;
+  email: string;
+  emailVerified: boolean;
+  image?: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type Session = typeof auth.$Infer.Session;
+export type User = BaseUser & typeof auth.$Infer.Session.user;

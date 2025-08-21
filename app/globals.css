@@ -2,41 +2,120 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Variables HeroUI */
-  --heroui-primary: 262 80% 50%;
-  --heroui-success: 142 70% 45%;
-  --heroui-warning: 38 92% 50%;
-  --heroui-danger: 0 84% 60%;
-  --heroui-background: 220 14% 96%;
-  --heroui-foreground: 220 14% 4%;
-  
-  /* Variables Toastify */
-  --toastify-color-progress-light: hsl(var(--heroui-primary));
-  --toastify-color-progress-dark: hsl(var(--heroui-primary));
-  --toastify-color-progress-success: hsl(var(--heroui-success));
-  --toastify-icon-color-success: hsl(var(--heroui-success));
-  --toastify-color-progress-warning: hsl(var(--heroui-warning));
-  --toastify-icon-color-warning: hsl(var(--heroui-warning));
-  --toastify-color-progress-error: hsl(var(--heroui-danger));
-  --toastify-icon-color-error: hsl(var(--heroui-danger));
-  --toastify-toast-background: hsl(var(--heroui-background));
-  --toastify-text-color-light: hsl(var(--heroui-foreground));
-  --toastify-text-color-dark: hsl(var(--heroui-foreground));
-  --toastify-color-light: hsl(var(--heroui-background));
-  --toastify-color-dark: hsl(var(--heroui-background));
-  
-  /* Variables générales */
-  --foreground: hsl(var(--heroui-foreground));
-  --background: hsl(var(--heroui-background));
+@layer base {
+  :root {
+    --background: 0 0% 96%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 173 82% 47%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 65 87% 67%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 210 40% 92%;
+    --muted-foreground: 215.4 16.3% 30%;
+    --accent: 210 40% 92%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 80%;
+    --input: 214.3 31.8% 80%;
+    --ring: 173 82% 47%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 173 82% 47%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 65 87% 67%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 173 82% 47%;
+  }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  min-height: 100%;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground transition-colors duration-200;
+  }
 }
 
-html {
-  height: 100%;
+.text-shadow {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.text-shadow-strong {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Animations pour les transitions de thème */
+.theme-transition {
+  transition: background-color 0.2s ease-in-out, 
+              color 0.2s ease-in-out, 
+              border-color 0.2s ease-in-out,
+              box-shadow 0.2s ease-in-out;
+}
+
+/* Effets de hover améliorés */
+.hover-lift {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.dark .hover-lift:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Amélioration du contraste en mode clair */
+.light-text-contrast {
+  @apply text-foreground;
+}
+
+.light-text-contrast-muted {
+  @apply text-muted-foreground;
+}
+
+/* Styles spécifiques pour améliorer la lisibilité */
+.text-enhanced {
+  @apply text-foreground font-medium;
+}
+
+.text-enhanced-muted {
+  @apply text-muted-foreground;
+}
+
+/* Amélioration des bordures en mode clair */
+.border-enhanced {
+  @apply border-border;
+}
+
+/* Amélioration des arrière-plans en mode clair */
+.bg-enhanced {
+  @apply bg-card;
+}
+
+.bg-enhanced-muted {
+  @apply bg-muted;
 }

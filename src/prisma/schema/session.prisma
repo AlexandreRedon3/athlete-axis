@@ -1,9 +1,0 @@
-model Session {
-  id         String    @id @default(uuid())
-  name       String
-  order      Int
-  program    Program   @relation(fields: [programId], references: [id])
-  programId  String
-  exercises  Exercise[]
-  createdAt  DateTime @default(now())
-}

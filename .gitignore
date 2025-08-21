@@ -11,6 +11,15 @@ node_modules
 
 # .env
 .env
+.env.test
+.env.local
+
+# migrations
+/src/drizzle/meta
+
 
 /build
 /coverage
+
+clean-cache.sh
+fix-dependencies.sh

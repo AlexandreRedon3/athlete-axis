@@ -1,6 +1,2 @@
-import { Pool } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-serverless";
-import * as schema from "../db";
-
-const pool = new Pool({ connectionString: process.env.DATABASE_URL ?? "" });
-export const db = drizzle({ client: pool, schema: schema });
+// Re-export de la configuration Neon optimisée avec logs désactivés
+export { db, sql } from "./neon";
