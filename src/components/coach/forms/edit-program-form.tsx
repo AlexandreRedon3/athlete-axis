@@ -19,6 +19,7 @@ import { Input } from '../../ui/input';
 import { Label } from '../../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
 import { Textarea } from '../../ui/textarea';
+import React from 'react';
 
 const editProgramSchema = z.object({
   name: z.string().min(1, 'Le nom est requis'),

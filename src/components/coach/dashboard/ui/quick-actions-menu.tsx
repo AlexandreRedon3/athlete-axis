@@ -1,6 +1,7 @@
 // src/components/coach/dashboard/ui/quick-actions-menu-with-forms.tsx
 "use client"
 
+import React from 'react';
 import { 
   Activity, 
   BookOpen,

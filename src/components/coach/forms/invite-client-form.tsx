@@ -1,6 +1,7 @@
 // src/components/coach/forms/invite-client-form.tsx
 "use client"
 
+import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { 
   CheckCircle,

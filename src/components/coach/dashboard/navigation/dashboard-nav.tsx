@@ -1,6 +1,7 @@
 // src/components/coach/dashboard/navigation/dashboard-nav.tsx
 "use client"
 
+import React from 'react';
 import { Activity, BarChart3, LucideIcon, Settings,Target, Users } from 'lucide-react';
 
 import { useTheme } from '@/lib/theme-provider';

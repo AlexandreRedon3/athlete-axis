@@ -3,6 +3,7 @@ import Link from "next/link"
 
 import { Button } from "../../ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../ui/card"
+import React from 'react';
 
 export default function ProgrammesSection() {
   return (

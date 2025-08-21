@@ -1,5 +1,6 @@
 "use client"
 
+import React from 'react';
 import { Camera, Loader2, X } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";

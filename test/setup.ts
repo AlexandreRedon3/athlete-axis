@@ -7,6 +7,27 @@ import { TextEncoder, TextDecoder } from "util";
 global.TextEncoder = TextEncoder as any;
 global.TextDecoder = TextDecoder as any;
 
+// Polyfill pour ResizeObserver (nécessaire pour recharts)
+global.ResizeObserver = class ResizeObserver {
+  constructor(callback: ResizeObserverCallback) {
+    this.callback = callback;
+  }
+  
+  observe() {
+    // Mock implementation
+  }
+  
+  unobserve() {
+    // Mock implementation
+  }
+  
+  disconnect() {
+    // Mock implementation
+  }
+  
+  private callback: ResizeObserverCallback;
+} as any;
+
 // Mock de next/navigation
 vi.mock("next/navigation", () => ({
   useRouter: () => ({

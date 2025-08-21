@@ -1,5 +1,6 @@
 // src/components/coach/forms/add-exercise-to-program-form.tsx
 "use client"
+import React from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { 

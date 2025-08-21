@@ -7,6 +7,7 @@ import { ThemeToggle } from "../../ui/theme-toggle";
 
 import { HeaderProps, SessionProps } from "./types";
 import { UserNav } from "./UserNav";
+import React from 'react';
 
 export const DesktopMenu = ({
     isScrolled,

@@ -1,5 +1,6 @@
 import { Dumbbell, Facebook, Instagram, Linkedin, Twitter } from "lucide-react"
 import Link from "next/link"
+import React from 'react';
 
 export default function FooterSection() {
   return (

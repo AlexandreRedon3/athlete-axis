@@ -1,5 +1,6 @@
 // src/components/coach/programs/program-overview.tsx
 "use client"
+import React from 'react';
 
 import {
   BarChart3,

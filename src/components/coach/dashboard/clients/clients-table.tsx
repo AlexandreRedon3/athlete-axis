@@ -1,6 +1,7 @@
 // src/components/coach/dashboard/clients/clients-table.tsx
 "use client"
 
+import React from 'react';
 import { useTheme } from '../../../../lib/theme-provider';
 import { ClientRow } from './clients-row';
 

@@ -1,5 +1,6 @@
 // src/components/coach/dashboard/sessions/session-item.tsx
 "use client"
+import React from 'react';
 
 import { useTheme } from '../../../../lib/theme-provider';
 
