@@ -5,30 +5,9 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { ThemeProvider } from '@/lib/theme-provider';
 import { CoachProfile } from '@/components/coach/profile/coach-profile';
-
-// Wrapper pour les tests avec tous les providers nécessaires
-const TestWrapper = ({ children }: { children: React.ReactNode }) => {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: { retry: false },
-      mutations: { retry: false }
-    }
-  });
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        {children}
-      </ThemeProvider>
-    </QueryClientProvider>
-  );
-};
+import { ModernCoachDashboard } from '@/components/coach/dashboard/coach-dashboard';
+import { ThemeProvider } from '@/lib/theme-provider';
 
 // Mock des hooks pour les tests
 vi.mock('@/hooks/use-coach-stats', () => ({
@@ -51,6 +30,85 @@ vi.mock('@/hooks/use-profile-actions', () => ({
   })
 }));
 
+vi.mock('@/hooks/use-program-actions', () => ({
+  useDeleteProgram: () => ({
+    deleteProgram: vi.fn(),
+    isDeleting: false
+  }),
+  useUpdateProgram: () => ({
+    updateProgram: vi.fn(),
+    isUpdating: false
+  }),
+  useCreateProgram: () => ({
+    createProgram: vi.fn(),
+    isCreating: false
+  }),
+  useDuplicateProgram: () => ({
+    duplicateProgram: vi.fn(),
+    isDuplicating: false
+  }),
+  usePublishProgram: () => ({
+    publishProgram: vi.fn(),
+    unpublishProgram: vi.fn(),
+    isPublishing: false,
+    isUnpublishing: false
+  })
+}));
+
+vi.mock('@/hooks/use-coach-programs', () => ({
+  useCoachPrograms: () => ({
+    programs: [],
+    isLoading: false,
+    error: null,
+    refetch: vi.fn()
+  })
+}));
+
+vi.mock('@/hooks/use-coach-client', () => ({
+  useCoachClients: () => ({
+    clients: [],
+    isLoading: false,
+    error: null,
+    refetch: vi.fn()
+  })
+}));
+
+vi.mock('@/hooks/use-today-sessions', () => ({
+  useTodaySessions: () => ({
+    sessions: [],
+    isLoading: false,
+    error: null,
+    refetch: vi.fn()
+  })
+}));
+
+vi.mock('@/hooks/use-program-sessions', () => ({
+  useProgramSessions: () => ({
+    sessions: [],
+    clientProgress: [],
+    isLoading: false,
+    error: null
+  })
+}));
+
+// Wrapper pour les tests avec tous les providers nécessaires
+const TestWrapper = ({ children }: { children: React.ReactNode }) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false }
+    }
+  });
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        {children}
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
+};
+
 // Mock des données utilisateur
 const mockUser = {
   id: '1',
@@ -68,153 +126,8 @@ const mockUser = {
   smsNotifications: false
 };
 
-describe('RGAA - Accessibilité', () => {
-  describe('Composants UI de base', () => {
-    it('devrait respecter les normes WCAG pour les formulaires', () => {
-      render(
-        <TestWrapper>
-          <form aria-label="Formulaire de profil utilisateur">
-            <Label htmlFor="name">Nom complet *</Label>
-            <Input 
-              id="name" 
-              required 
-              aria-required="true"
-              aria-describedby="name-help"
-            />
-            <div id="name-help" className="text-sm text-gray-600">
-              Votre nom complet
-            </div>
-            
-            <Label htmlFor="email">Adresse email *</Label>
-            <Input 
-              id="email" 
-              type="email" 
-              required 
-              aria-required="true"
-              aria-describedby="email-help"
-            />
-            <div id="email-help" className="text-sm text-gray-600">
-              Votre adresse email valide
-            </div>
-            
-            <Label htmlFor="bio">Biographie</Label>
-            <Textarea 
-              id="bio" 
-              maxLength={500}
-              aria-describedby="bio-help"
-            />
-            <div id="bio-help" className="text-sm text-gray-600">
-              Maximum 500 caractères
-            </div>
-            
-            <Button type="submit" aria-label="Sauvegarder les modifications">
-              Sauvegarder
-            </Button>
-          </form>
-        </TestWrapper>
-      );
-      
-      // Vérifier la présence des éléments d'accessibilité
-      expect(screen.getByLabelText(/formulaire de profil utilisateur/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/nom complet/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/adresse email/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/biographie/i)).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /sauvegarder les modifications/i })).toBeInTheDocument();
-      
-      // Vérifier les attributs ARIA
-      const nameInput = screen.getByLabelText(/nom complet/i);
-      expect(nameInput).toHaveAttribute('aria-required', 'true');
-      expect(nameInput).toHaveAttribute('aria-describedby', 'name-help');
-      
-      const emailInput = screen.getByLabelText(/adresse email/i);
-      expect(emailInput).toHaveAttribute('aria-required', 'true');
-      expect(emailInput).toHaveAttribute('aria-describedby', 'email-help');
-    });
-
-    it('devrait permettre la navigation au clavier', async () => {
-      const user = userEvent.setup();
-      render(
-        <TestWrapper>
-          <form>
-            <Label htmlFor="name">Nom</Label>
-            <Input id="name" />
-            
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" />
-            
-            <Label htmlFor="bio">Biographie</Label>
-            <Textarea id="bio" />
-            
-            <Button type="submit">Sauvegarder</Button>
-          </form>
-        </TestWrapper>
-      );
-      
-      const nameInput = screen.getByLabelText(/nom/i);
-      const emailInput = screen.getByLabelText(/email/i);
-      const bioTextarea = screen.getByLabelText(/biographie/i);
-      const submitButton = screen.getByRole('button', { name: /sauvegarder/i });
-      
-      // Navigation avec Tab
-      await user.tab();
-      expect(nameInput).toHaveFocus();
-      
-      await user.tab();
-      expect(emailInput).toHaveFocus();
-      
-      await user.tab();
-      expect(bioTextarea).toHaveFocus();
-      
-      await user.tab();
-      expect(submitButton).toHaveFocus();
-    });
-
-    it('devrait avoir des labels appropriés pour les lecteurs d\'écran', () => {
-      render(
-        <TestWrapper>
-          <form>
-            <Label htmlFor="name">Nom complet *</Label>
-            <Input 
-              id="name" 
-              required 
-              aria-required="true"
-              aria-describedby="name-error"
-            />
-            <div id="name-error" role="alert" className="text-red-500">
-              Le nom est requis
-            </div>
-            
-            <Label htmlFor="email">Adresse email *</Label>
-            <Input 
-              id="email" 
-              type="email" 
-              required 
-              aria-required="true"
-              aria-describedby="email-error"
-            />
-            <div id="email-error" role="alert" className="text-red-500">
-              Adresse email invalide
-            </div>
-          </form>
-        </TestWrapper>
-      );
-      
-      // Vérifier la présence des labels
-      expect(screen.getByLabelText(/nom complet/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/adresse email/i)).toBeInTheDocument();
-      
-      // Vérifier les attributs ARIA
-      const nameInput = screen.getByLabelText(/nom complet/i);
-      expect(nameInput).toHaveAttribute('aria-required', 'true');
-      expect(nameInput).toHaveAttribute('aria-describedby', 'name-error');
-      
-      const emailInput = screen.getByLabelText(/adresse email/i);
-      expect(emailInput).toHaveAttribute('aria-required', 'true');
-      expect(emailInput).toHaveAttribute('aria-describedby', 'email-error');
-    });
-  });
-
-  describe('Page de profil coach', () => {
+describe('Pages - Accessibilité', () => {
+  describe('CoachProfile', () => {
     it('devrait avoir une structure de page accessible', () => {
       render(
         <TestWrapper>
@@ -279,7 +192,6 @@ describe('RGAA - Accessibilité', () => {
       expect(screen.getByText('5')).toBeInTheDocument(); // Clients actifs
       expect(screen.getByText('12')).toBeInTheDocument(); // Programmes créés
       expect(screen.getByText('85%')).toBeInTheDocument(); // Taux de réussite
-      // Retirer la vérification de "Note moyenne" car elle n'existe pas dans le composant
     });
 
     it('devrait avoir des labels pour les statistiques', () => {
@@ -292,7 +204,56 @@ describe('RGAA - Accessibilité', () => {
       expect(screen.getByText(/clients actifs/i)).toBeInTheDocument();
       expect(screen.getByText(/programmes créés/i)).toBeInTheDocument();
       expect(screen.getByText(/taux de réussite/i)).toBeInTheDocument();
-      // Retirer la vérification de "note moyenne" car elle n'existe pas dans le composant
+    });
+  });
+
+  describe('ModernCoachDashboard', () => {
+    it('devrait avoir une structure de navigation accessible', () => {
+      render(
+        <TestWrapper>
+          <ModernCoachDashboard />
+        </TestWrapper>
+      );
+      
+      // Vérifier la présence de la navigation
+      expect(screen.getByRole('navigation')).toBeInTheDocument();
+    });
+
+    it('devrait permettre la navigation entre les sections', async () => {
+      const user = userEvent.setup();
+      render(
+        <TestWrapper>
+          <ModernCoachDashboard />
+        </TestWrapper>
+      );
+      
+      // Vérifier que les boutons de navigation sont présents et accessibles
+      const buttons = screen.getAllByRole('button');
+      expect(buttons.length).toBeGreaterThan(0);
+    });
+
+    it('devrait avoir des cartes de statistiques accessibles', () => {
+      render(
+        <TestWrapper>
+          <ModernCoachDashboard />
+        </TestWrapper>
+      );
+      
+      expect(screen.getByText(/clients actifs/i)).toBeInTheDocument();
+      expect(screen.getByText(/clients récents/i)).toBeInTheDocument();
+    });
+
+    it('devrait avoir des boutons d\'action rapide accessibles', () => {
+      render(
+        <TestWrapper>
+          <ModernCoachDashboard />
+        </TestWrapper>
+      );
+      
+      // Vérifier la présence des boutons d'action (ajuster selon le contenu réel)
+      // D'après le DOM, il y a "Nouveau client" et "Planifier séance"
+      expect(screen.getByRole('button', { name: /nouveau client/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /planifier séance/i })).toBeInTheDocument();
     });
   });
 

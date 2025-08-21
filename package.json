@@ -72,6 +72,7 @@
     "drizzle-orm": "^0.43.1",
     "drizzle-zod": "^0.7.1",
     "framer-motion": "^12.10.5",
+    "glob": "^11.0.3",
     "lucide-react": "^0.511.0",
     "nanoid": "^5.1.5",
     "next": "^15.3.0",

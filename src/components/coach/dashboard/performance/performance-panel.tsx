@@ -1,5 +1,6 @@
 // src/components/coach/dashboard/performance/performance-panel.tsx
 "use client"
+import React from 'react';
 
 import { Calendar,Plus } from 'lucide-react';
 

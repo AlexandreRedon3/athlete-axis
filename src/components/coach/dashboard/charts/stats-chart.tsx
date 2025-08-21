@@ -1,5 +1,6 @@
 "use client"
 
+import React from 'react';
 import { Bar, BarChart, CartesianGrid, Cell,Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 import { useTheme } from '../../../../lib/theme-provider';

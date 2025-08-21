@@ -1,5 +1,6 @@
 // src/components/coach/dashboard/ui/command-palette.tsx
 "use client"
+import React from 'react';
 
 import { Activity, ArrowRight,Clock, Command, Search, Users } from 'lucide-react';
 import { useEffect, useRef,useState } from 'react';
