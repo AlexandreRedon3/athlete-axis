@@ -1,7 +1,6 @@
 // src/components/coach/forms/invite-client-form.tsx
 "use client"
 
-import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { 
   CheckCircle,
@@ -11,6 +10,7 @@ import {
   Send,
   User, 
   UserPlus} from 'lucide-react';
+import React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';

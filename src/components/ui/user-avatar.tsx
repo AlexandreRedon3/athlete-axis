@@ -1,6 +1,7 @@
 import { User } from "lucide-react";
-import { cn } from "@/lib/utils";
 import React from 'react';
+
+import { cn } from "@/lib/utils";
 
 interface UserAvatarProps {
   src?: string;

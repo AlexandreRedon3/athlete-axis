@@ -1,6 +1,7 @@
+import React from 'react';
+
 import { Button } from "../../ui/button";
 import { LogoutButton } from "../../ui/logout-button";
-import React from 'react';
 
 export const UserNav = () => {
   return (

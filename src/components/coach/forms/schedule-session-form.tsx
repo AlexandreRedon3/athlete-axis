@@ -1,7 +1,5 @@
 // src/components/coach/forms/schedule-session-form.tsx
 "use client"
-import React from 'react';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { 
   Calendar, 
@@ -13,6 +11,7 @@ import {
   MapPin,
   User
 } from 'lucide-react';
+import React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';

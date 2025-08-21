@@ -1,5 +1,6 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card"
 import React from 'react';
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card"
 
 export default function TestimonialsSection() {
   return (

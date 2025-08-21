@@ -1,7 +1,6 @@
 // src/components/coach/dashboard/modern-coach-dashboard-optimized.tsx
 "use client"
 
-import React from 'react';
 import { 
   Activity, 
   AlertCircle,
@@ -14,6 +13,7 @@ import {
   Users, 
   X
 } from 'lucide-react';
+import React from 'react';
 import { useEffect, useState } from 'react';
 
 import { useCoachClients } from '../../../hooks/use-coach-client';

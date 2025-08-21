@@ -1,9 +1,8 @@
 // src/components/coach/dashboard/stats/stats-card.tsx
 "use client"
-import React from 'react';
-
 import { LucideIcon } from 'lucide-react';
 import { TrendingUp } from 'lucide-react';
+import React from 'react';
 
 import { useTheme } from '../../../../lib/theme-provider';
 

@@ -1,11 +1,10 @@
 "use client"
 
+import { Camera, Loader2 } from "lucide-react";
 import React from 'react';
-import { Camera, Loader2, X } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
-import { Button } from "@/components/ui/button";
 import { useUpdateProfile } from "@/hooks/use-profile-actions";
 import { useUploadThing } from "@/lib/uploadthing/react";
 

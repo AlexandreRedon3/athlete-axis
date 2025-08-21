@@ -1,5 +1,5 @@
-import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { headers } from "next/headers";
+import { createUploadthing, type FileRouter } from "uploadthing/next";
 
 import { auth } from "@/lib/auth";
 

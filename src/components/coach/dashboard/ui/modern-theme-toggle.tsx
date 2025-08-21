@@ -1,8 +1,8 @@
 // src/components/coach/dashboard/ui/modern-theme-toggle.tsx
 "use client"
 
-import React from 'react';
 import { Moon,Sun } from 'lucide-react';
+import React from 'react';
 
 import { Button } from '../../../../components/ui/button';
 import { useTheme } from '../../../../lib/theme-provider';

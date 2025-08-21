@@ -1,13 +1,12 @@
 import { useSearchParams } from "next/navigation";
+import React from 'react';
 
 import { cn } from "@/lib/utils";
 
 import { Button } from "../../ui/button";
 import { ThemeToggle } from "../../ui/theme-toggle";
-
 import { HeaderProps, SessionProps } from "./types";
 import { UserNav } from "./UserNav";
-import React from 'react';
 
 export const DesktopMenu = ({
     isScrolled,

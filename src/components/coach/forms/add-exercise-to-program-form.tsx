@@ -1,7 +1,5 @@
 // src/components/coach/forms/add-exercise-to-program-form.tsx
 "use client"
-import React from 'react';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { 
   Activity, 
@@ -14,6 +12,7 @@ import {
   Plus, 
   Search
 } from 'lucide-react';
+import React from 'react';
 import { useState } from 'react';
 import { Controller,useForm } from 'react-hook-form';
 import { z } from 'zod';

@@ -8,8 +8,8 @@ import NextTopLoader from "nextjs-toploader";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { extractRouterConfig } from "uploadthing/server";
 
-import { ourFileRouter } from "../src/lib/uploadthing/core";
 import Providers from "../src/context/providers";
+import { ourFileRouter } from "../src/lib/uploadthing/core";
 import { cn } from "../src/lib/utils";
 
 // Define the Inter font
