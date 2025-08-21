@@ -1,4 +1,3 @@
-// src/components/coach/dashboard/sessions/session-item.tsx
 "use client"
 import React from 'react';
 

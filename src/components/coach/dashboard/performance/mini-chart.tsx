@@ -1,4 +1,3 @@
-// src/components/coach/dashboard/performance/mini-chart.tsx
 "use client"
 import React from 'react';
 

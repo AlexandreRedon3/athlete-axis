@@ -1,4 +1,3 @@
-// src/lib/auth.ts
 import bcrypt from "bcryptjs";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";

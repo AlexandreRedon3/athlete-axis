@@ -1,4 +1,3 @@
-// src/hooks/use-exercise-library.ts
 import { useQuery } from "@tanstack/react-query";
 
 interface ExerciseLibraryItem {

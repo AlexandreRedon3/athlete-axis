@@ -1,4 +1,3 @@
-// __tests__/api/exercises.test.ts
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { POST, GET } from "../../../app/api/trainings/[sessionId]/exercises/route";
 import { DELETE } from "../../../app/api/trainings/[sessionId]/route";

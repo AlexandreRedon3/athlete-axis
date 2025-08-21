@@ -1,4 +1,3 @@
-// src/components/coach/programs/program-sessions-manager.tsx
 "use client"
 import { 
   AlertCircle,

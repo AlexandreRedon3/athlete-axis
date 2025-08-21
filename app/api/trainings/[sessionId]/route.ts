@@ -1,4 +1,3 @@
-// app/api/sessions/[sessionId]/route.ts
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
