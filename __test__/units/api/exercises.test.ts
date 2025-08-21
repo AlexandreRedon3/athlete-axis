@@ -65,6 +65,7 @@ describe("API Exercices", () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       image: null,
+      bio: null,
       onBoardingComplete: true,
       twoFactorEnabled: false,
       stripeId: null,
@@ -100,31 +101,38 @@ describe("API Exercices", () => {
   });
 
   describe("POST /api/sessions/:sessionId/exercises", () => {
-    it("devrait créer un exercice", async () => {
+    it("devrait créer un nouvel exercice", async () => {
       vi.mocked(auth.api.getSession).mockResolvedValue(mockCoachSession);
       vi.mocked(db.query.trainingSession.findFirst).mockResolvedValue(mockTrainingSession);
+      vi.mocked(db.insert).mockReturnValue({
+        values: vi.fn(() => ({
+          returning: vi.fn().mockResolvedValue([
+            {
+              id: "ex-123",
+              name: "Développé couché",
+              sets: 4,
+              reps: 8,
+              rpe: null,
+              restSeconds: null,
+              notes: null,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              trainingSessionId: "session-123",
+              order: 1,
+            },
+          ]),
+        })),
+      } as any);
 
       const newExercise = {
         name: "Développé couché",
         sets: 4,
         reps: 8,
-        rpe: 8,
-        restSeconds: 180,
+        rpe: null,
+        restSeconds: null,
+        notes: null,
         order: 1,
       };
-
-      const mockCreated = {
-        id: "ex-123",
-        ...newExercise,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        notes: null,
-        trainingSessionId: "session-123",
-      };
-
-      const mockReturning = vi.fn().mockResolvedValue([mockCreated]);
-      const mockValues = vi.fn().mockReturnValue({ returning: mockReturning });
-      vi.mocked(db.insert).mockReturnValue({ values: mockValues } as any);
 
       const request = new NextRequest("http://localhost:3000/api/sessions/session-123/exercises", {
         method: "POST",
@@ -134,7 +142,7 @@ describe("API Exercices", () => {
         body: JSON.stringify(newExercise),
       });
 
-      const response = await POST(request, { params: { sessionId: "session-123" } });
+      const response = await POST(request, { params: Promise.resolve({ sessionId: "session-123" }) });
 
       expect(response.status).toBe(201);
       const data = await response.json();
@@ -160,7 +168,7 @@ describe("API Exercices", () => {
         body: JSON.stringify(invalidExercise),
       });
 
-      const response = await POST(request, { params: { sessionId: "session-123" } });
+      const response = await POST(request, { params: Promise.resolve({ sessionId: "session-123" }) });
 
       expect(response.status).toBe(400);
       const data = await response.json();
@@ -204,7 +212,7 @@ describe("API Exercices", () => {
       vi.mocked(db.query.exercise.findMany).mockResolvedValue(mockExercises);
 
       const request = new NextRequest("http://localhost:3000/api/sessions/session-123/exercises");
-      const response = await GET(request, { params: { sessionId: "session-123" } });
+      const response = await GET(request, { params: Promise.resolve({ sessionId: "session-123" }) });
 
       expect(response.status).toBe(200);
       const data = await response.json();
@@ -233,18 +241,18 @@ describe("API Exercices", () => {
 
       vi.mocked(db.query.exercise.findFirst).mockResolvedValue(mockExercise);
       vi.mocked(db.delete).mockReturnValue({
-        where: vi.fn().mockResolvedValue(true),
+        where: vi.fn().mockResolvedValue([mockExercise]),
       } as any);
 
       const request = new NextRequest("http://localhost:3000/api/exercises/ex-123", {
         method: "DELETE",
       });
 
-      const response = await DELETE(request, { params: { trainingSessionId: "ex-123" } });
+      const response = await DELETE(request, { params: Promise.resolve({ sessionId: "ex-123" }) });
 
       expect(response.status).toBe(200);
       const data = await response.json();
-      expect(data.success).toBe(true);
+      expect(data.message).toBe("Exercice supprimé avec succès");
     });
   });
 });
