@@ -1,4 +1,3 @@
-// src/hooks/use-exercises.ts
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 

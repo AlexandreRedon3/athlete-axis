@@ -1,4 +1,3 @@
-// src/components/coach/dashboard/modern-coach-dashboard-optimized.tsx
 "use client"
 
 import { 

@@ -1,4 +1,3 @@
-// src/components/coach/programs/program-overview.tsx
 "use client"
 import {
   BarChart3,

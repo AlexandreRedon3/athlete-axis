@@ -1,4 +1,3 @@
-// app/(main)/dashboard/layout.tsx
 import { headers } from "next/headers"
 import type React from "react"
 

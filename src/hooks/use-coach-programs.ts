@@ -1,4 +1,3 @@
-// src/hooks/use-coach-programs.ts
 "use client"
 
 import { useEffect,useState } from 'react';

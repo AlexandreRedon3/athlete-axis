@@ -1,4 +1,3 @@
-// __test__/units/hooks/use-keybiard-shortcut.test.tsx
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { renderHook, waitFor } from "@testing-library/react";
 import { useKeyboardShortcuts } from "../../../src/hooks/use-keybiard-shortcut";

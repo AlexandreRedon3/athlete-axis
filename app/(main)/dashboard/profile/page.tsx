@@ -1,4 +1,3 @@
-// app/(main)/dashboard/profile/page.tsx
 import { headers } from "next/headers";
 
 import { CoachProfile } from "@/components/coach/profile/coach-profile";

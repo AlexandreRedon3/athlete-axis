@@ -1,4 +1,3 @@
-// __test__/units/hooks/use-program-sessions.test.tsx
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { renderHook, waitFor } from "@testing-library/react";
 import { useProgramSessions } from "../../../src/hooks/use-program-sessions";

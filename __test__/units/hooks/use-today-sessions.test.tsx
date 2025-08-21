@@ -1,4 +1,3 @@
-// __test__/units/hooks/use-today-sessions.test.tsx
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { renderHook, waitFor } from "@testing-library/react";
 import { useTodaySessions } from "../../../src/hooks/use-today-sessions";

@@ -1,4 +1,3 @@
-// __tests__/api/programs.test.ts
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { NextRequest } from "next/server";
 
@@ -340,8 +339,7 @@ describe("API /api/programs", () => {
 
       // Assert
       expect(response.status).toBe(201);
-      const data = await response.json();
-      expect(data.program.name).toBe("Nouveau Programme");
+      const data = await response.json();      expect(data.program.name).toBe("Nouveau Programme");
     });
 
     it("devrait valider les données du programme", async () => {
