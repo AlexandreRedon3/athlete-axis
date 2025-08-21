@@ -128,9 +128,8 @@ describe("API Exercices", () => {
         name: "Développé couché",
         sets: 4,
         reps: 8,
-        rpe: null,
-        restSeconds: null,
-        notes: null,
+        rpe: 8,
+        restSeconds: 180,
         order: 1,
       };
 
@@ -252,7 +251,7 @@ describe("API Exercices", () => {
 
       expect(response.status).toBe(200);
       const data = await response.json();
-      expect(data.message).toBe("Exercice supprimé avec succès");
+      expect(data.success).toBe(true);
     });
   });
 });

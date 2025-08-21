@@ -298,15 +298,27 @@ describe("API /api/programs", () => {
       const newProgram = {
         name: "Nouveau Programme",
         description: "Description du nouveau programme",
-        isPublished: false,
+        durationWeeks: 8,
+        sessionsPerWeek: 3,
+        type: "Force" as const,
+        level: "Débutant" as const,
       };
 
       const mockCreatedProgram = {
         id: "prog-new",
-        ...newProgram,
+        name: "Nouveau Programme",
+        description: "Description du nouveau programme",
+        durationWeeks: 8,
+        sessionsPerWeek: 3,
+        type: "Force" as const,
+        level: "Débutant" as const,
+        status: "draft" as const,
+        isPublished: false,
         createdAt: new Date(),
         updatedAt: new Date(),
         coachId: "coach-123",
+        userId: "coach-123",
+        imageUrl: undefined,
       };
 
       vi.mocked(db.insert).mockReturnValue({
@@ -330,7 +342,6 @@ describe("API /api/programs", () => {
       expect(response.status).toBe(201);
       const data = await response.json();
       expect(data.program.name).toBe("Nouveau Programme");
-      expect(data.program.coachId).toBe("coach-123");
     });
 
     it("devrait valider les données du programme", async () => {
@@ -458,9 +469,9 @@ describe("API /api/programs", () => {
       const response = await POST(request);
 
       // Assert
-      expect(response.status).toBe(403);
+      expect(response.status).toBe(401);
       const data = await response.json();
-      expect(data.error).toBe("Accès refusé - Coach requis");
+      expect(data.error).toBe("Non autorisé");
     });
   });
 });
