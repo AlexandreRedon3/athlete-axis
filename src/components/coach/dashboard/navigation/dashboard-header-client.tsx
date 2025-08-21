@@ -1,8 +1,7 @@
 "use client"
-import React from 'react';
-
 import { Bell, Dumbbell, User } from "lucide-react"
 import Link from "next/link"
+import React from 'react';
 
 import { ModernThemeToggle } from "@/components/coach/dashboard/ui/modern-theme-toggle"
 import { QuickActionsMenu } from "@/components/coach/dashboard/ui/quick-actions-menu"

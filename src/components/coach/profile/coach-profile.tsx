@@ -1,33 +1,32 @@
 "use client"
 
-import React, { useMemo, useState } from "react";
 import {
-  Award,
   Bell,
-  Camera,
+  Calendar,
+  Edit3,
   Eye,
+  Mail,
   MapPin,
   Phone,
   Save,
   Settings,
+  Shield,
   Star,
   TrendingUp,
   User as UserIcon,
-  X,
-  Calendar,
   Users,
-  Edit3,
-  Mail,
-  Shield,
+  X,
 } from "lucide-react";
+import React, { useMemo, useState } from "react";
 
-import { useTheme } from "@/lib/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useCoachStats } from "@/hooks/use-coach-stats";
 import { useUpdateProfile } from "@/hooks/use-profile-actions";
+import { useTheme } from "@/lib/theme-provider";
+
 import { ProfileImageUpload } from "./profile-image-upload";
 
 export type CoachUser = {

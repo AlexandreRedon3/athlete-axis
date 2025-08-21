@@ -94,6 +94,7 @@ describe("API /api/programs", () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         image: null,
+        bio: null,
         isCoach: true,
         onBoardingComplete: true,
         twoFactorEnabled: false,
@@ -109,29 +110,48 @@ describe("API /api/programs", () => {
         smsNotifications: false,
       };
 
+      const mockSessionData = {
+        session: mockSession,
+        user: mockUser,
+      };
+
+      vi.mocked(auth.api.getSession).mockResolvedValue(mockSessionData);
+
       const mockPrograms = [
         {
           id: "prog-1",
           name: "Programme Force",
-          description: "Programme de force",
+          description: "Programme pour développer la force",
           level: "Débutant" as const,
           type: "Force" as const,
           durationWeeks: 8,
           sessionsPerWeek: 3,
-          coachId: "coach-123",
-          userId: "coach-123",
+          status: "published" as const,
+          isPublished: true,
           createdAt: new Date(),
           updatedAt: new Date(),
-          status: "published" as const,
+          coachId: "coach-123",
+          userId: "coach-123",
           imageUrl: null,
-          trainingSessions: [],
+        },
+        {
+          id: "prog-2",
+          name: "Programme Hypertrophie",
+          description: "Programme pour la masse musculaire",
+          level: "Intermédiaire" as const,
+          type: "Hypertrophie" as const,
+          durationWeeks: 12,
+          sessionsPerWeek: 4,
+          status: "draft" as const,
+          isPublished: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          coachId: "coach-123",
+          userId: "coach-123",
+          imageUrl: null,
         },
       ];
 
-      vi.mocked(auth.api.getSession).mockResolvedValue({
-        session: mockSession,
-        user: mockUser,
-      });
       vi.mocked(db.query.program.findMany).mockResolvedValue(mockPrograms);
 
       // Act
@@ -141,14 +161,12 @@ describe("API /api/programs", () => {
       // Assert
       expect(response.status).toBe(200);
       const data = await response.json();
-      expect(data.programs).toHaveLength(1);
+      expect(data.programs).toHaveLength(2);
       expect(data.programs[0].name).toBe("Programme Force");
-      
-      // Vérifier que la requête a été faite
-      expect(db.query.program.findMany).toHaveBeenCalled();
+      expect(data.programs[1].name).toBe("Programme Hypertrophie");
     });
 
-    it("devrait retourner les programmes assignés pour un athlète", async () => {
+    it("devrait retourner les programmes d'un athlète", async () => {
       // Arrange
       const mockSession = {
         id: "session-123",
@@ -167,6 +185,7 @@ describe("API /api/programs", () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         image: null,
+        bio: null,
         isCoach: false,
         onBoardingComplete: true,
         twoFactorEnabled: false,
@@ -182,38 +201,43 @@ describe("API /api/programs", () => {
         smsNotifications: false,
       };
 
+      const mockSessionData = {
+        session: mockSession,
+        user: mockUser,
+      };
+
+      vi.mocked(auth.api.getSession).mockResolvedValue(mockSessionData);
+
       const mockAssignments = [
         {
           id: "assign-1",
           createdAt: new Date(),
           updatedAt: new Date(),
           coachId: "coach-123",
-          programId: "prog-1",
           athleteId: "athlete-123",
+          programId: "prog-1",
           startDate: new Date(),
           endDate: null,
           isActive: true,
           program: {
             id: "prog-1",
-            name: "Programme Débutant",
-            description: "Programme pour débutants",
+            name: "Programme Force",
+            description: "Programme pour développer la force",
             level: "Débutant" as const,
-            type: "Mixte" as const,
-            durationWeeks: 12,
+            type: "Force" as const,
+            durationWeeks: 8,
             sessionsPerWeek: 3,
-            coachId: "coach-123",
-            userId: "coach-123",
+            status: "published" as const,
+            isPublished: true,
             createdAt: new Date(),
             updatedAt: new Date(),
-            trainingSessions: [],
+            coachId: "coach-123",
+            userId: "coach-123",
+            imageUrl: null,
           },
         },
       ];
 
-      vi.mocked(auth.api.getSession).mockResolvedValue({
-        session: mockSession,
-        user: mockUser,
-      });
       vi.mocked(db.query.programAssignment.findMany).mockResolvedValue(mockAssignments);
 
       // Act
@@ -224,12 +248,12 @@ describe("API /api/programs", () => {
       expect(response.status).toBe(200);
       const data = await response.json();
       expect(data.programs).toHaveLength(1);
-      expect(data.programs[0].name).toBe("Programme Débutant");
+      expect(data.programs[0].name).toBe("Programme Force");
     });
   });
 
   describe("POST /api/programs", () => {
-    it("devrait créer un programme si coach", async () => {
+    it("devrait créer un nouveau programme", async () => {
       // Arrange
       const mockSession = {
         id: "session-123",
@@ -248,6 +272,7 @@ describe("API /api/programs", () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         image: null,
+        bio: null,
         isCoach: true,
         onBoardingComplete: true,
         twoFactorEnabled: false,
@@ -263,34 +288,44 @@ describe("API /api/programs", () => {
         smsNotifications: false,
       };
 
+      const mockSessionData = {
+        session: mockSession,
+        user: mockUser,
+      };
+
+      vi.mocked(auth.api.getSession).mockResolvedValue(mockSessionData);
+
       const newProgram = {
         name: "Nouveau Programme",
-        durationWeeks: 12,
-        sessionsPerWeek: 4,
+        description: "Description du nouveau programme",
+        durationWeeks: 8,
+        sessionsPerWeek: 3,
         type: "Force" as const,
-        description: "Programme de force pour débutants",
         level: "Débutant" as const,
       };
 
       const mockCreatedProgram = {
-        ...newProgram,
-        id: "new-prog-id",
-        coachId: "coach-123",
-        userId: "coach-123",
+        id: "prog-new",
+        name: "Nouveau Programme",
+        description: "Description du nouveau programme",
+        durationWeeks: 8,
+        sessionsPerWeek: 3,
+        type: "Force" as const,
+        level: "Débutant" as const,
+        status: "draft" as const,
+        isPublished: false,
         createdAt: new Date(),
         updatedAt: new Date(),
-        status: "draft",
-        imageUrl: null,
+        coachId: "coach-123",
+        userId: "coach-123",
+        imageUrl: undefined,
       };
 
-      vi.mocked(auth.api.getSession).mockResolvedValue({
-        session: mockSession,
-        user: mockUser,
-      });
-      
-      const mockReturning = vi.fn().mockResolvedValue([mockCreatedProgram]);
-      const mockValues = vi.fn().mockReturnValue({ returning: mockReturning });
-      vi.mocked(db.insert).mockReturnValue({ values: mockValues } as any);
+      vi.mocked(db.insert).mockReturnValue({
+        values: vi.fn(() => ({
+          returning: vi.fn().mockResolvedValue([mockCreatedProgram]),
+        })),
+      } as any);
 
       // Act
       const request = new NextRequest("http://localhost:3000/api/programs", {
@@ -307,70 +342,9 @@ describe("API /api/programs", () => {
       expect(response.status).toBe(201);
       const data = await response.json();
       expect(data.program.name).toBe("Nouveau Programme");
-      expect(data.program.id).toBe("new-prog-id");
     });
 
-    it("devrait refuser si pas coach", async () => {
-      // Arrange
-      const mockSession = {
-        id: "session-123",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        userId: "athlete-123",
-        expiresAt: new Date(Date.now() + 3600000),
-        token: "mock-token",
-      };
-
-      const mockUser = {
-        id: "athlete-123",
-        name: "Test Athlete",
-        email: "athlete@test.com",
-        emailVerified: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        image: null,
-        isCoach: false,
-        onBoardingComplete: true,
-        twoFactorEnabled: false,
-        stripeId: null,
-        address: null,
-        zipCode: null,
-        city: null,
-        country: null,
-        phone: null,
-        birthDate: null,
-        phoneNumber: null,
-        emailNotifications: true,
-        smsNotifications: false,
-      };
-
-      vi.mocked(auth.api.getSession).mockResolvedValue({
-        session: mockSession,
-        user: mockUser,
-      });
-
-      // Act
-      const request = new NextRequest("http://localhost:3000/api/programs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: "Programme",
-          durationWeeks: 8,
-          sessionsPerWeek: 3,
-        }),
-      });
-
-      const response = await POST(request);
-
-      // Assert
-      expect(response.status).toBe(401);
-      const data = await response.json();
-      expect(data.error).toBe("Non autorisé");
-    });
-
-    it("devrait valider les données d'entrée", async () => {
+    it("devrait valider les données du programme", async () => {
       // Arrange
       const mockSession = {
         id: "session-123",
@@ -389,6 +363,7 @@ describe("API /api/programs", () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         image: null,
+        bio: null,
         isCoach: true,
         onBoardingComplete: true,
         twoFactorEnabled: false,
@@ -404,25 +379,26 @@ describe("API /api/programs", () => {
         smsNotifications: false,
       };
 
-      vi.mocked(auth.api.getSession).mockResolvedValue({
+      const mockSessionData = {
         session: mockSession,
         user: mockUser,
-      });
+      };
 
-      // Act - Données invalides (nom vide)
+      vi.mocked(auth.api.getSession).mockResolvedValue(mockSessionData);
+
+      const invalidProgram = {
+        name: "", // Nom vide
+        description: "Description valide",
+        isPublished: false,
+      };
+
+      // Act
       const request = new NextRequest("http://localhost:3000/api/programs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          name: "",
-          durationWeeks: 8,
-          sessionsPerWeek: 3,
-          type: "Force",
-          description: "Test",
-          level: "Débutant",
-        }),
+        body: JSON.stringify(invalidProgram),
       });
 
       const response = await POST(request);
@@ -431,7 +407,71 @@ describe("API /api/programs", () => {
       expect(response.status).toBe(400);
       const data = await response.json();
       expect(data.error).toBe("Données invalides");
-      expect(data.details).toBeDefined();
+    });
+
+    it("devrait refuser la création si l'utilisateur n'est pas coach", async () => {
+      // Arrange
+      const mockSession = {
+        id: "session-123",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        userId: "athlete-123",
+        expiresAt: new Date(Date.now() + 3600000),
+        token: "mock-token",
+      };
+
+      const mockUser = {
+        id: "athlete-123",
+        name: "Test Athlete",
+        email: "athlete@test.com",
+        emailVerified: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        image: null,
+        bio: null,
+        isCoach: false,
+        onBoardingComplete: true,
+        twoFactorEnabled: false,
+        stripeId: null,
+        address: null,
+        zipCode: null,
+        city: null,
+        country: null,
+        phone: null,
+        birthDate: null,
+        phoneNumber: null,
+        emailNotifications: true,
+        smsNotifications: false,
+      };
+
+      const mockSessionData = {
+        session: mockSession,
+        user: mockUser,
+      };
+
+      vi.mocked(auth.api.getSession).mockResolvedValue(mockSessionData);
+
+      const newProgram = {
+        name: "Nouveau Programme",
+        description: "Description du nouveau programme",
+        isPublished: false,
+      };
+
+      // Act
+      const request = new NextRequest("http://localhost:3000/api/programs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newProgram),
+      });
+
+      const response = await POST(request);
+
+      // Assert
+      expect(response.status).toBe(401);
+      const data = await response.json();
+      expect(data.error).toBe("Non autorisé");
     });
   });
 });

@@ -1,7 +1,7 @@
 "use client"
 
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useTheme as useNextTheme } from 'next-themes';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import React from 'react';
 
 export type Theme = 'light' | 'dark';

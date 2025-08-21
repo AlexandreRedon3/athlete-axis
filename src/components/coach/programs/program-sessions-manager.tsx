@@ -1,7 +1,5 @@
 // src/components/coach/programs/program-sessions-manager.tsx
 "use client"
-import React from 'react';
-
 import { 
   AlertCircle,
   Calendar, 
@@ -19,6 +17,7 @@ import {
   TrendingUp,
   X
 } from 'lucide-react';
+import React from 'react';
 import { useState } from 'react';
 
 import { useDeleteSession, useDuplicateSession, usePublishProgram } from '../../../hooks/use-program-actions';

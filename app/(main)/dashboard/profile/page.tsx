@@ -2,9 +2,9 @@
 import { headers } from "next/headers";
 
 import { CoachProfile } from "@/components/coach/profile/coach-profile";
+import { User } from "@/db";
 import { authClient } from "@/lib/auth-client";
 import { ThemeProvider } from "@/lib/theme-provider";
-import { User } from "@/db";
 
 export default async function ProfilePage() {
   const data = await authClient.getSession({

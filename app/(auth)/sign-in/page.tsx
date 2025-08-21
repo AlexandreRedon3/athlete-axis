@@ -1,13 +1,12 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { Button } from '@/components/ui/button';
 import { authClient } from '@/lib/auth-client';
-import { logger } from 'better-auth';
 
 export default function SignInPage() {
   const router = useRouter();

@@ -1,8 +1,7 @@
 "use client"
-import React from 'react';
-
 import { LogOut } from "lucide-react"
 import { useRouter } from "next/navigation"
+import React from 'react';
 import { useState } from "react"
 import { toast } from "sonner"
 

@@ -1,7 +1,6 @@
 // src/components/coach/forms/create-program-form.tsx
 "use client"
 
-import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { 
   Activity, 
@@ -12,6 +11,7 @@ import {
   Loader2,
   Users
 } from 'lucide-react';
+import React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';

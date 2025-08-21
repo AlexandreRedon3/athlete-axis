@@ -1,9 +1,7 @@
 "use client"
-import React from 'react';
-
-import { Button } from "./button"
 import { Crop, Trash, Upload } from "lucide-react"
 import Image from "next/image"
+import React from 'react';
 import { InputHTMLAttributes, useCallback, useEffect, useState } from "react"
 import { Accept, useDropzone } from "react-dropzone"
 import { toast } from "react-toastify"
@@ -11,6 +9,7 @@ import { toast } from "react-toastify"
 import { bytesToMegabytes } from "@/lib/utils"
 import { cn } from "@/lib/utils"
 
+import { Button } from "./button"
 import ImageCrop from "./image-crop"
 
 function File({

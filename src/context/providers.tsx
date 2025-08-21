@@ -1,8 +1,7 @@
 'use client';
-import React from 'react';
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ThemeProvider as NextThemeProvider } from "next-themes"
+import React from 'react';
 import { Toaster } from "sonner"
 
 import { ThemeProvider } from "@/lib/theme-provider"

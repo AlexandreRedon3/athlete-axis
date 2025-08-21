@@ -1,7 +1,5 @@
 // src/components/coach/programs/program-overview.tsx
 "use client"
-import React from 'react';
-
 import {
   BarChart3,
   Calendar,
@@ -14,6 +12,7 @@ import {
   Target,
   TrendingUp,
   Users} from 'lucide-react';
+import React from 'react';
 import { useState } from 'react';
 
 import { useTheme } from '../../../lib/theme-provider';
