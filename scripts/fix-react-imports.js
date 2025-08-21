@@ -35,12 +35,53 @@ function addReactImport(filePath) {
     }
   }
   
-  // Insérer l'import React
+  // Insérer l'import React APRÈS la directive "use client"
   lines.splice(insertIndex, 0, 'import React from \'react\';');
   
   // Écrire le fichier modifié
   fs.writeFileSync(filePath, lines.join('\n'));
   return true;
+}
+
+// Fonction pour corriger l'ordre des imports
+function fixImportOrder(filePath) {
+  const content = fs.readFileSync(filePath, 'utf8');
+  const lines = content.split('\n');
+  
+  // Vérifier si le fichier a "use client" et React import
+  const hasUseClient = lines.some(line => line.trim() === '"use client"' || line.trim() === "'use client'");
+  const hasReactImport = lines.some(line => line.includes('import React'));
+  
+  if (hasUseClient && hasReactImport) {
+    // Trouver les indices
+    let useClientIndex = -1;
+    let reactImportIndex = -1;
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line === '"use client"' || line === "'use client'") {
+        useClientIndex = i;
+      }
+      if (line.includes('import React')) {
+        reactImportIndex = i;
+      }
+    }
+    
+    // Si React est importé avant "use client", corriger l'ordre
+    if (reactImportIndex < useClientIndex) {
+      // Supprimer l'import React
+      lines.splice(reactImportIndex, 1);
+      
+      // Réinsérer après "use client"
+      lines.splice(useClientIndex + 1, 0, 'import React from \'react\';');
+      
+      // Écrire le fichier corrigé
+      fs.writeFileSync(filePath, lines.join('\n'));
+      return true;
+    }
+  }
+  
+  return false;
 }
 
 // Fonction principale
@@ -49,9 +90,17 @@ function main() {
   const files = glob.sync(pattern, { ignore: ['**/node_modules/**'] });
   
   let modifiedCount = 0;
+  let fixedCount = 0;
   
   files.forEach(file => {
     try {
+      // D'abord corriger l'ordre des imports
+      if (fixImportOrder(file)) {
+        console.log(`🔧 Corrigé l'ordre des imports dans: ${file}`);
+        fixedCount++;
+      }
+      
+      // Puis ajouter React si nécessaire
       if (addReactImport(file)) {
         console.log(`✅ Ajouté import React à: ${file}`);
         modifiedCount++;
@@ -61,7 +110,7 @@ function main() {
     }
   });
   
-  console.log(`\n🎉 Terminé! ${modifiedCount} fichiers modifiés.`);
+  console.log(`\n🎉 Terminé! ${modifiedCount} fichiers modifiés, ${fixedCount} fichiers corrigés.`);
 }
 
 // Exécuter le script
@@ -69,4 +118,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { addReactImport }; 
+module.exports = { addReactImport, fixImportOrder }; 

@@ -1,5 +1,5 @@
-import React from 'react';
 "use client";
+import React from 'react';
 import { Dumbbell } from "lucide-react"
 import Link from "next/link"
 
