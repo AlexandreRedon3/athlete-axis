@@ -1,5 +1,4 @@
 import { Dumbbell, Facebook, Instagram, Linkedin, Twitter } from "lucide-react"
-import Link from "next/link"
 import React from 'react';
 
 export default function FooterSection() {
@@ -17,111 +16,91 @@ export default function FooterSection() {
           <div className="flex flex-col gap-2">
             <h3 className="text-lg font-medium">Programmes</h3>
             <nav className="flex flex-col gap-2">
-              <Link href="/programmes/debutant" className="text-sm text-white/70 hover:text-[#21D0B2]">
+              <span className="text-sm text-white/40 cursor-not-allowed">
                 Débutant
-              </Link>
-              <Link href="/programmes/intermediaire" className="text-sm text-white/70 hover:text-[#21D0B2]">
+              </span>
+              <span className="text-sm text-white/40 cursor-not-allowed">
                 Intermédiaire
-              </Link>
-              <Link href="/programmes/avance" className="text-sm text-white/70 hover:text-[#21D0B2]">
+              </span>
+              <span className="text-sm text-white/40 cursor-not-allowed">
                 Avancé
-              </Link>
-              <Link href="/programmes" className="text-sm text-white/70 hover:text-[#21D0B2]">
+              </span>
+              <span className="text-sm text-white/40 cursor-not-allowed">
                 Tous les programmes
-              </Link>
+              </span>
             </nav>
           </div>
           <div className="flex flex-col gap-2">
             <h3 className="text-lg font-medium">Coaching</h3>
             <nav className="flex flex-col gap-2">
-              <Link href="/coaching/coachs" className="text-sm text-white/70 hover:text-[#21D0B2]">
+              <span className="text-sm text-white/40 cursor-not-allowed">
                 Nos coachs
-              </Link>
-              <Link href="/coaching/fonctionnement" className="text-sm text-white/70 hover:text-[#21D0B2]">
+              </span>
+              <span className="text-sm text-white/40 cursor-not-allowed">
                 Comment ça marche
-              </Link>
-              <Link href="/coaching/tarifs" className="text-sm text-white/70 hover:text-[#21D0B2]">
+              </span>
+              <span className="text-sm text-white/40 cursor-not-allowed">
                 Tarifs
-              </Link>
-              <Link href="/coaching/reservation" className="text-sm text-white/70 hover:text-[#21D0B2]">
+              </span>
+              <span className="text-sm text-white/40 cursor-not-allowed">
                 Réserver une séance
-              </Link>
+              </span>
             </nav>
           </div>
           <div className="flex flex-col gap-2 sm:col-span-2 md:col-span-1">
             <h3 className="text-lg font-medium">Entreprise</h3>
             <nav className="flex flex-col gap-2">
-              <Link href="/a-propos" className="text-sm text-white/70 hover:text-[#21D0B2]">
+              <span className="text-sm text-white/40 cursor-not-allowed">
                 À propos
-              </Link>
-              <Link href="/blog" className="text-sm text-white/70 hover:text-[#21D0B2]">
+              </span>
+              <span className="text-sm text-white/40 cursor-not-allowed">
                 Blog
-              </Link>
-              <Link href="/carrieres" className="text-sm text-white/70 hover:text-[#21D0B2]">
+              </span>
+              <span className="text-sm text-white/40 cursor-not-allowed">
                 Carrières
-              </Link>
-              <Link href="/contact" className="text-sm text-white/70 hover:text-[#21D0B2]">
+              </span>
+              <span className="text-sm text-white/40 cursor-not-allowed">
                 Contact
-              </Link>
+              </span>
             </nav>
           </div>
           <div className="flex flex-col gap-2 sm:col-span-2 md:col-span-1">
             <h3 className="text-lg font-medium">Légal</h3>
             <nav className="flex flex-col gap-2">
-              <Link href="/conditions" className="text-sm text-white/70 hover:text-[#21D0B2]">
+              <span className="text-sm text-white/40 cursor-not-allowed">
                 Conditions
-              </Link>
-              <Link href="/confidentialite" className="text-sm text-white/70 hover:text-[#21D0B2]">
+              </span>
+              <span className="text-sm text-white/40 cursor-not-allowed">
                 Confidentialité
-              </Link>
-              <Link href="/cookies" className="text-sm text-white/70 hover:text-[#21D0B2]">
+              </span>
+              <span className="text-sm text-white/40 cursor-not-allowed">
                 Cookies
-              </Link>
-              <Link href="/mentions-legales" className="text-sm text-white/70 hover:text-[#21D0B2]">
+              </span>
+              <span className="text-sm text-white/40 cursor-not-allowed">
                 Mentions légales
-              </Link>
+              </span>
             </nav>
           </div>
         </div>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-white/70">&copy; {new Date().getFullYear()} AthleteAxis. Tous droits réservés.</p>
           <div className="flex gap-4">
-            <Link
-              href="https://twitter.com"
-              className="text-white/70 hover:text-white"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <span className="text-white/40 cursor-not-allowed">
               <Twitter className="h-5 w-5" />
               <span className="sr-only">Twitter</span>
-            </Link>
-            <Link
-              href="https://facebook.com"
-              className="text-white/70 hover:text-white"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            </span>
+            <span className="text-white/40 cursor-not-allowed">
               <Facebook className="h-5 w-5" />
               <span className="sr-only">Facebook</span>
-            </Link>
-            <Link
-              href="https://instagram.com"
-              className="text-white/70 hover:text-white"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            </span>
+            <span className="text-white/40 cursor-not-allowed">
               <Instagram className="h-5 w-5" />
               <span className="sr-only">Instagram</span>
-            </Link>
-            <Link
-              href="https://linkedin.com"
-              className="text-white/70 hover:text-white"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            </span>
+            <span className="text-white/40 cursor-not-allowed">
               <Linkedin className="h-5 w-5" />
               <span className="sr-only">LinkedIn</span>
-            </Link>
+            </span>
           </div>
         </div>
       </div>
