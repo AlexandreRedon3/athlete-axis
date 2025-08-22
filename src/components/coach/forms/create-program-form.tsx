@@ -85,6 +85,8 @@ export const CreateProgramForm = ({
 
   const watchedValues = watch();
 
+  console.log(isSubmitting);
+
   // Images par défaut selon le type
   const defaultImages = {
     'Cardio': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
@@ -333,102 +335,101 @@ export const CreateProgramForm = ({
               Une image par défaut sera utilisée si aucune URL n'est fournie
             </p>
           </div>
-        </form>
+          {/* Aperçu du programme */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-bold">Aperçu du programme</h3>
+            
+            {/* Card d'aperçu */}
+            <div className={`${colors.cardBg} ${colors.border} rounded-xl p-4 shadow-sm border`}>
+              {/* Image d'aperçu */}
+              <div className="relative h-40 rounded-lg overflow-hidden mb-4">
+                <img
+                  src={watchedValues.imageUrl || defaultImages[watchedValues.type as keyof typeof defaultImages]}
+                  alt="Aperçu du programme"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = defaultImages['Mixte'];
+                  }}
+                />
+                <div className="absolute top-2 right-2">
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    watchedValues.level === 'Débutant' ? 'bg-green-100 text-green-700' :
+                    watchedValues.level === 'Intermédiaire' ? 'bg-blue-100 text-blue-700' :
+                    'bg-purple-100 text-purple-700'
+                  }`}>
+                    {watchedValues.level}
+                  </span>
+                </div>
+              </div>
 
-        {/* Aperçu du programme */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-bold">Aperçu du programme</h3>
-          
-          {/* Card d'aperçu */}
-          <div className={`${colors.cardBg} ${colors.border} rounded-xl p-4 shadow-sm border`}>
-            {/* Image d'aperçu */}
-            <div className="relative h-40 rounded-lg overflow-hidden mb-4">
-              <img
-                src={watchedValues.imageUrl || defaultImages[watchedValues.type as keyof typeof defaultImages]}
-                alt="Aperçu du programme"
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.src = defaultImages['Mixte'];
-                }}
-              />
-              <div className="absolute top-2 right-2">
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                  watchedValues.level === 'Débutant' ? 'bg-green-100 text-green-700' :
-                  watchedValues.level === 'Intermédiaire' ? 'bg-blue-100 text-blue-700' :
-                  'bg-purple-100 text-purple-700'
-                }`}>
-                  {watchedValues.level}
-                </span>
+              {/* Contenu */}
+              <div className="space-y-3">
+                <div>
+                  <h4 className={`font-bold text-lg ${colors.text}`}>
+                    {watchedValues.name || 'Nom du programme'}
+                  </h4>
+                  <p className={`text-sm ${colors.textSecondary}`}>{watchedValues.type}</p>
+                </div>
+
+                <p className={`text-sm line-clamp-2 ${colors.textSecondary}`}>
+                  {watchedValues.description || 'Description du programme...'}
+                </p>
+
+                <div className="flex items-center justify-between text-sm">
+                  <span className={`flex items-center ${colors.textSecondary}`}>
+                    <Clock className="w-4 h-4 mr-1" />
+                    {watchedValues.durationWeeks} sem.
+                  </span>
+                  <span className={`flex items-center ${colors.textSecondary}`}>
+                    <Activity className="w-4 h-4 mr-1" />
+                    {watchedValues.sessionsPerWeek}/sem
+                  </span>
+                  <span className={`flex items-center ${colors.textSecondary}`}>
+                    <Users className="w-4 h-4 mr-1" />
+                    {(watchedValues.durationWeeks || 0) * (watchedValues.sessionsPerWeek || 0)} séances
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Contenu */}
-            <div className="space-y-3">
-              <div>
-                <h4 className={`font-bold text-lg ${colors.text}`}>
-                  {watchedValues.name || 'Nom du programme'}
-                </h4>
-                <p className={`text-sm ${colors.textSecondary}`}>{watchedValues.type}</p>
-              </div>
-
-              <p className={`text-sm line-clamp-2 ${colors.textSecondary}`}>
-                {watchedValues.description || 'Description du programme...'}
-              </p>
-
-              <div className="flex items-center justify-between text-sm">
-                <span className={`flex items-center ${colors.textSecondary}`}>
-                  <Clock className="w-4 h-4 mr-1" />
-                  {watchedValues.durationWeeks} sem.
-                </span>
-                <span className={`flex items-center ${colors.textSecondary}`}>
-                  <Activity className="w-4 h-4 mr-1" />
-                  {watchedValues.sessionsPerWeek}/sem
-                </span>
-                <span className={`flex items-center ${colors.textSecondary}`}>
-                  <Users className="w-4 h-4 mr-1" />
-                  {(watchedValues.durationWeeks || 0) * (watchedValues.sessionsPerWeek || 0)} séances
-                </span>
-              </div>
+            {/* Informations supplémentaires */}
+            <div className={`p-4 rounded-lg ${colors.cardBg} ${colors.border} border`}>
+              <h4 className={`font-medium text-sm mb-2 ${colors.text}`}>
+                Après création, vous pourrez :
+              </h4>
+              <ul className={`text-sm space-y-1 ${colors.textSecondary}`}>
+                <li>• Ajouter des exercices personnalisés</li>
+                <li>• Organiser les séances par semaines</li>
+                <li>• Assigner le programme à vos clients</li>
+                <li>• Suivre les progrès en temps réel</li>
+              </ul>
             </div>
           </div>
 
-          {/* Informations supplémentaires */}
-          <div className={`p-4 rounded-lg ${colors.cardBg} ${colors.border} border`}>
-            <h4 className={`font-medium text-sm mb-2 ${colors.text}`}>
-              Après création, vous pourrez :
-            </h4>
-            <ul className={`text-sm space-y-1 ${colors.textSecondary}`}>
-              <li>• Ajouter des exercices personnalisés</li>
-              <li>• Organiser les séances par semaines</li>
-              <li>• Assigner le programme à vos clients</li>
-              <li>• Suivre les progrès en temps réel</li>
-            </ul>
-          </div>
-        </div>
-
-        <DialogFooter>
+          {/* Boutons d'action */}
+          <div className="flex items-center justify-between pt-4">
             <div className="flex items-center space-x-2 text-sm text-gray-500">
               <FileText className="h-4 w-4" />
-            <span>Champs obligatoires *</span>
+              <span>Champs obligatoires *</span>
             </div>
             
             <div className="flex items-center space-x-3">
-            <Button
+              <Button
                 type="button"
-              variant="outline"
+                variant="outline"
                 onClick={handleClose}
                 disabled={isSubmitting}
               >
                 Annuler
-            </Button>
-              
-            <Button
+              </Button>
+                
+              <Button
                 type="submit"
                 disabled={isSubmitting}
                 className={`
-                min-w-[140px]
+                  min-w-[140px]
                   ${submitStatus === 'success' 
-                  ? 'bg-green-500 hover:bg-green-600' 
+                    ? 'bg-green-500 hover:bg-green-600' 
                     : submitStatus === 'error'
                     ? 'bg-red-500 hover:bg-red-600'
                     : 'bg-emerald-500 hover:bg-emerald-600'
@@ -436,12 +437,12 @@ export const CreateProgramForm = ({
                 `}
               >
                 {isSubmitting ? (
-                <div className="flex items-center">
+                  <div className="flex items-center">
                     <Loader2 className="h-4 w-4 animate-spin mr-2" />
                     Création...
                   </div>
                 ) : submitStatus === 'success' ? (
-                <div className="flex items-center">
+                  <div className="flex items-center">
                     <CheckCircle className="h-4 w-4 mr-2" />
                     Créé !
                   </div>
@@ -450,7 +451,15 @@ export const CreateProgramForm = ({
                 ) : (
                   'Créer le programme'
                 )}
-            </Button>
+              </Button>
+            </div>
+          </div>
+        </form>
+
+        <DialogFooter>
+          <div className="flex items-center space-x-2 text-sm text-gray-500">
+            <FileText className="h-4 w-4" />
+            <span>Champs obligatoires *</span>
           </div>
         </DialogFooter>
       </DialogContent>
