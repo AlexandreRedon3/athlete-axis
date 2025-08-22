@@ -8,7 +8,7 @@ export default function HeroSection() {
   return (
     <section className="w-full min-h-[80vh] flex items-center justify-center bg-gradient-to-r from-[#1DCFE0] via-[#2DF3C0] to-[#2F455C] text-white">
       <div className="container px-4 sm:px-6 text-center max-w-3xl">
-        <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold leading-tight tracking-tight drop-shadow-md">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold leading-tight tracking-tight">
           Un nouveau souffle pour ton entraînement
         </h1>
 

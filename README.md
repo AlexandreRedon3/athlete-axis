@@ -201,6 +201,30 @@ docker build -t athlete-axis .
 docker run -p 3000:3000 athlete-axis
 ```
 
+## 🧪 Compte de Test en Production
+
+Pour les examinateurs et tests en production, un compte de démonstration est disponible :
+
+### 🌐 Application en ligne
+- **URL** : [https://athlete-axis.vercel.app/](https://athlete-axis.vercel.app/)
+
+### 👤 Compte de test
+- **Email** : `marie.martin@example.com`
+- **Mot de passe** : `azerty123`
+
+### 📋 Fonctionnalités disponibles avec ce compte
+- **Dashboard coach** complet avec statistiques
+- **Gestion des clients** et invitations
+- **Création de programmes** d'entraînement
+- **Planification des séances**
+- **Suivi des performances** en temps réel
+- **Gestion du profil** avec upload de photo
+
+### 🔐 Sécurité
+- Ce compte est dédié aux tests et démonstrations
+- Les données sont régulièrement réinitialisées
+- Aucune donnée sensible n'est stockée
+
 ## 🤝 Contribution
 
 1. Fork le projet
